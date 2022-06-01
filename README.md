@@ -1,28 +1,43 @@
 # Icenberg 🥶
 
+v0.1
+
 ### What is it?
 
-Icenberg is an attempt to clean up our block templates which involve a lot of repetition and a lot of logic tangled up in presentation, in true WordPress style.
+This requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF's Flexible content fields.
 
-Using Icenberg's methods we can render any acf fields complete with classes and settings in a clean(er) fashion, while still allowing us to do things the old fashioned way if necessary.
+Icenberg is an attempt to clean up ACF Flexible content block templates which often involve a lot of repetition and logic tangled up in presentation, in true WordPress style.
 
-This will lead to more readable code and a smoother block creation experience, making creating 10 different types of testimonial a breeze.
+Using Icenberg's methods we can render any acf fields complete with BEM classes and settings in a clean(er) OO fashion, while still allowing us to do things the old fashioned way if necessary.
 
 It is designed to be used primarily with flexible content fields as it asumes the existance of 'the row' but could also work within non-flexible groups and repeaters, in theory.
 
-Icenberg works in conjunction with MVRK CLI which will generate the boilerplate for you.
-
-Currently destined to sit in the cookiecutter theme, I would hope to move it to an (open source) composer package soon. Or maybe a plugin (yuck).
-
-Its a little known fact that the theme inc/classes folder is namespaced to MVRK (hidden away in composer.json). So as long as composer autoloading is enabled in functions.php we can use Icenberg anywhere in the theme.
-
-## How it works
-
-### page.php
-
-Instead of dynamically grabbing partials within page.php as we traditionally have done, we now pass the row to a block template which performs the initial wrapping of the block with settings, a section__inner and a wrapper.
+Note: The `buttons` and `settings` methods rely on Maverick specific setups, we'll make these more generally usable in the future.
 
 
+### Getting Started
+
+Install via composer:
+
+```bash
+composer require mvrk/icenberg
+```
+
+make sure autoloading is set up in functions.php - something like:
+
+```php
+
+$composer_path = $_SERVER['DOCUMENT_ROOT'] . '/../vendor/';
+
+if (file_exists($composer_path)) {
+
+    require_once $composer_path . 'autoload.php';
+}
+
+```
+Make sure you have ACF Pro installed. The library also supports [ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/) plugin.
+
+The following all takes place inside ACF's the_row() - ie:
 ```php
 
 if (have_rows('content_blocks', $id)) :
@@ -34,35 +49,8 @@ if (have_rows('content_blocks', $id)) :
     endwhile;
 
 endif;
-
 ```
-
-### inc/blocks/block_template.php
-
-`block--` is prepended to the block name when creating classes to allow for clean overrides on individual blocks.
-
-So for instance if your flexible block is called 'general_content' in acf, once you send the row through the base block template it will be set up as
-
-```html
-<div class="block block--general_content">
-    <div class="section__inner">
-        <div class="wrapper block--general_content__wrapper">
-
-        {{ individual block inserted here }}
-
-        </div>
-    </div>
-</div>
-```
-
-So then in your block file you can just concentrate on the inner part of the block.
-Settings are applied at the base template level so you don't need to worry about them, but they'll still be available to you in the block template if you need them there.
-
-### inc/blocks/your_block_name.php
-
-So now, having done the setup all that needs to be added to the individual block template is the actual meat of the block. In a very simple block setup you will now be able to render everything without writing any html whatsoever!! You just need to use the Icenberg methods which hide all the field structure.
-
-At the head of the file you need to set up a new icenberg instance, passing the layout name as a string (acf's get_row_layout() gives us that):
+Initialise with ACFs `the_row_layout()`
 
 ```php
 
@@ -75,9 +63,9 @@ Once that's intialised you're ready to build your block.
 
 ### Icenberg Methods
 
-#### `get_element()`
+#### `get_element($field_name, $tag = 'div')`
 
-Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any  special considerations applied.
+Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any  special considerations applied. Takes the field name as an argument and optionally a tag for the uppermost element. If no tag is set it will use 'div'
 
 ```php
 
@@ -87,7 +75,7 @@ echo $field_name;
 
 ```
 
-#### `the_element()`
+#### `the_element($field_name, $tag = 'div')`
 
 As above, but echoes it out immediately.
 
@@ -113,7 +101,7 @@ $icenberg->enclose('text', [
 ]);
 
 ```
-will spit out:
+will generate:
 
 ```html
 
@@ -163,13 +151,31 @@ Of course life is never simple, so you will most likely need more complex layout
 ```
 ## Conditionals
 
+#### `field($field_name)`
+
+you can use icenberg to evaluate fieldstoo, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
+
+ ```php
+ $icenberg->field($field_name)
+ ```
+
+#### `is($value)`
+
+returns true if the value of the field equals the argument to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
+
 ```php
-if ($icenberg->field('range_test')->is('50')) :
-    $icenberg->the_element('range_test');
+ if ($icenberg->field('font_colour')->is('red')) :
+    $icenberg->the_element('font_colour');
 else :
     echo 'oh no';
 endif;
+```
 
+#### `lessThan($value)` and `greaterThan($value)`
+
+Self explanatory, both take an integer as an argument. Warning: If you use it on a non numeric field it will return false.
+
+```php
 if ($icenberg->field('range_test')->lessThan(51)) :
     $class = 'text_' . $icenberg->field('range_test')->field;
     $icenberg->enclose($class, [
@@ -178,3 +184,19 @@ if ($icenberg->field('range_test')->lessThan(51)) :
     ]);
 endif;
 ```
+
+## Maverick Specific
+
+#### `get_buttons($field_name)` and `the_buttons($field_name)`
+
+Return a formatted button group with a huge range of styles catered for - very Maverick specific.
+Expects our usual button group format.
+
+#### `get_settings($field_name)` and `the_buttons($field_name)`
+
+Return contents of our standard settingss fields as classes.
+
+
+## Supported fields
+
+Many fields are supported but not all. Coverage to increase soon.
