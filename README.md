@@ -1,6 +1,5 @@
 # Icenberg 🥶
 
-v0.1
 
 ### What is it?
 
@@ -109,10 +108,10 @@ will generate:
     <div class="section__inner">
         <div class="wrapper block--cta__wrapper">
             <div class="block--cta__text">
-                <div class="block--cta__cta_heading">
+                <div class="block--cta__cta-heading">
                     I'm a heading, look at me!
                 </div>
-                <div class="block--cta__cta_content">
+                <div class="block--cta__cta-content">
                     <p>
                         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                     </p>
