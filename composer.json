@@ -19,7 +19,9 @@
             "email": "cathal.toomey@maverick-intl.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.4"
+    },
     "autoload": {
         "psr-4": {
             "MVRK\\Icenberg\\": "src/"
