@@ -1,0 +1,38 @@
+{
+    "name": "maverick/icenberg",
+    "type": "library",
+    "description": "Library to abstract away Advanced Custom Fields flexible content markup",
+    "license": "MIT",
+    "keywords": [
+        "acf",
+        "advanced custom fields",
+        "wordpress",
+        "flexible content"
+    ],
+    "authors": [
+        {
+            "name": "Daniel Devine",
+            "email": "dan.devine@maverick-intl.com"
+        },
+        {
+            "name": "Cathal Toomey",
+            "email": "cathal.toomey@maverick-intl.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "MVK\\Icenberg\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MVK\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "symfony/var-dumper": "^5.1"
+    }
+}
