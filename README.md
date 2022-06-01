@@ -10,11 +10,11 @@ This will lead to more readable code and a smoother block creation experience, m
 
 It is designed to be used primarily with flexible content fields as it asumes the existance of 'the row' but could also work within non-flexible groups and repeaters, in theory.
 
-Icenberg works in conjunction with MVK CLI which will generate the boilerplate for you.
+Icenberg works in conjunction with MVRK CLI which will generate the boilerplate for you.
 
 Currently destined to sit in the cookiecutter theme, I would hope to move it to an (open source) composer package soon. Or maybe a plugin (yuck).
 
-Its a little known fact that the theme inc/classes folder is namespaced to MVK (hidden away in composer.json). So as long as composer autoloading is enabled in functions.php we can use Icenberg anywhere in the theme.
+Its a little known fact that the theme inc/classes folder is namespaced to MVRK (hidden away in composer.json). So as long as composer autoloading is enabled in functions.php we can use Icenberg anywhere in the theme.
 
 ## How it works
 
@@ -66,7 +66,7 @@ At the head of the file you need to set up a new icenberg instance, passing the 
 
 ```php
 
-use MVK\Icenberg\Icenberg;
+use MVRK\Icenberg\Icenberg;
 
 $icenberg = new Icenberg(get_row_layout());
 

@@ -1,5 +1,5 @@
 {
-    "name": "maverick/icenberg",
+    "name": "mvrk/icenberg",
     "type": "library",
     "description": "Library to abstract away Advanced Custom Fields flexible content markup",
     "license": "MIT",
@@ -22,12 +22,12 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "MVK\\Icenberg\\": "src/"
+            "MVRK\\Icenberg\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MVK\\Tests\\": "tests/"
+            "MVRK\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
