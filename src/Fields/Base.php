@@ -26,4 +26,9 @@ class Base
     {
         return  str_replace('_', '-', $text);
     }
+
+    public function unSpace($string)
+    {
+        return str_replace([' ', '-'], '_', $string);
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace MVRK\Icenberg\Fields;
 
-
+/**
+ * Creates CSS classes and id from an ac group.
+ */
 class Settings extends Base
 {
     public $settings;
@@ -75,6 +77,11 @@ class Settings extends Base
         }
     }
 
+    /**
+     * Puts the generated classes together.
+     *
+     * @return void
+     */
     protected function setClasses()
     {
         $this->setBackground();
@@ -92,6 +99,11 @@ class Settings extends Base
         $this->class_string =  "class='{$classlist}' ";
     }
 
+    /**
+     * If a 'unique_id' field exists an id will be created.
+     *
+     * @return void
+     */
     protected function setId()
     {
         if (isset($this->settings['unique_id']) && $this->settings['unique_id']) {
@@ -99,6 +111,35 @@ class Settings extends Base
         }
     }
 
+    /**
+     * Generates a css class for each field in a group.
+     * Skips any fields that are handled specifically above, for legacy class reasons.
+     *
+     * @return void
+     */
+    protected function setArbitrary()
+    {
+
+        $standard = [
+            'unique_id', 'orientation', 'padding_bottom', 'padding_top', 'motif_background', 'section_width', 'inner_background_colour', 'section_background-color'
+        ];
+
+        foreach ($this->settings as $key => $value) {
+            if (!is_iterable($value) && !in_array($key, $standard)) {
+                $this->classes[] = "block_" . $this->unSnake($key) . '_' . $this->unSpace($value);
+            } elseif (is_array($value)) {
+                foreach ($value as $k => $v) {
+                    $this->classes[] = "block_" . $this->unSnake($key) . '_' . $this->unSnake($k) . $this->unSpace($v);
+                }
+            }
+        }
+    }
+
+    /**
+     * Combines the strings.
+     *
+     * @return void
+     */
     protected function build()
     {
         return "{$this->id_string} {$this->class_string}";
