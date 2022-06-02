@@ -1,6 +1,26 @@
 # Icenberg 🥶
 
 
+
+- [Icenberg 🥶](#icenberg-)
+    - [What is it?](#what-is-it)
+    - [Getting Started](#getting-started)
+    - [Icenberg Methods](#icenberg-methods)
+      - [`get_element($field_name, $tag = 'div')`](#get_elementfield_name-tag--div)
+      - [`the_element($field_name, $tag = 'div')`](#the_elementfield_name-tag--div)
+      - [`enclose()`](#enclose)
+      - [`settings($field_name, $additional_classes)`](#settingsfield_name-additional_classes)
+  - [Conditionals](#conditionals)
+      - [`field($field_name)`](#fieldfield_name)
+      - [`is($value)`](#isvalue)
+      - [`lessThan($value)` and `greaterThan($value)`](#lessthanvalue-and-greaterthanvalue)
+  - [Maverick Specific](#maverick-specific)
+      - [`get_buttons($field_name)` and `the_buttons($field_name)`](#get_buttonsfield_name-and-the_buttonsfield_name)
+  - [Supported fields](#supported-fields)
+      - [Currently Supported fields](#currently-supported-fields)
+      - [Third party fields:](#third-party-fields)
+      - [Special Fields](#special-fields)
+
 ### What is it?
 
 This requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF's Flexible content fields.
@@ -148,11 +168,47 @@ Of course life is never simple, so you will most likely need more complex layout
 </div>
 
 ```
+
+#### `settings($field_name, $additional_classes)`
+
+Pass in a field group of settings and optionally an array of manually set classes and it will attach them as CSS modifier classes. if you include a text field called 'unique_id' in your group icenberg will attach it as a id too.
+
+Example using settings in  `enclose()`:
+
+```php
+$classes = ['banana', 'orange'];
+
+$block_settings = get_sub_field($block_settings);
+
+$settings = $icenberg->settings($block_settings, $classes);
+
+$icenberg->enclose ($settings, [
+    $icenberg->get_element('cheese_board'),
+    $icenberg->get_element('flame_thrower')
+])
+```
+
+or in regular php/html
+
+```html
+
+<div <?php echo $settings; ?>>
+    ...whatever you want
+</div>
+```
+
+which will print out something like
+```html
+"class='orange orange_padding_top_300 orange_skin_purple' id='cheese_board'"
+```
+
+Depending on the settings in your group.
+
 ## Conditionals
 
 #### `field($field_name)`
 
-you can use icenberg to evaluate fieldstoo, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
+you can use icenberg to evaluate fields too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
 
  ```php
  $icenberg->field($field_name)
@@ -184,6 +240,7 @@ if ($icenberg->field('range_test')->lessThan(51)) :
 endif;
 ```
 
+
 ## Maverick Specific
 
 #### `get_buttons($field_name)` and `the_buttons($field_name)`
@@ -191,11 +248,27 @@ endif;
 Return a formatted button group with a huge range of styles catered for - very Maverick specific.
 Expects our usual button group format.
 
-#### `get_settings($field_name)` and `the_buttons($field_name)`
-
-Return contents of our standard settingss fields as classes.
-
 
 ## Supported fields
 
-Many fields are supported but not all. Coverage to increase soon.
+#### Currently Supported fields
+- Gallery
+- Group
+- Image
+- Link
+- Number
+- OEmbed
+- Range
+- Repeater
+- Select
+- Text
+- Textarea
+- Wysiwyg
+
+#### Third party fields:
+- Forms
+- Swatch
+
+#### Special Fields
+- Buttons
+- Settings
