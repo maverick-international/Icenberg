@@ -11,7 +11,7 @@ class Repeater extends Base
 
         $innards = "";
 
-        $class = "block--{$icenberg->layout}__{$this->unSnake($name)}";
+        $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
 
 
         if (have_rows($name)) :

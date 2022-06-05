@@ -30,7 +30,7 @@ class Group extends Base
 
         endif;
 
-        $class = "block--{$icenberg->layout}__{$this->unSnake($name)}";
+        $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
         $group = "<div class='{$class}'>{$innards}</div>";
 
         return $group;

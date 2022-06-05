@@ -8,7 +8,6 @@ class Buttons extends Base
 {
     public function getElement($field_object, $layout)
     {
-        // dd($field_object);
 
         $name = $field_object['_name'];
 

@@ -3,6 +3,7 @@
 namespace MVRK\Icenberg;
 
 use MVRK\Icenberg\Fields\FlexibleContent;
+use MVRK\Icenberg\Fields\Relationship;
 use MVRK\Icenberg\Fields\Group;
 use MVRK\Icenberg\Fields\Repeater;
 use MVRK\Icenberg\Fields\Buttons;
@@ -275,6 +276,10 @@ class Icenberg
             return (new FlexibleContent)->getElement($field_object, $this);
         }
 
+        if ($type === 'relationship') {
+            return (new Relationship)->getElement($field_object, $this);
+        }
+
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
@@ -294,5 +299,11 @@ class Icenberg
     {
         $layout = str_replace('_', '-', $this->layout);
         echo "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
+    }
+
+    public function get_enclose($class, $elements = [])
+    {
+        $layout = str_replace('_', '-', $this->layout);
+        return "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
     }
 }
