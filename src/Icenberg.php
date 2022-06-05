@@ -3,6 +3,7 @@
 namespace MVRK\Icenberg;
 
 use MVRK\Icenberg\Fields\FlexibleContent;
+use MVRK\Icenberg\Fields\Relationship;
 use MVRK\Icenberg\Fields\Group;
 use MVRK\Icenberg\Fields\Repeater;
 use MVRK\Icenberg\Fields\Buttons;
@@ -273,6 +274,10 @@ class Icenberg
 
         if ($type === 'flexible_content') {
             return (new FlexibleContent)->getElement($field_object, $this);
+        }
+
+        if ($type === 'relationship') {
+            return (new Relationship)->getElement($field_object, $this);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
