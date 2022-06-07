@@ -300,4 +300,10 @@ class Icenberg
         $layout = str_replace('_', '-', $this->layout);
         echo "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
     }
+
+    public function get_enclose($class, $elements = [])
+    {
+        $layout = str_replace('_', '-', $this->layout);
+        return "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
+    }
 }
