@@ -8,7 +8,6 @@ class Buttons extends Base
 {
     public function getElement($field_object, $layout)
     {
-        // dd($field_object);
 
         $name = $field_object['_name'];
 
@@ -25,7 +24,7 @@ class Buttons extends Base
 
         endif;
 
-        $class = "buttons block--{$layout}__{$this->unSnake($name)}";
+        $class = "buttons block--{$this->unSnake($layout)}__{$this->unSnake($name)}";
         $group = "<div class='{$class}'>{$innards}</div>";
 
         return $group;

@@ -1,0 +1,21 @@
+.block--{{ block }} {
+    .section__inner {
+
+    }
+
+    .wrapper {
+
+    }
+
+    &__content {
+
+    }
+
+    &__text {
+
+    }
+
+    &__image {
+
+    }
+}

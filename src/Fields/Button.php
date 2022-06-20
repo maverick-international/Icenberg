@@ -99,7 +99,7 @@ class Button extends Base
 
 
         if (!$colour) {
-            $this->classes[] = $prefix . 'transparent';
+            $this->classes[] = $prefix . 'primary_colour';
         }
 
         $this->classes[] = $prefix . $colour;
