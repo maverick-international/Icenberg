@@ -30,7 +30,7 @@ class File extends Base
     {
 
         if (is_array($video)) {
-            $content = "<video loop muted autoplay>
+            $content = "<video loop muted autoplay playsinline>
                              <source src='{$video['url']}' type='video/mp4' />
                         </video>";
         }
