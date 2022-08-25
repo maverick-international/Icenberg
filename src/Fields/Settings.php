@@ -3,7 +3,7 @@
 namespace MVRK\Icenberg\Fields;
 
 /**
- * Creates CSS classes and id from an ac group.
+ * Creates CSS classes and id from an acf group.
  */
 class Settings extends Base
 {
@@ -125,9 +125,11 @@ class Settings extends Base
      */
     protected function setArbitrary()
     {
-        foreach ($this->settings as $key => $value) {
+        if ($this->settings) {
+            foreach ($this->settings as $key => $value) {
 
-            $this->parseFields($key, $value);
+                $this->parseFields($key, $value);
+            }
         }
     }
 
