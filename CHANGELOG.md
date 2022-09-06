@@ -38,6 +38,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
  - Email field
  - Password Field
+ - True/False field
+ - Checkbox field
 
 ### Fixed
  - Wrapped url field in link
+ - Handled non-video uploads with link - maybe should create a special file method for other applications?

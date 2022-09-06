@@ -9,6 +9,7 @@ class Text extends Base
      *
      * @param object $field
      * @param string $layout the current row layout
+     * @param string $tag
      * @return string
      */
     public function getElement($field, $layout, $tag)
