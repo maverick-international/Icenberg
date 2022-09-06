@@ -17,7 +17,7 @@ class Url extends Base
 
         $content = get_sub_field($name);
 
-        $wrapped = $this->wrap($content, $name, $layout, $tag);
+        $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$content}'>{$content}</a>";
 
         return $wrapped;
     }

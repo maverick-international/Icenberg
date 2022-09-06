@@ -13,7 +13,7 @@ class Link extends Base
         if (is_array($link)) {
             $wrapped = "<a class='button block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$link['url']}' target='{$link['target']}'>{$link['title']}</a>";
         } else {
-            $wrapped = "<a class='button block--{$this->unSnake($layout)}__{$this->unSnake($name)}'  href='{$link}'>{$link}</a>";
+            $wrapped = "<a class='button block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$link}'>{$link}</a>";
         }
 
         return $wrapped;
