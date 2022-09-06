@@ -24,6 +24,10 @@ class File extends Base
         if ($file['type'] === 'video') {
             return  $this->getVideo($file);
         }
+
+        $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($this->name)}' href='{$file['url']}'>{$file['title']}</a>";
+
+        return $wrapped;
     }
 
     public function getVideo($video)

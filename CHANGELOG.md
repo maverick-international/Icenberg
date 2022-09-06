@@ -36,7 +36,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [v0.1.7] 2022-07-28
 
 ### Added
- - Email field support
+ - Email field
+ - Password Field
 
 ### Fixed
  - Wrapped url field in link
