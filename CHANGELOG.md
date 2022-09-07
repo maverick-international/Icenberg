@@ -28,12 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
  - Allowed videos to autoplay on iOS devices
 
-## [v0.1.6] 2022-07-28
+## [v0.1.6] 2022-08-28
 
 ### Fixed
  - Allows for deleted block settings
 
-## [v0.1.7] 2022-07-28
+## [v0.1.7] 2022-09-07
 
 ### Added
  - Email field
