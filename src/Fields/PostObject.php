@@ -2,10 +2,18 @@
 
 namespace MVRK\Icenberg\Fields;
 
+
 class PostObject extends Base
 {
 
-
+    /**
+     * Highly opinionated handling of post object field.
+     *
+     * @param string $field
+     * @param string $layout
+     * @param string $tag
+     * @return void
+     */
     public function getElement($field, $layout, $tag)
     {
         $name = $field['_name'];
@@ -29,13 +37,10 @@ class PostObject extends Base
             }
         }
 
-
         // field using default behaviour and returning a single post object
         if (is_object($post_object_field)) {
             $content =  $this->buildPostContent($post_object_field, $name, $layout, $tag);
         }
-
-        dump($content);
 
         return $this->wrap($content, $name, $layout, $tag);
     }
@@ -51,6 +56,8 @@ class PostObject extends Base
 
         $content['excerpt'] = $post_object->post_excerpt;
 
+        $content['link'] = $post_object->guid;
+
         $date = new \DateTime($content['modified']);
 
         $post_content = $this->wrap($date->format('jS F Y'), $name . '__date', $layout, $tag);
@@ -59,8 +66,14 @@ class PostObject extends Base
 
         $post_content .=  $this->wrap($content['excerpt'], $name . '__excerpt', $layout, 'p');
 
+        $post_content .= "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$content['link']}'>Read More</a>";
+
         $post_wrap = $this->wrap($post_content, $name . '__item', $layout, $tag);
 
-        return $post_wrap;
+        $linked_wrap = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$content['link']}'>{$post_wrap}</a>";
+
+        dump($linked_wrap);
+
+        return $linked_wrap;
     }
 }
