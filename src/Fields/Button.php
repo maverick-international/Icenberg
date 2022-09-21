@@ -71,7 +71,7 @@ class Button extends Base
 
         $this->button_border_colour = $this->getColourSetting('button_border_colour', 'button-border--');
 
-        $this->button_icon_background_colour = $this->getColourSetting('button_icon_background_colour', 'button-icon--');
+        $this->button_icon_background_colour = $this->getColourSetting('button_icon_background_colour', 'button-icon-background--');
 
         $this->button_icon_colour = $this->getColourSetting('button_icon_colour', 'button-icon--');
 
@@ -81,7 +81,7 @@ class Button extends Base
 
         $this->hover_border_colour = $this->getColourSetting('hover_border_colour', 'hover-border--');
 
-        $this->hover_icon_background_colour = $this->getColourSetting('hover_icon_background_colour', 'button-');
+        $this->hover_icon_background_colour = $this->getColourSetting('hover_icon_background_colour', 'hover-icon-background--');
 
         $this->hover_icon_colour = $this->getColourSetting('hover_icon_colour', 'hover-icon--');
     }
