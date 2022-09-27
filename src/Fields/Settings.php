@@ -90,6 +90,8 @@ class Settings extends Base
     {
         $this->setBackground();
 
+        $this->setInner();
+
         $this->setWidth();
 
         $this->setMotif();
