@@ -49,3 +49,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
  - Applies inner background colour setting
+
+## [v0.1.9] 2022-09-27
+
+### Fixed
+ - Applies video modal class correctly
