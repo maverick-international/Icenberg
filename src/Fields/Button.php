@@ -43,13 +43,13 @@ class Button extends Base
             return;
         }
 
-        if ($this->button['opens_modal_video']) {
-            $classes[] = 'video-modal-trigger';
-        }
-
         $is_underline = !empty($this->button['is_underline_button']);
 
         $this->classes = $is_underline ? ['button-underline'] : ['button'];
+
+        if ($this->button['opens_modal_video']) {
+            $this->classes[] = 'video-modal-trigger';
+        }
 
         $this->getColourSettings();
 

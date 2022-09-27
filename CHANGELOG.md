@@ -45,7 +45,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
  - Wrapped url field in link
  - Handled non-video uploads with link - maybe should create a special file method for other applications?
 
-## [v0.1.8] 2022-09-21
+## [v0.1.8] 2022-09-27
 
 ### Fixed
-- Class names for button icon background colours
+ - Applies inner background colour setting
+
+## [v0.1.9] 2022-09-27
+
+### Fixed
+ - Applies video modal class correctly
