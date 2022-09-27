@@ -44,3 +44,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
  - Wrapped url field in link
  - Handled non-video uploads with link - maybe should create a special file method for other applications?
+
+## [v0.1.8] 2022-09-27
+
+### Fixed
+ - Applies inner background colour setting
