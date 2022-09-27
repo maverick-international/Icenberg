@@ -54,3 +54,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
  - Applies video modal class correctly
+
+## [v0.1.10] 2022-09-27
+
+### Added
+- Ability to use icomoon for button icons
+
+### Fixed
+- Class names for button icon background colours
