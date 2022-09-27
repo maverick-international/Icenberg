@@ -129,10 +129,16 @@ class Button extends Base
 
         if (!empty($this->button['button_icon'])) {
             $icon = $this->button['button_icon'];
+        } elseif (!empty($this->button['icon'])) {
+            $icon = trim($this->button['icon']);
         }
 
         if ($icon) {
-            $icon_section = "<span class='button__icon-image'><img src='{$icon['url']}'></span>";
+            if (is_array($icon)) {
+                $icon_section = "<span class='button__icon-image'><img src='{$icon['url']}'></span>";
+            } else {
+                $icon_section = "<span class='icon button__icon {$icon}'></span>";
+            }
         }
 
         $element =
