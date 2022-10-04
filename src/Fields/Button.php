@@ -94,15 +94,15 @@ class Button extends Base
      */
     protected function getColourSetting($setting, $prefix)
     {
-        // dd($this->button);
-        $colour = str_replace(' ', '_',  is_array($this->button[$setting]) ? $this->button[$setting]['label'] : $this->button[$setting]);
+        if (isset($this->button[$setting])) {
+            $colour = str_replace(' ', '_',  is_array($this->button[$setting]) ? $this->button[$setting]['label'] : $this->button[$setting]);
 
+            if (!$colour) {
+                $this->classes[] = $prefix . 'primary_colour';
+            }
 
-        if (!$colour) {
-            $this->classes[] = $prefix . 'primary_colour';
+            $this->classes[] = $prefix . $colour;
         }
-
-        $this->classes[] = $prefix . $colour;
 
         return;
     }
