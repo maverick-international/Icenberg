@@ -65,12 +65,24 @@ class Settings extends Base
 
     protected function setPadding()
     {
-        if (isset($this->settings['padding_top']) && !$this->settings['padding_top']) {
-            $this->classes[] = 'block_padding-top--0';
+        if (isset($this->settings['padding_top'])) {
+            if (is_bool($this->settings['padding_top'])) { // old style toggle padding on/off
+                if (!$this->settings['padding_top']) {
+                    $this->classes[] = 'block_padding-top--0';
+                }
+            } else { // new style range input for padding size
+                $this->classes[] = 'block_padding-top--' . $this->settings['padding_top'];
+            }
         }
 
-        if (isset($this->settings['padding_bottom']) && !$this->settings['padding_bottom']) {
-            $this->classes[] = 'block_padding-bottom--0';
+        if (isset($this->settings['padding_bottom'])) {
+            if (is_bool($this->settings['padding_bottom'])) { // old style toggle padding on/off
+                if (!$this->settings['padding_bottom']) {
+                    $this->classes[] = 'block_padding-bottom--0';
+                }
+            } else { // new style range input for padding size
+                $this->classes[] = 'block_padding-bottom--' . $this->settings['padding_bottom'];
+            }
         }
     }
 
