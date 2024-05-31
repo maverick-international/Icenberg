@@ -293,17 +293,17 @@ class Icenberg
      *
      * @param string $class element classname - this method will BEM it up with the layout name
      * @param array $elements array of icenberg elements
+     * @param string $tag HTML tag used for enclosing element
      * @return string
      */
-    public function enclose($class, $elements = [])
+    public function enclose($class, $elements = [], $tag = 'div')
     {
-        $layout = str_replace('_', '-', $this->layout);
-        echo "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
+        echo $this->get_enclose($class, $elements, $tag);
     }
 
-    public function get_enclose($class, $elements = [])
+    public function get_enclose($class, $elements = [], $tag = 'div')
     {
         $layout = str_replace('_', '-', $this->layout);
-        return "<div class='block--{$layout}__{$class}'>" . implode($elements)  . "</div>";
+        return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
     }
 }
