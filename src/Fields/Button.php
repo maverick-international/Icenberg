@@ -53,6 +53,10 @@ class Button extends Base
 
         $this->getColourSettings();
 
+        if (isset($this->button['button_icon_position']) && $this->button['button_icon_position']) {
+            $this->classes[] = 'button-icon-position--' . $this->button['button_icon_position'];
+        }
+
         return $this->buildElement();
     }
 
