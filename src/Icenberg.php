@@ -294,16 +294,32 @@ class Icenberg
      * @param string $class element classname - this method will BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
+     * @param array $attrs custom attributes to be added to the enclosing element
      * @return string
      */
-    public function enclose($class, $elements = [], $tag = 'div')
+    public function enclose($class, $elements = [], $tag = 'div', $attrs = [])
     {
-        echo $this->get_enclose($class, $elements, $tag);
+        echo $this->get_enclose($class, $elements, $tag, $attrs);
     }
 
-    public function get_enclose($class, $elements = [], $tag = 'div')
+    public function get_enclose($class, $elements = [], $tag = 'div', $attrs = [])
     {
         $layout = str_replace('_', '-', $this->layout);
-        return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
+
+        $additional_classes = '';
+        $additional_attrs = '';
+
+        if (count($attrs)) {
+            if (isset($attrs['class'])) { // handle classes separately as we already have a class attribute
+                $additional_classes = $attrs['class'];
+                unset($attrs['class']);
+            }
+
+            $additional_attrs = implode(' ', array_map(function ($key, $val) {
+                return "{$key}='{$val}'";
+            }, array_keys($attrs), array_values($attrs)));
+        }
+
+        return "<{$tag} class='block--{$layout}__{$class} {$additional_classes}' {$additional_attrs}>" . implode($elements)  . "</{$tag}>";
     }
 }
