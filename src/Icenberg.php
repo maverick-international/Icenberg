@@ -294,6 +294,7 @@ class Icenberg
      * @param string $class element classname - this method will BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
+     * @param array $attrs custom attributes to be added to the enclosing element
      * @return string
      */
     public function enclose($class, $elements = [], $tag = 'div', $attrs = [])
