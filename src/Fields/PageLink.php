@@ -8,7 +8,7 @@ class PageLink extends Base
     {
         $name = $field['_name'];
 
-        $link = get_sub_field($name);
+        $link = self::icefield($name);
 
         $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$link}'>{$link}</a>";
 

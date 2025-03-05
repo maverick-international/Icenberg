@@ -19,7 +19,7 @@ class File extends Base
         $this->tag = $tag;
         $this->name = $field['_name'];
 
-        $file = get_sub_field($this->name);
+        $file = self::icefield($this->name);
 
         if ($file['type'] === 'video') {
             return  $this->getVideo($file);

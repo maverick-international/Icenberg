@@ -8,7 +8,7 @@ class Select extends Base
     {
         $name = $field['_name'];
 
-        $content = get_sub_field($name);
+        $content = self::icefield($name);
 
         if (is_iterable($content)) {
             $wrapped = $this->listWrap($content, $name, $layout);

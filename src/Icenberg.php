@@ -73,7 +73,7 @@ class Icenberg
 
     public function get_buttons($field_name)
     {
-        $field_object = $this->process($field_name);
+        $field_object = $this->processFieldObject($field_name);
 
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
@@ -97,16 +97,48 @@ class Icenberg
      */
     public function field($field_name)
     {
+        return $this->processField($field_name);
+    }
 
-        if (!get_sub_field($field_name)) {
+    public function processField($field_name)
+    {
+        if (!get_sub_field($field_name) && !get_field($field_name)) {
             return;
         }
 
-        $this->field = get_sub_field($field_name);
-
-        $this->field_object = get_sub_field_object($field_name);
+        if (get_sub_field($field_name)) {
+            $this->field = get_sub_field($field_name);
+            $this->field_object = get_sub_field_object($field_name);
+        } else if (get_field($field_name)) {
+            $this->field = get_field($field_name);
+            $this->field_object = get_field_object($field_name);
+        }
 
         return $this;
+    }
+
+    /**
+     * Process the field.
+     *
+     * @param string $field the sub field name
+     * @return object
+     */
+    protected function processFieldObject($field_name)
+    {
+        $field_object = null;
+
+        // fails quietly if field doesn't exist.
+        if (!get_sub_field($field_name) && !get_field($field_name)) {
+            return;
+        }
+
+        if (get_sub_field($field_name)) {
+            $field_object = get_sub_field_object($field_name);
+        } else if (get_field($field_name)) {
+            $field_object = get_field_object($field_name);
+        }
+
+        return $field_object;
     }
 
 
@@ -130,7 +162,7 @@ class Icenberg
     }
 
     /**
-     * Checks if an interable contains a gicen condition.
+     * Checks if an interable contains a given condition.
      *
      * @param string|int $condition
      * @return boolean
@@ -223,25 +255,7 @@ class Icenberg
         return (new Settings($block_settings, $classes))->applySettings();
     }
 
-    /**
-     * Process the field.
-     *
-     * @param string $field the sub field name
-     * @return object
-     */
-    protected function process($field_name)
-    {
-        // fails quietly if field doesn't exist.
-        if (!get_sub_field($field_name)) {
-            return;
-        }
 
-        $field_object = get_sub_field_object($field_name);
-
-        // dd($field_object);
-
-        return $field_object;
-    }
 
     /**
      * Find out what type of field we're
@@ -254,7 +268,7 @@ class Icenberg
      */
     protected function sortElement($field_name, $tag)
     {
-        $field_object = $this->process($field_name);
+        $field_object = $this->processFieldObject($field_name);
 
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
@@ -294,32 +308,16 @@ class Icenberg
      * @param string $class element classname - this method will BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
-     * @param array $attrs custom attributes to be added to the enclosing element
      * @return string
      */
-    public function enclose($class, $elements = [], $tag = 'div', $attrs = [])
+    public function enclose($class, $elements = [], $tag = 'div')
     {
-        echo $this->get_enclose($class, $elements, $tag, $attrs);
+        echo $this->get_enclose($class, $elements, $tag);
     }
 
-    public function get_enclose($class, $elements = [], $tag = 'div', $attrs = [])
+    public function get_enclose($class, $elements = [], $tag = 'div')
     {
         $layout = str_replace('_', '-', $this->layout);
-
-        $additional_classes = '';
-        $additional_attrs = '';
-
-        if (count($attrs)) {
-            if (isset($attrs['class'])) { // handle classes separately as we already have a class attribute
-                $additional_classes = $attrs['class'];
-                unset($attrs['class']);
-            }
-
-            $additional_attrs = implode(' ', array_map(function ($key, $val) {
-                return "{$key}='{$val}'";
-            }, array_keys($attrs), array_values($attrs)));
-        }
-
-        return "<{$tag} class='block--{$layout}__{$class} {$additional_classes}' {$additional_attrs}>" . implode($elements)  . "</{$tag}>";
+        return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
     }
 }

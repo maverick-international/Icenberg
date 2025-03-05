@@ -8,7 +8,7 @@ class Email extends Base
     {
         $name = $field['_name'];
 
-        $content = get_sub_field($name);
+        $content = self::icefield($name);
 
         $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='mailto:{$content}'>{$content}</a>";
 

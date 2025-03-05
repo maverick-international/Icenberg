@@ -9,7 +9,7 @@ class Range extends Base
     {
         $name = $field['_name'];
 
-        $content = get_sub_field($name);
+        $content = self::icefield($name);
 
         $wrapped = $this->wrap($content, $name, $layout, $tag);
 

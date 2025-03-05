@@ -9,7 +9,7 @@ class Gallery extends Base
     {
         $name = $field['_name'];
 
-        $gallery = get_sub_field($name);
+        $gallery = self::icefield($name);
 
         $images = '';
 

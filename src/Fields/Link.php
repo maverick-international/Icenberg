@@ -8,7 +8,7 @@ class Link extends Base
     {
         $name = $field['_name'];
 
-        $link = get_sub_field($name);
+        $link = self::icefield($name);
 
         if (is_array($link)) {
             $wrapped = "<a class='button block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$link['url']}' target='{$link['target']}'>{$link['title']}</a>";

@@ -31,4 +31,19 @@ class Base
     {
         return str_replace([' ', '-'], '_', $string);
     }
+
+    public static function icefield($field_name)
+    {
+        if (!get_sub_field($field_name) && !get_field($field_name)) {
+            return;
+        }
+
+        if (get_sub_field($field_name)) {
+            $field = get_sub_field($field_name);
+        } else if (get_field($field_name)) {
+            $field = get_field($field_name);
+        }
+
+        return $field;
+    }
 }

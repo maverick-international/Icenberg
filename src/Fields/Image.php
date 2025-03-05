@@ -15,7 +15,7 @@ class Image extends Base
     {
         $name = $field['_name'];
 
-        $image = get_sub_field($name);
+        $image = self::icefield($name);
 
         //handle each possible format of image uses array, url or id
         if (is_array($image)) {
