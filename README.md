@@ -1,26 +1,6 @@
 # Icenberg 🥶
 
 
-
-- [Icenberg 🥶](#icenberg-)
-    - [What is it?](#what-is-it)
-    - [Getting Started](#getting-started)
-    - [Icenberg Methods](#icenberg-methods)
-      - [`get_element($field_name, $tag = 'div')`](#get_elementfield_name-tag--div)
-      - [`the_element($field_name, $tag = 'div')`](#the_elementfield_name-tag--div)
-      - [`enclose()`](#enclose)
-      - [`settings($field_name, $additional_classes)`](#settingsfield_name-additional_classes)
-  - [Conditionals](#conditionals)
-      - [`field($field_name)`](#fieldfield_name)
-      - [`is($value)`](#isvalue)
-      - [`lessThan($value)` and `greaterThan($value)`](#lessthanvalue-and-greaterthanvalue)
-  - [Maverick Specific](#maverick-specific)
-      - [`get_buttons($field_name)` and `the_buttons($field_name)`](#get_buttonsfield_name-and-the_buttonsfield_name)
-  - [Supported fields](#supported-fields)
-      - [Currently Supported fields](#currently-supported-fields)
-      - [Third party fields:](#third-party-fields)
-      - [Special Fields](#special-fields)
-
 ### What is it?
 
 This requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF's Flexible content fields.
@@ -29,7 +9,7 @@ Icenberg is an attempt to clean up ACF Flexible content block templates which of
 
 Using Icenberg's methods we can render any acf fields complete with BEM classes and settings in a clean(er) OO fashion, while still allowing us to do things the old fashioned way if necessary.
 
-It is designed to be used primarily with flexible content fields as it asumes the existance of 'the row' but could also work within non-flexible groups and repeaters, in theory.
+It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but could also work within other scenarios, in theory.
 
 Note: The `buttons` and `settings` methods rely on Maverick specific setups, we'll make these more generally usable in the future.
 
@@ -204,6 +184,18 @@ which will print out something like
 
 Depending on the settings in your group.
 
+## Using in an ACF Gutenberg Block
+
+since v 0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. 
+
+```php
+$icenberg = new Icenberg(strtolower($block['title']));
+
+$icenberg->the_element('quote');
+$icenberg->the_element('attribution');
+$icenberg->the_element('portrait');
+```
+
 ## Conditionals
 
 #### `field($field_name)`
@@ -240,6 +232,32 @@ if ($icenberg->field('range_test')->lessThan(51)) :
 endif;
 ```
 
+## CLI
+
+you can now use the Icenberg CLI to rapidly bootstrap Icenberg blocks (since v0.5.0). This extends wp-cli so you need to have that installed and working first.
+
+first add the following to your functions.php
+
+```php
+use MVRK\Icenberg\Commands\Bootstrap;
+```
+
+then somewhere after your composer autoload logic add:
+
+```php
+  $is_wp_cli = defined('WP_CLI') && WP_CLI;
+
+    if ($is_wp_cli) {
+        Bootstrap::setup(get_template_directory());
+    }
+```
+you need to pass the location of the theme directory to the ``Bootstrap::setup()`` method and you're good to go. 
+
+### Available commands
+
+`wp icenberg block --block_name`
+
+this bootstraps an ACF gutenberg block with all relevant files ready to go. This assumes that your blocks are in a folder called 'blocks' in your template root directory.
 
 ## Maverick Specific
 

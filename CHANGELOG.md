@@ -62,3 +62,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Class names for button icon background colours
+
+## [v0.3.0] 2025-03-17
+Paddy's day release
+- Adds Gutenberg support:
+  - Adds support for single fields, outside of the_row()
+  - Adds a functioning CLI to create icenberg ready blocks
+  - Makes CLI extensible

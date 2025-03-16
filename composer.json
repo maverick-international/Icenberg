@@ -25,7 +25,10 @@
     "autoload": {
         "psr-4": {
             "MVRK\\Icenberg\\": "src/"
-        }
+        },
+        "files": [
+            "cli/register-cli.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
