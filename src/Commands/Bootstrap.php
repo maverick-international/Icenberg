@@ -7,6 +7,7 @@ use WP_CLI_Command;
 
 /**
  * Bootstraps our commands.
+ * @disregard 1009
  */
 class Bootstrap extends WP_CLI_Command
 {
@@ -17,8 +18,11 @@ class Bootstrap extends WP_CLI_Command
 
     public static function setup()
     {
+        /** @disregard P1010 */
         static::$theme_directory = get_template_directory();
+        /** @disregard P1010 */
         static::$blocks_directory = get_template_directory() . "/blocks";
+        /** @disregard P1009 */
         WP_CLI::add_command('icenberg', 'MVRK\\Icenberg\\Commands\\Cli');
     }
 

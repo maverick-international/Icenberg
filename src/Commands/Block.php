@@ -22,6 +22,7 @@ class Block
 
         self::writeFile($directories['file_path'], $php_stub);
 
+        /** @disregard P1009 */
         WP_CLI::success("New block created at {$directories['file_path']}");
     }
 

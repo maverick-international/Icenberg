@@ -9,6 +9,7 @@ class Cli extends Bootstrap
 {
     public function make()
     {
+        /** @disregard P1009 */
         WP_CLI::success('Icenberg make command executed.');
     }
 
@@ -22,6 +23,7 @@ class Cli extends Bootstrap
     {
         // Exit early if no arguments
         if (!$args) {
+            /** @disregard P1009 */
             WP_CLI::error('Hey, meathead - you need to give me a snake_case block name.');
         }
 
@@ -29,6 +31,7 @@ class Cli extends Bootstrap
         $block_name = array_shift($args);
 
         // Display progress bar (simple for now)
+        /** @disregard P1010 */
         $progress = WP_CLI\Utils\make_progress_bar('Generating blocks', 1);
 
         // Create the block via the Block class
