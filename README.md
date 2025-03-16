@@ -236,20 +236,14 @@ endif;
 
 you can now use the Icenberg CLI to rapidly bootstrap Icenberg blocks (since v0.5.0). This extends wp-cli so you need to have that installed and working first.
 
-first add the following to your functions.php
+Add the below to your functions.php, after the autoload.
 
 ```php
-use MVRK\Icenberg\Commands\Bootstrap;
-```
+$is_wp_cli = defined('WP_CLI') && WP_CLI;
 
-then somewhere after your composer autoload logic add:
-
-```php
-  $is_wp_cli = defined('WP_CLI') && WP_CLI;
-
-    if ($is_wp_cli) {
-        Bootstrap::setup(get_template_directory());
-    }
+if ($is_wp_cli) {
+    \MVRK\Icenberg\Commands\Bootstrap::setup();
+}
 ```
 you need to pass the location of the theme directory to the ``Bootstrap::setup()`` method and you're good to go. 
 

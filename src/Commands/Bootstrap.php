@@ -15,10 +15,10 @@ class Bootstrap extends WP_CLI_Command
 
     protected static $blocks_directory;
 
-    public static function setup($theme_directory)
+    public static function setup()
     {
-        static::$theme_directory = $theme_directory;
-        static::$blocks_directory = $theme_directory . "/blocks";
+        static::$theme_directory = get_template_directory();
+        static::$blocks_directory = get_template_directory() . "/blocks";
         WP_CLI::add_command('icenberg', 'MVRK\\Icenberg\\Commands\\Cli');
     }
 
