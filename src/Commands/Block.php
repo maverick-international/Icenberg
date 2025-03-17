@@ -7,7 +7,7 @@ use WP_CLI;
 class Block
 {
     /**
-     * Creates a new block with PHP and SCSS files
+     * Creates a new block with necessary files
      *
      * @param string $block_name
      * @param array $args
@@ -23,6 +23,7 @@ class Block
         self::writeFile($directories['php_file_path'], $php_stub);
         self::writeFile($directories['scss_file_path'], $css_classes);
         self::writeFile($directories['json_file_path'], $json_stub);
+
         self::createEmptyFieldGroup($block_name);
 
         /** @disregard P1009 */
@@ -86,6 +87,7 @@ class Block
     public static function createEmptyFieldGroup($block_name)
     {
         if (!function_exists('acf_add_local_field_group')) {
+            /** @disregard P1009 */
             WP_CLI::error('ACF is not active.');
             return;
         }
@@ -93,7 +95,7 @@ class Block
         $title = 'Block: ' . ucfirst($block_name);
         $group_key = 'group_' . strtolower(str_replace(' ', '_', $block_name));
 
-        // Check if the field group already exists
+        /** @disregard P1010 */
         $existing = get_posts(array(
             'post_type' => 'acf-field-group',
             'name' => $group_key,
@@ -102,10 +104,12 @@ class Block
         ));
 
         if ($existing) {
+            /** @disregard P1009 */
             WP_CLI::warning("Field group '{$title}' already exists.");
             return;
         }
 
+        /** @disregard p1010 */
         $post_id = wp_insert_post(array(
             'post_title' => $title,
             'post_name' => $group_key,
@@ -113,7 +117,9 @@ class Block
             'post_status' => 'publish',
         ));
 
+        /** @disregard P1010 */
         if (is_wp_error($post_id)) {
+            /** @disregard P1009 */
             WP_CLI::error("Failed to create field group: " . $post_id->get_error_message());
             return;
         }
@@ -141,11 +147,13 @@ class Block
 
         $serialized_content = serialize($post_content);
 
+        /** @disregard P1010 */
         wp_update_post(array(
             'ID'           => $post_id,
             'post_content' => $serialized_content,
         ));
 
+        /** @disregard P1009 */
         WP_CLI::success("ACF field group '{$title}' created and registered in the GUI.");
     }
 

@@ -4,6 +4,7 @@ namespace MVRK\Icenberg\Commands;
 
 use WP_CLI;
 use WP_CLI_Command;
+use MVRK\Icenberg\Config\Config;
 
 /**
  * Bootstraps our commands.
@@ -16,12 +17,20 @@ class Bootstrap extends WP_CLI_Command
 
     protected static $blocks_directory;
 
+    protected static $block_directory_name;
+
     public static function setup()
     {
+        require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+        Config::load();
+
+        static::$block_directory_name = Config::get('block_directory_name') ?? 'blocks';
+
         /** @disregard P1010 */
         static::$theme_directory = get_template_directory();
         /** @disregard P1010 */
-        static::$blocks_directory = get_template_directory() . "/blocks";
+        static::$blocks_directory = get_template_directory() . "/" . static::$block_directory_name;
         /** @disregard P1009 */
         WP_CLI::add_command('icenberg', 'MVRK\\Icenberg\\Commands\\Cli');
     }
