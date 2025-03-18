@@ -1,13 +1,12 @@
 # Icenberg 🥶
 
-
 ### What is it?
 
-This requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF's Flexible content fields.
+Icenberg is an attempt to clean up ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
 
-Icenberg is an attempt to clean up ACF Flexible content block templates which often involve a lot of repetition and logic tangled up in presentation, in true WordPress style.
+Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It includes a convenient CLI for generating ACF Gutenberg blocks.
 
-Using Icenberg's methods we can render any acf fields complete with BEM classes and settings in a clean(er) OO fashion, while still allowing us to do things the old fashioned way if necessary.
+Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) OO fashion, while still allowing us to do things the old fashioned way if necessary.
 
 It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but could also work within other scenarios, in theory.
 
@@ -36,7 +35,7 @@ if (file_exists($composer_path)) {
 ```
 Make sure you have ACF Pro installed. The library also supports [ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/) plugin.
 
-The following all takes place inside ACF's the_row() - ie:
+The following example takes place inside ACF's the_row() - ie:
 ```php
 
 if (have_rows('content_blocks', $id)) :
@@ -58,7 +57,19 @@ use MVRK\Icenberg\Icenberg;
 $icenberg = new Icenberg(get_row_layout());
 
 ```
-Once that's intialised you're ready to build your block.
+Once that's intialised you're ready to build your flexible content block.
+
+## Using in an ACF Gutenberg Block
+
+since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. 
+
+```php
+$icenberg = new Icenberg(strtolower($block['title']));
+
+$icenberg->the_element('quote');
+$icenberg->the_element('attribution');
+$icenberg->the_element('portrait');
+```
 
 ### Icenberg Methods
 
@@ -184,17 +195,6 @@ which will print out something like
 
 Depending on the settings in your group.
 
-## Using in an ACF Gutenberg Block
-
-since v 0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. 
-
-```php
-$icenberg = new Icenberg(strtolower($block['title']));
-
-$icenberg->the_element('quote');
-$icenberg->the_element('attribution');
-$icenberg->the_element('portrait');
-```
 
 ## Conditionals
 
@@ -232,6 +232,13 @@ if ($icenberg->field('range_test')->lessThan(51)) :
 endif;
 ```
 
+## Maverick Specific
+
+#### `get_buttons($field_name)` and `the_buttons($field_name)`
+
+Return a formatted button group with a huge range of styles catered for - very Maverick specific.
+Expects our usual button group format.
+
 ## CLI
 
 you can now use the Icenberg CLI to rapidly bootstrap Icenberg blocks (since v0.5.0). This extends wp-cli so you need to have that installed and working first.
@@ -244,22 +251,36 @@ $is_wp_cli = defined('WP_CLI') && WP_CLI;
 if ($is_wp_cli) {
     \MVRK\Icenberg\Commands\Bootstrap::setup();
 }
-```
-you need to pass the location of the theme directory to the ``Bootstrap::setup()`` method and you're good to go. 
+``` 
 
 ### Available commands
 
 `wp icenberg block --block_name`
 
-this bootstraps an ACF gutenberg block with all relevant files ready to go. This assumes that your blocks are in a folder called 'blocks' in your template root directory.
+this bootstraps an ACF gutenberg block with all relevant files ready to go.
 
-## Maverick Specific
+This assumes that your blocks are in a folder called 'blocks' in your template root directory but this is configurable.
 
-#### `get_buttons($field_name)` and `the_buttons($field_name)`
+Icenberg generates a folder per block withing the blocks folder. This folder contains
+- block.json
+- <block_name>.php
+- <block_name>.css
 
-Return a formatted button group with a huge range of styles catered for - very Maverick specific.
-Expects our usual button group format.
+It will also register an empty field group ready for access via the ACF GUI.
 
+if the `build_src` config option is `true` then a sass partial will also be generated at the specified `sass_path`
+
+
+### Configurqation
+Config options are now available by placing an 'icenberg.yaml' file in your project's root directory. If this file doesn't exist or can't be parsed, icenberg will just go ahead and use its defaults.
+
+Supported config options below with their default values:
+
+```yaml
+block_directory_name: 'blocks' #change the default block directory name
+sass_path: 'src/sass/blocks' #specify a location for sass partials
+build_src: true #whether or not to create a sass file in a specified directory for those who prefer to seperate concerns.
+```
 
 ## Supported fields
 

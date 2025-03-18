@@ -21,8 +21,9 @@ class Block
         $directories = self::createDirectories($block_name);
 
         self::writeFile($directories['php_file_path'], $php_stub);
-        self::writeFile($directories['scss_file_path'], $css_classes);
+        self::writeFile($directories['css_file_path'], $css_classes);
         self::writeFile($directories['json_file_path'], $json_stub);
+        self::writeFile($directories['sass_file_path'], $css_classes);
 
         self::createEmptyFieldGroup($block_name);
 
@@ -166,8 +167,8 @@ class Block
      */
     public static function generateJsonStub($block_name)
     {
-        // Grab our stub files
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
+
         $json_stub = file_get_contents($stubs_directory . "/block.json.stub", true);
         $json_stub = str_replace('{block_name}', $block_name, $json_stub);
         $json_stub = str_replace('{block_title}', ucwords(str_replace('_', ' ', $block_name)), $json_stub);
@@ -185,11 +186,13 @@ class Block
     public static function createDirectories($block_name)
     {
         $blocks_dir = Bootstrap::getBlocksDirectory();
+        $sass_dir = Bootstrap::getSassDirectory();
         $single_dir = $blocks_dir . "/{$block_name}";
 
         $php_file_path = $single_dir . "/{$block_name}.php";
-        $scss_file_path = $single_dir . "/{$block_name}.scss";
+        $css_file_path = $single_dir . "/{$block_name}.css";
         $json_file_path = $single_dir . "/block.json";
+        $sass_file_path = $sass_dir . "/{$block_name}.scss";
 
         if (!is_dir($blocks_dir)) {
             mkdir($blocks_dir, 0755, true);
@@ -199,12 +202,17 @@ class Block
             mkdir($single_dir, 0755, true);
         }
 
+        if (!is_dir($sass_dir)) {
+            mkdir($sass_dir, 0755, true);
+        }
+
         return [
             'blocks_dir' => $blocks_dir,
             'single_dir' => $single_dir,
             'php_file_path' => $php_file_path,
-            'scss_file_path' => $scss_file_path,
-            'json_file_path' => $json_file_path
+            'css_file_path' => $css_file_path,
+            'json_file_path' => $json_file_path,
+            'sass_file_path' => $sass_file_path
         ];
     }
 

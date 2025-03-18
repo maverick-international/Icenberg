@@ -89,7 +89,7 @@ class Icenberg
     }
 
     /**
-     * Store the field and field objectfor method chaining.
+     * Store the field and field object for method chaining.
      * Used for evaluations.
      *
      * @param string $field_name

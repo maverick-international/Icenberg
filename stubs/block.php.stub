@@ -2,7 +2,7 @@
 
 use MVRK\Icenberg\Icenberg;
 
-$icenberg = new Icenberg(get_row_layout());
+$icenberg = new Icenberg(strtolower($block['title']));
 
 $icenberg->enclose('text', [
     //$icenberg->get_element('your_sub_field'),
