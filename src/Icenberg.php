@@ -2,6 +2,7 @@
 
 namespace MVRK\Icenberg;
 
+use MVRK\Icenberg\Blocks\Wrap;
 use MVRK\Icenberg\Fields\FlexibleContent;
 use MVRK\Icenberg\Fields\Relationship;
 use MVRK\Icenberg\Fields\Group;
@@ -277,7 +278,6 @@ class Icenberg
 
         $type = $field_object['type'];
 
-
         if ($type === 'group') {
             return (new Group)->getElement($field_object, $this);
         }
@@ -319,5 +319,18 @@ class Icenberg
     {
         $layout = str_replace('_', '-', $this->layout);
         return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
+    }
+
+    /**
+     * Wrap a Gutenberg block
+     *
+     * @param [type] $content
+     * @param [type] $block_settings
+     * @param boolean $wrap_inner
+     * @return void
+     */
+    public static function wrap($content, $block_settings = null, $wrap_inner = true)
+    {
+        echo Wrap::create($content, $block_settings, $wrap_inner);
     }
 }

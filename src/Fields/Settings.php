@@ -16,7 +16,16 @@ class Settings extends Base
     protected $id_string;
 
     protected $standard = [
-        'unique_id', 'orientation', 'padding_bottom', 'padding_top', 'motif_background', 'section_width', 'inner_background_colour', 'section_background_colour', 'background_image', 'background_video'
+        'unique_id',
+        'orientation',
+        'padding_bottom',
+        'padding_top',
+        'motif_background',
+        'section_width',
+        'inner_background_colour',
+        'section_background_colour',
+        'background_image',
+        'background_video'
     ];
 
     public function __construct($settings, $classes = [])
