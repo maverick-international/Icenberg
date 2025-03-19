@@ -8,7 +8,7 @@ use MVRK\Icenberg\Icenberg;
 /**
  * Prepare ACF Gutenberg blocks so that their structure
  * is more flexible content block like (good, normal) and
- *  less Gutenberg block like (lame, bad).
+ * less Gutenberg block like (lame, bad).
  */
 class Wrap
 {
