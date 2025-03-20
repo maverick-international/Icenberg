@@ -2,11 +2,16 @@
     "name": "acf/{block_name}",
     "title": "{block_title}",
     "category": "formatting",
+    "style": "icenberg-{block_name}-css",
     "acf": {
         "mode": "preview",
         "renderTemplate": "{block_name}.php"
     },
     "supports": {
-        "anchor": true
+        "anchor": true,
+           "align": [
+            "full",
+            "wide"
+        ],
     }
 }
