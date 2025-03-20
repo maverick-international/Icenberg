@@ -8,6 +8,7 @@ use MVRK\Icenberg\Fields\Group;
 use MVRK\Icenberg\Fields\Repeater;
 use MVRK\Icenberg\Fields\Buttons;
 use MVRK\Icenberg\Fields\Settings;
+use MVRK\Icenberg\Fields\Base;
 
 /**
  * Magically clean up block templates by standardising the
@@ -80,7 +81,7 @@ class Icenberg
             return null;
         }
 
-        return (new Buttons)->getElement($field_object, $this->layout);
+        return (new Buttons())->getElement($field_object, $this->layout);
     }
 
     public function the_buttons($field_name)
@@ -109,7 +110,7 @@ class Icenberg
         if (get_sub_field($field_name)) {
             $this->field = get_sub_field($field_name);
             $this->field_object = get_sub_field_object($field_name);
-        } else if (get_field($field_name)) {
+        } elseif (get_field($field_name)) {
             $this->field = get_field($field_name);
             $this->field_object = get_field_object($field_name);
         }
@@ -134,11 +135,20 @@ class Icenberg
 
         if (get_sub_field($field_name)) {
             $field_object = get_sub_field_object($field_name);
-        } else if (get_field($field_name)) {
+        } elseif (get_field($field_name)) {
             $field_object = get_field_object($field_name);
         }
 
         return $field_object;
+    }
+
+    public function prune($exclusions)
+    {
+        if (!$this->field) {
+            return false;
+        }
+
+        dd($this->field_object);
     }
 
 
@@ -256,7 +266,6 @@ class Icenberg
     }
 
 
-
     /**
      * Find out what type of field we're
      * dealing with and route accordingly.
@@ -277,28 +286,27 @@ class Icenberg
 
         $type = $field_object['type'];
 
-
         if ($type === 'group') {
-            return (new Group)->getElement($field_object, $this);
+            return (new Group())->getElement($field_object, $this);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater)->getElement($field_object, $this);
+            return (new Repeater())->getElement($field_object, $this);
         }
 
         if ($type === 'flexible_content') {
-            return (new FlexibleContent)->getElement($field_object, $this);
+            return (new FlexibleContent())->getElement($field_object, $this);
         }
 
         if ($type === 'relationship') {
-            return (new Relationship)->getElement($field_object, $this);
+            return (new Relationship())->getElement($field_object, $this);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname)->getElement($field_object, $this->layout, $tag);
+        return (new $classname())->getElement($field_object, $this->layout, $tag);
     }
 
 

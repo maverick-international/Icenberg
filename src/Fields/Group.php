@@ -35,4 +35,9 @@ class Group extends Base
 
         return $group;
     }
+
+    public function dig($field_object, $icenberg)
+    {
+        return $this;
+    }
 }
