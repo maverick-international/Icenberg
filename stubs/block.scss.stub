@@ -1,21 +1,6 @@
-.block--{{ block }} {
-    .section__inner {
+.wp-block-acf-{{ block }} {
 
-    }
+   &__wrapper {
 
-    .wrapper {
-
-    }
-
-    &__content {
-
-    }
-
-    &__text {
-
-    }
-
-    &__image {
-
-    }
+   }
 }
