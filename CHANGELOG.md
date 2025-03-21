@@ -81,3 +81,7 @@ Paddy's day mega-release
 ### fixed
 - fixed some errors in the stubs
 
+## [v0.5.2] 2025-03-21
+
+### fixed
+- fixed bug where custom tags were not passed to groups
