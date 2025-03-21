@@ -205,19 +205,28 @@ you can use icenberg to evaluate fields and do some more comlplex field manipual
  ```php
  $icenberg->field($field_name)
  ```
-#### `get($tag)`
-Returns the icenbergified field html (in the same way as get_element).
+#### `get(string $tag = 'div')`
+Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
 
 ```php
 $icenberg->field('saxaphone')->get()
 ```
 
-#### `prune($exclusions)`
+#### `prune(array $exclusions)`
 
 pass an array of field names to the prune method to remove them from a group or from a repeater row.
 
 ```php
-$group = $icenberg->field('bad_singers')->prune(['chris_de_burgh'])->get();
+$group = $icenberg->field('bad_singers')->prune(['chris_de_burgh', 'cliff_richard'])->get();
+
+```
+
+#### `only(array $inclusions)`
+
+pass an array of field names to the only method to extract them from a group or set of repeater rows. 
+
+```php
+$group = $icenberg->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
 
 ```
 

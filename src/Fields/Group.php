@@ -4,10 +4,8 @@ namespace MVRK\Icenberg\Fields;
 
 class Group extends Base
 {
-    public function getElement($field_object, $icenberg, $tag)
+    public function getElement($field_object, $icenberg, $tag = 'div')
     {
-        // dd($field_object);
-
         $name = $field_object['_name'];
 
         $sub_fields = [];

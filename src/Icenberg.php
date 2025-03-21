@@ -186,7 +186,54 @@ class Icenberg
         ));
     }
 
-    public function get($tag = null)
+    protected function pruneIncluded($sub_fields, $inclusions)
+    {
+        return array_values(array_filter(
+            $sub_fields,
+            fn($field) => in_array($field['name'], $inclusions)
+        ));
+    }
+
+    public function only($inclusions)
+    {
+        if (!$this->field_object) {
+            return $this;
+        }
+
+        $type = $this->field_object['type'];
+
+        $values = $this->field_object['value'] ?? null;
+
+        if (!$values || !is_array($values)) {
+            return $this;
+        }
+
+        if ($type === 'group') {
+            $this->field_object['value'] = array_filter(
+                $values,
+                fn($field) => in_array($field, $inclusions),
+                ARRAY_FILTER_USE_KEY
+            );
+            $this->field_object['sub_fields'] = $this->pruneIncluded($this->field_object['sub_fields'], $inclusions);
+        }
+
+        if ($type === 'repeater') {
+            $new_rows = [];
+
+            foreach ($values as $row) {
+                $row = array_diff_key(array_flip($inclusions), $row);
+                $new_rows[] = $row;
+            }
+
+            $this->field_object['value'] = $new_rows;
+
+            $this->field_object['sub_fields'] = $this->pruneIncluded($this->field_object['sub_fields'], $inclusions);
+        }
+
+        return $this;
+    }
+
+    public function get($tag = 'div')
     {
         return $this->getElementFromFieldObject($this->field_object, $tag);
     }
@@ -205,7 +252,7 @@ class Icenberg
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this);
+            return (new Repeater())->getElement($field_object, $this, $tag);
         }
 
         if ($type === 'flexible_content') {
