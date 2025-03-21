@@ -10,7 +10,7 @@ Using Icenberg's methods we can render acf fields complete with BEM classes and 
 
 It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but could also work within other scenarios, in theory.
 
-Note: The `buttons` and `settings` methods rely on Maverick specific setups, we'll make these more generally usable in the future.
+Note: The `buttons` and `settings` methods rely on Maverick specific setups and are not intended for general use.
 
 
 ### Getting Started
@@ -214,7 +214,7 @@ $icenberg->field('saxaphone')->get()
 
 #### `prune($exclusions)`
 
-pass an array of field names to the prune method to remove them from a group 
+pass an array of field names to the prune method to remove them from a group or from a repeater row.
 
 ```php
 $group = $icenberg->field('bad_singers')->prune(['chris_de_burgh'])->get();

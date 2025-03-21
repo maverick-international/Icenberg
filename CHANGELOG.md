@@ -72,3 +72,12 @@ Paddy's day mega-release
 - A functioning CLI to create icenberg ready ACF gutenberg blocks
 - icenberg.yaml config support
 
+## [v0.5.1] 2025-03-21
+
+### Added
+- Allows pruning of unwanted fields from groups and repeaters
+- Adds wrapping class to synchronise ACF block presentation on front and backends.
+
+### fixed
+- fixed some errors in the stubs
+
