@@ -196,19 +196,34 @@ which will print out something like
 Depending on the settings in your group.
 
 
-## Conditionals
+## Conditionals and manipulations
 
 #### `field($field_name)`
 
-you can use icenberg to evaluate fields too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
+you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
 
  ```php
  $icenberg->field($field_name)
  ```
+#### `get($tag)`
+Returns the icenbergified field html (in the same way as get_element).
+
+```php
+$icenberg->field('saxaphone')->get()
+```
+
+#### `prune($exclusions)`
+
+pass an array of field names to the prune method to remove them from a group 
+
+```php
+$group = $icenberg->field('bad_singers')->prune(['chris_de_burgh'])->get();
+
+```
 
 #### `is($value)`
 
-returns true if the value of the field equals the argument to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
+returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
 
 ```php
  if ($icenberg->field('font_colour')->is('red')) :
@@ -230,7 +245,9 @@ if ($icenberg->field('range_test')->lessThan(51)) :
         $icenberg->get_element('cta_image'),
     ]);
 endif;
+
 ```
+
 
 ## Maverick Specific
 

@@ -145,13 +145,83 @@ class Icenberg
 
     public function prune($exclusions)
     {
-        if (!$this->field) {
-            return false;
+        if (!$this->field_object) {
+            return $this;
         }
 
-        dd($this->field_object);
+        $type = $this->field_object['type'];
+
+        $values = $this->field_object['value'] ?? null;
+
+        if (!$values || !is_array($values)) {
+            return $this;
+        }
+
+        if ($type === 'group') {
+            $this->field_object['value'] = array_diff_key($values, array_flip($exclusions));
+            $this->field_object['sub_fields'] = $this->pruneExcluded($this->field_object['sub_fields'], $exclusions);
+        }
+
+        if ($type === 'repeater') {
+            $new_rows = [];
+
+            foreach ($values as $row) {
+                $row = array_diff_key($row, array_flip($exclusions));
+                $new_rows[] = $row;
+            }
+
+            $this->field_object['value'] = $new_rows;
+
+            $this->field_object['sub_fields'] = $this->pruneExcluded($this->field_object['sub_fields'], $exclusions);
+        }
+
+        return $this;
     }
 
+    protected function pruneExcluded($sub_fields, $exclusions)
+    {
+        return array_values(array_filter(
+            $sub_fields,
+            fn($field) => !in_array($field['name'], $exclusions)
+        ));
+    }
+
+    public function get($tag = null)
+    {
+        return $this->getElementFromFieldObject($this->field_object, $tag);
+    }
+
+    protected function getElementFromFieldObject($field_object, $tag)
+    {
+        // N.B fails quietly if field doesn't exist.
+        if (!$field_object) {
+            return null;
+        }
+
+        $type = $field_object['type'];
+
+        if ($type === 'group') {
+            return (new Group())->getElement($field_object, $this);
+        }
+
+        if ($type === 'repeater') {
+            return (new Repeater())->getElement($field_object, $this);
+        }
+
+        if ($type === 'flexible_content') {
+            return (new FlexibleContent())->getElement($field_object, $this);
+        }
+
+        if ($type === 'relationship') {
+            return (new Relationship())->getElement($field_object, $this);
+        }
+
+        $pascal = str_replace('_', '', ucwords($type, '_'));
+
+        $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
+
+        return (new $classname())->getElement($field_object, $this->layout, $tag);
+    }
 
     /**
      * Checks equivalence
@@ -280,34 +350,7 @@ class Icenberg
     {
         $field_object = $this->processFieldObject($field_name);
 
-        // N.B fails quietly if field doesn't exist.
-        if (!$field_object) {
-            return null;
-        }
-
-        $type = $field_object['type'];
-
-        if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this);
-        }
-
-        if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this);
-        }
-
-        if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this);
-        }
-
-        if ($type === 'relationship') {
-            return (new Relationship())->getElement($field_object, $this);
-        }
-
-        $pascal = str_replace('_', '', ucwords($type, '_'));
-
-        $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
-
-        return (new $classname())->getElement($field_object, $this->layout, $tag);
+        return $this->getElementFromFieldObject($field_object, $tag);
     }
 
 
