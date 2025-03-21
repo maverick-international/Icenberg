@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class Group extends Base
 {
-    public function getElement($field_object, $icenberg)
+    public function getElement($field_object, $icenberg, $tag)
     {
         // dd($field_object);
 
@@ -31,13 +31,8 @@ class Group extends Base
         endif;
 
         $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
-        $group = "<div class='{$class}'>{$innards}</div>";
+        $group = "<{$tag} class='{$class}'>{$innards}</{$tag}>";
 
         return $group;
-    }
-
-    public function dig($field_object, $icenberg)
-    {
-        return $this;
     }
 }

@@ -201,7 +201,7 @@ class Icenberg
         $type = $field_object['type'];
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this);
+            return (new Group())->getElement($field_object, $this, $tag);
         }
 
         if ($type === 'repeater') {
