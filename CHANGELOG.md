@@ -86,7 +86,7 @@ Paddy's day mega-release
 ### fixed
 - fixed bug where custom tags were not passed to groups
 
-## [v0.5.2] 2025-03-21
+## [v0.5.3] 2025-03-21
 
 ### Added
 - new 'only()' method to extrat an indibidual field or fields from a group or set of repeater rows.
