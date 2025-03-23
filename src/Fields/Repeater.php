@@ -13,8 +13,14 @@ class Repeater extends Base
 
         $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
 
-        if (have_rows($name)) :
-            while (have_rows($name)) : the_row();
+        $options = false;
+
+        if ($field_object['ID'] === 0) {
+            $options = 'options';
+        }
+
+        if (have_rows($name, $options)) :
+            while (have_rows($name, $options)) : the_row();
 
                 $gizzards = '';
 

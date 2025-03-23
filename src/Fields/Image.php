@@ -7,15 +7,16 @@ class Image extends Base
     /**
      * Scaffolds an image field
      *
-     * @param object $field
+     * @param object $field_object
      * @param string $layout
      * @return string
      */
-    public function getElement($field, $layout, $tag)
+    public function getElement($field_object, $layout, $tag)
     {
-        $name = $field['_name'];
+        $name = $field_object['_name'];
+        $id = $field_object['ID'];
 
-        $image = self::icefield($name);
+        $image = self::icefield($name, $id);
 
         //handle each possible format of image uses array, url or id
         if (is_array($image)) {

@@ -10,8 +10,20 @@ class Relationship extends Base
      * (its not you, its me).
      *
      */
-    public function getElement($field, $icenberg)
+    public function getElement($field_object, $layout, $tag)
     {
-        return;
+        $name = $field_object['name'];
+
+        $values = $field_object['value'] ?? null;
+
+        $content = '';
+
+        if ($values) {
+            foreach ($values as $value) {
+                $content .= $this->preview($value, $name, $layout, $tag);
+            }
+        }
+
+        return $content;
     }
 }

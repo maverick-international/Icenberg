@@ -1,3 +1,4 @@
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -89,4 +90,14 @@ Paddy's day mega-release
 ## [v0.5.3] 2025-03-21
 
 ### Added
-- new 'only()' method to extrat an indibidual field or fields from a group or set of repeater rows.
+- new 'only()' method to extract an individual field or fields from a group or set of repeater rows.
+
+## [v0.6.0]
+
+### Added
+- Ability to use global options fields
+- Relationship field support
+- Post object field support
+
+### Fixed
+- added more consistent variable naming in field classes

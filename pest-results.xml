@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/Users/dandevine/Sites/icenberg/phpunit.xml" tests="3" assertions="4" errors="0" failures="0" skipped="0" time="0.073897">
+    <testsuite name="Test Suite" tests="3" assertions="4" errors="0" failures="0" skipped="0" time="0.073897">
+      <testsuite name="Tests\Unit\IcenbergTest" file="tests/Unit/IcenbergTest.php" tests="3" assertions="4" errors="0" failures="0" skipped="0" time="0.073897">
+        <testcase name="it initializes with layout" file="tests/Unit/IcenbergTest.php::it initializes with layout" class="Tests\Unit\IcenbergTest" classname="Tests.Unit.IcenbergTest" assertions="1" time="0.040859"/>
+        <testcase name="it returns an element string from get_element" file="tests/Unit/IcenbergTest.php::it returns an element string from get_element" class="Tests\Unit\IcenbergTest" classname="Tests.Unit.IcenbergTest" assertions="1" time="0.032804"/>
+        <testcase name="it handles field() with and without comma" file="tests/Unit/IcenbergTest.php::it handles field() with and without comma" class="Tests\Unit\IcenbergTest" classname="Tests.Unit.IcenbergTest" assertions="2" time="0.000234"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

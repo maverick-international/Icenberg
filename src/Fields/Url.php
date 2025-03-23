@@ -7,15 +7,16 @@ class Url extends Base
     /**
      * Scaffold a text field
      *
-     * @param object $field
+     * @param object $field_object
      * @param string $layout the current row layout
      * @return string
      */
-    public function getElement($field, $layout, $tag)
+    public function getElement($field_object, $layout, $tag)
     {
-        $name = $field['_name'];
+        $name = $field_object['_name'];
+        $id = $field_object['ID'];
 
-        $content = get_sub_field($name);
+        $content = self::icefield($name, $id);
 
         $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$content}'>{$content}</a>";
 

@@ -96,6 +96,16 @@ $icenberg->the_element('field_name');
 ```
 Icenberg is smart enough to know what a field's type is, so you don't need to differentiate, you just pass the field name in.
 
+#### Global Options
+
+To retrieve a flobal option simply pass a comma delimeted string to `the_element()` or `get_element()` - it must be all as one string as opposed to seperate args and it must be comma delimited, where the first part is the field name and the second part is the options name, eg
+
+```php
+
+$ice->the_element('field_name, options');
+
+```
+
 
 #### `enclose()`
 

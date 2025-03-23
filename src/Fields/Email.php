@@ -4,11 +4,13 @@ namespace MVRK\Icenberg\Fields;
 
 class Email extends Base
 {
-    public function getElement($field, $layout, $tag)
+    public function getElement($field_object, $layout, $tag)
     {
-        $name = $field['_name'];
+        $name = $field_object['_name'];
 
-        $content = self::icefield($name);
+        $id = $field_object['ID'];
+
+        $content = self::icefield($name, $id);
 
         $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='mailto:{$content}'>{$content}</a>";
 

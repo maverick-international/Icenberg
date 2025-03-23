@@ -8,6 +8,7 @@ class Group extends Base
     {
         $name = $field_object['_name'];
 
+
         $sub_fields = [];
 
         foreach ($field_object['value'] as $key => $value) {
@@ -17,8 +18,14 @@ class Group extends Base
 
         $innards = "";
 
-        if (have_rows($name)) :
-            while (have_rows($name)) : the_row();
+        $options = false;
+
+        if ($field_object['ID'] === 0) {
+            $options = 'options';
+        }
+
+        if (have_rows($name, $options)) :
+            while (have_rows($name, $options)) : the_row();
 
                 foreach ($sub_fields as $sub_field) {
                     $innards .= $icenberg->get_element($sub_field);

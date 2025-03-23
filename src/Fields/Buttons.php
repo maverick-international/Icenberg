@@ -8,7 +8,6 @@ class Buttons extends Base
 {
     public function getElement($field_object, $layout)
     {
-
         $name = $field_object['_name'];
 
         $innards = "";
@@ -21,7 +20,6 @@ class Buttons extends Base
                 $innards .= $button;
 
             endwhile;
-
         endif;
 
         $class = "buttons block--{$this->unSnake($layout)}__{$this->unSnake($name)}";

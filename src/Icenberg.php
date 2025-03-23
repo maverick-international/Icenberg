@@ -9,23 +9,21 @@ use MVRK\Icenberg\Fields\Group;
 use MVRK\Icenberg\Fields\Repeater;
 use MVRK\Icenberg\Fields\Buttons;
 use MVRK\Icenberg\Fields\Settings;
-use MVRK\Icenberg\Fields\Base;
 
 /**
- * Magically clean up block templates by standardising the
- * presentation of acf sub fields in flexible field blocks
- * allowing us to get on with the most important part of our
- * job which is styling 30 different variations of testimonial.
- *
- * @todo maybe bring this up one level and automatically process
- * all the fields in a given row.
+ * Magically cleans up templates by standardising the
+ * presentation of acf fields, allowing us to get on with the
+ * most important part of our jobs which is styling 30
+ * different variations of testimonial.
  *
  * @author Dan Devine <dan.devine@maverick-intl.com>
+ * @author Cathal Toomey <cathal.toomey@maverick-intl.com>
  */
 class Icenberg
 {
     /**
      * The flexible content row/block name
+     * primarily used for generating css classes
      *
      * @var string
      */
@@ -73,46 +71,63 @@ class Icenberg
         return $this->sortElement($field_name, $tag);
     }
 
-    public function get_buttons($field_name)
+    /**
+     * Find out what type of field we're
+     * dealing with and route accordingly.
+     * Depends on the magic of consistent naming.
+     * Indvivdual field types can be overriden here.
+     *
+     * @param object $field
+     * @return string
+     */
+    protected function sortElement($field_name, $tag)
     {
-        $field_object = $this->processFieldObject($field_name);
-
-        // N.B fails quietly if field doesn't exist.
-        if (!$field_object) {
-            return null;
+        if (strpos($field_name, ',')) {
+            $args = array_map('trim', explode(',', $field_name));
+            $field_object = $this->processFieldObject(...$args);
+        } else {
+            $field_object = $this->processFieldObject($field_name);
         }
 
-        return (new Buttons())->getElement($field_object, $this->layout);
-    }
-
-    public function the_buttons($field_name)
-    {
-        echo $this->get_buttons($field_name);
+        return $this->getElementFromFieldObject($field_object, $tag);
     }
 
     /**
-     * Store the field and field object for method chaining.
+     * Set properties for method chaining.
      * Used for evaluations.
      *
      * @param string $field_name
-     * @return object
+     * @return Icenberg
      */
     public function field($field_name)
     {
-        return $this->processField($field_name);
+        if (strpos($field_name, ',')) {
+            $args = array_map('trim', explode(',', $field_name));
+            return $this->processField(...$args);
+        } else {
+            return $this->processField($field_name);
+        }
     }
 
-    public function processField($field_name)
+    /**
+     * Check if a field exists, discover if it's a field or sub field,
+     * retrieve its field object and set the class properties for method chaining.
+     *
+     * @param mixed $field_name
+     * @param mixed $option
+     * @return Icenberg
+     */
+    public function processField($field_name, $option = null)
     {
-        if (!get_sub_field($field_name) && !get_field($field_name)) {
+        if (!get_sub_field($field_name) && !get_field($field_name, $option)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $this->field = get_sub_field($field_name);
             $this->field_object = get_sub_field_object($field_name);
-        } elseif (get_field($field_name)) {
-            $this->field = get_field($field_name);
+        } elseif (get_field($field_name, $option)) {
+            $this->field = get_field($field_name, $option);
             $this->field_object = get_field_object($field_name);
         }
 
@@ -120,29 +135,37 @@ class Icenberg
     }
 
     /**
-     * Process the field.
+     * Discover if the field is a field or sub field,
+     * check if it exists and get its field object.
      *
-     * @param string $field the sub field name
-     * @return object
+     * @param string $field the field name
+     * @return object $field_object ACF Field object
+     *
      */
-    protected function processFieldObject($field_name)
+    protected function processFieldObject($field_name, $option = null)
     {
         $field_object = null;
 
-        // fails quietly if field doesn't exist.
-        if (!get_sub_field($field_name) && !get_field($field_name)) {
+        if (!get_sub_field($field_name) && !get_field($field_name, $option)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $field_object = get_sub_field_object($field_name);
-        } elseif (get_field($field_name)) {
-            $field_object = get_field_object($field_name);
+        } elseif (get_field($field_name, $option)) {
+            $field_object = get_field_object($field_name, $option);
         }
 
         return $field_object;
     }
 
+    /**
+     * Remove unwanted sub fields from
+     * group or repeater fields
+     *
+     * @param array $exclusions
+     * @return Icenberg
+     */
     public function prune($exclusions)
     {
         if (!$this->field_object) {
@@ -178,6 +201,13 @@ class Icenberg
         return $this;
     }
 
+    /**
+     * Perform the exclusions
+     *
+     * @param array $sub_fields
+     * @param array $exclusions
+     * @return array
+     */
     protected function pruneExcluded($sub_fields, $exclusions)
     {
         return array_values(array_filter(
@@ -186,6 +216,13 @@ class Icenberg
         ));
     }
 
+    /**
+     * Perform the inclusions
+     *
+     * @param array $sub_fields
+     * @param array $inclusions
+     * @return array
+     */
     protected function pruneIncluded($sub_fields, $inclusions)
     {
         return array_values(array_filter(
@@ -194,6 +231,13 @@ class Icenberg
         ));
     }
 
+    /**
+     * Prune non-whitelisted sub fields
+     * from a repeater or group
+     *
+     * @param array $inclusions
+     * @return Icenberg
+     */
     public function only($inclusions)
     {
         if (!$this->field_object) {
@@ -233,10 +277,18 @@ class Icenberg
         return $this;
     }
 
+    /**
+     * Delivers the icenberged string from an Icenberg
+     * field instance, at the end of the chain
+     *
+     * @param string $tag
+     * @return string
+     */
     public function get($tag = 'div')
     {
         return $this->getElementFromFieldObject($this->field_object, $tag);
     }
+
 
     protected function getElementFromFieldObject($field_object, $tag)
     {
@@ -247,6 +299,10 @@ class Icenberg
 
         $type = $field_object['type'];
 
+        /**
+         * Groups and Repeaters require special treatment
+         */
+
         if ($type === 'group') {
             return (new Group())->getElement($field_object, $this, $tag);
         }
@@ -255,12 +311,11 @@ class Icenberg
             return (new Repeater())->getElement($field_object, $this, $tag);
         }
 
+        /**
+         * This is a dead end (for now)
+         */
         if ($type === 'flexible_content') {
             return (new FlexibleContent())->getElement($field_object, $this);
-        }
-
-        if ($type === 'relationship') {
-            return (new Relationship())->getElement($field_object, $this);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
@@ -384,22 +439,22 @@ class Icenberg
     }
 
 
-    /**
-     * Find out what type of field we're
-     * dealing with and route accordingly.
-     * Depends on the magic of consistent naming.
-     * Indvivdual field types can be overriden here.
-     *
-     * @param object $field
-     * @return string
-     */
-    protected function sortElement($field_name, $tag)
+    public function get_buttons($field_name)
     {
         $field_object = $this->processFieldObject($field_name);
 
-        return $this->getElementFromFieldObject($field_object, $tag);
+        // N.B fails quietly if field doesn't exist.
+        if (!$field_object) {
+            return null;
+        }
+
+        return (new Buttons())->getElement($field_object, $this->layout);
     }
 
+    public function the_buttons($field_name)
+    {
+        echo $this->get_buttons($field_name);
+    }
 
     /**
      * Wrap up multiple icenberg elements together
@@ -417,7 +472,12 @@ class Icenberg
     public function get_enclose($class, $elements = [], $tag = 'div')
     {
         $layout = str_replace('_', '-', $this->layout);
-        return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
+
+        if ($class) {
+            return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
+        } else {
+            return "<{$tag} class='block--{$layout}'>" . implode($elements)  . "</{$tag}>";
+        }
     }
 
     /**

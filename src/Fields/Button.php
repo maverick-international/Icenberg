@@ -36,7 +36,6 @@ class Button extends Base
      */
     public function prepareButton($field)
     {
-
         $this->button = get_sub_field($field);
 
         if (!$this->button['button_link']) {
