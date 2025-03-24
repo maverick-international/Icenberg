@@ -1,12 +1,45 @@
 # Icenberg 🥶
 
+- [Icenberg 🥶](#icenberg-)
+    - [What is it?](#what-is-it)
+    - [Getting Started](#getting-started)
+      - [Initialise](#initialise)
+    - [Using with ACF Flexible Content blocks](#using-with-acf-flexible-content-blocks)
+  - [Using in an ACF Gutenberg Block](#using-in-an-acf-gutenberg-block)
+    - [Icenberg Methods](#icenberg-methods)
+      - [`get_element($field_name, $tag = 'div')`](#get_elementfield_name-tag--div)
+      - [`the_element($field_name, $tag = 'div')`](#the_elementfield_name-tag--div)
+      - [Global Options](#global-options)
+      - [`enclose()`](#enclose)
+  - [Values](#values)
+  - [Conditionals and manipulations](#conditionals-and-manipulations)
+      - [`field($field_name)`](#fieldfield_name)
+      - [`get(string $tag = 'div')`](#getstring-tag--div)
+      - [`prune(array $exclusions)`](#prunearray-exclusions)
+      - [`only(array $inclusions)`](#onlyarray-inclusions)
+      - [`is($value)`](#isvalue)
+      - [`lessThan($value)` and `greaterThan($value)`](#lessthanvalue-and-greaterthanvalue)
+  - [Special Fields](#special-fields)
+      - [Google Maps Field](#google-maps-field)
+      - [`settings($field_name, $additional_classes)`](#settingsfield_name-additional_classes)
+      - [`get_buttons($field_name)` and `the_buttons($field_name)`](#get_buttonsfield_name-and-the_buttonsfield_name)
+  - [CLI](#cli)
+    - [Available commands](#available-commands)
+    - [Configurqation](#configurqation)
+  - [Supported fields](#supported-fields)
+      - [Full Support](#full-support)
+      - [Third party fields:](#third-party-fields)
+      - [Special Fields](#special-fields-1)
+
+
+
 ### What is it?
 
 Icenberg is an attempt to clean up ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
 
-Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It includes a convenient CLI for generating ACF Gutenberg blocks.
+Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) object oriented fashion, while still allowing us to do things the old fashioned way if necessary. 
 
-Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) OO fashion, while still allowing us to do things the old fashioned way if necessary.
+Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It includes a convenient CLI for generating ACF Gutenberg blocks.
 
 It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but could also work within other scenarios, in theory.
 
@@ -35,7 +68,19 @@ if (file_exists($composer_path)) {
 ```
 Make sure you have ACF Pro installed. The library also supports [ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/) plugin.
 
+#### Initialise
+
+```php
+
+use MVRK\Icenberg\Icenberg;
+
+$ice = new Icenberg('block_name');
+
+```
+
+### Using with ACF Flexible Content blocks
 The following example takes place inside ACF's the_row() - ie:
+
 ```php
 
 if (have_rows('content_blocks', $id)) :
@@ -48,7 +93,7 @@ if (have_rows('content_blocks', $id)) :
 
 endif;
 ```
-Initialise with ACFs `the_row_layout()`
+Initialise with ACFs `the_row_layout()` in your block template:
 
 ```php
 
@@ -56,19 +101,31 @@ use MVRK\Icenberg\Icenberg;
 
 $ice = new Icenberg(get_row_layout());
 
-```
-Once that's intialised you're ready to build your flexible content block.
-
-## Using in an ACF Gutenberg Block
-
-since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. 
-
-```php
-$ice = new Icenberg(strtolower($block['title']));
-
 $ice->the_element('quote');
 $ice->the_element('attribution');
 $ice->the_element('portrait');
+
+```
+
+## Using in an ACF Gutenberg Block
+
+since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. You can use the wrap method in a gutenberg block to wrap the block frontend in a similar way to how it is wrapped automatically by wp in the backend:
+
+```php
+use MVRK\Icenberg\Icenberg;
+
+$icenberg = new Icenberg(strtolower($block['title']));
+
+$icenberg::wrap(
+    [
+        $icenberg->get_element('quote'),
+        $icenberg->get_element('attribution'),
+        $icenberg->get_element('portrait'),
+    ],
+    $block,
+    true
+);
+
 ```
 
 ### Icenberg Methods
@@ -98,7 +155,7 @@ Icenberg is smart enough to know what a field's type is, so you don't need to di
 
 #### Global Options
 
-To retrieve a flobal option simply pass a comma delimeted string to `the_element()` or `get_element()` - it must be all as one string as opposed to seperate args and it must be comma delimited, where the first part is the field name and the second part is the options name, eg
+To retrieve a global option simply pass a comma delimeted string to `the_element()` or `get_element()` - it must be all as one string as opposed to seperate args and it must be comma delimited, where the first part is the field name and the second part is the options name, eg
 
 ```php
 
