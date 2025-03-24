@@ -12,12 +12,10 @@ class FlexibleContent extends Base
 
         $name = $field_object['_name'];
 
-
         if (have_rows($name)) :
             while (have_rows($name)) : the_row();
 
                 dump(get_row_layout());
-
 
             endwhile;
         endif;

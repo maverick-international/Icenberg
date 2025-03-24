@@ -4,7 +4,6 @@ namespace MVRK\Icenberg\Fields;
 
 class Range extends Base
 {
-
     public function getElement($field_object, $layout, $tag)
     {
         $name = $field_object['_name'];

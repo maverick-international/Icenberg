@@ -92,12 +92,18 @@ Paddy's day mega-release
 ### Added
 - new 'only()' method to extract an individual field or fields from a group or set of repeater rows.
 
-## [v0.6.0]
+## [v0.6.0] 2025-03-21
+
+**Potentially Breaking changes**: Relationship and Post Object fields now return a value, so if they exist in groups that are dispayed using previous versions of icenberg they will now display, which may not be desired. 
 
 ### Added
 - Ability to use global options fields
 - Relationship field support
 - Post object field support
-
+- Testing framework (Brain Monkey/Pest) and scaffolding for future implementation
+- Google Maps field
+- Value method to retrieve unprocessed field/sub field values
+  
 ### Fixed
-- added more consistent variable naming in field classes
+- Inconsistent variable naming in field classes
+- Dynamic property assignment in Form class 

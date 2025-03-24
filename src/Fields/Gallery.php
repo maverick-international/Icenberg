@@ -2,7 +2,6 @@
 
 namespace MVRK\Icenberg\Fields;
 
-
 class Gallery extends Base
 {
     public function getElement($field, $layout, $tag)

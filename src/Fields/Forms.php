@@ -24,8 +24,11 @@ class Forms extends Base
     public function getElement($field_object, $layout, $tag)
     {
         $this->form = $field_object['value'];
+
         $this->name = $field_object['_name'];
+
         $this->layout = $layout;
+
         $this->tag = $tag;
 
         $this->getTitles();

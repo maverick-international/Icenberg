@@ -6,8 +6,8 @@ class PostObject extends Base
 {
     public function getElement($field_object, $layout, $tag)
     {
-
         $name = $field_object['_name'];
+
         $values = $field_object['value'] ?? null;
 
         if (!is_array($values)) {

@@ -14,6 +14,7 @@ class Image extends Base
     public function getElement($field_object, $layout, $tag)
     {
         $name = $field_object['_name'];
+
         $id = $field_object['ID'];
 
         $image = self::icefield($name, $id);

@@ -4,11 +4,11 @@ namespace MVRK\Icenberg;
 
 use MVRK\Icenberg\Blocks\Wrap;
 use MVRK\Icenberg\Fields\FlexibleContent;
-use MVRK\Icenberg\Fields\Relationship;
 use MVRK\Icenberg\Fields\Group;
 use MVRK\Icenberg\Fields\Repeater;
 use MVRK\Icenberg\Fields\Buttons;
 use MVRK\Icenberg\Fields\Settings;
+use MVRK\Icenberg\Fields\Base;
 
 /**
  * Magically cleans up templates by standardising the
@@ -72,6 +72,23 @@ class Icenberg
     }
 
     /**
+     * Return the 'raw' value of a given field
+     *
+     * @param string $field_name
+     * @return mixed
+     */
+    public function value($field_name)
+    {
+        $field_object = $this->getFieldObject($field_name);
+
+        $name = $field_object['_name'];
+
+        $id = $field_object['ID'] ?? '';
+
+        return Base::icefield($name, $id);
+    }
+
+    /**
      * Find out what type of field we're
      * dealing with and route accordingly.
      * Depends on the magic of consistent naming.
@@ -82,14 +99,19 @@ class Icenberg
      */
     protected function sortElement($field_name, $tag)
     {
-        if (strpos($field_name, ',')) {
-            $args = array_map('trim', explode(',', $field_name));
-            $field_object = $this->processFieldObject(...$args);
-        } else {
-            $field_object = $this->processFieldObject($field_name);
-        }
+        $field_object = $this->getFieldObject($field_name);
 
         return $this->getElementFromFieldObject($field_object, $tag);
+    }
+
+    protected function getFieldObject($field_name)
+    {
+        if (strpos($field_name, ',')) {
+            $args = array_map('trim', explode(',', $field_name));
+            return $this->processFieldObject(...$args);
+        } else {
+            return $this->processFieldObject($field_name);
+        }
     }
 
     /**

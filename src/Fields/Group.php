@@ -8,7 +8,6 @@ class Group extends Base
     {
         $name = $field_object['_name'];
 
-
         $sub_fields = [];
 
         foreach ($field_object['value'] as $key => $value) {

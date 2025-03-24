@@ -6,7 +6,6 @@ class Repeater extends Base
 {
     public function getElement($field_object, $icenberg, $tag = 'div')
     {
-
         $name = $field_object['_name'];
 
         $innards = "";

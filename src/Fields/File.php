@@ -15,8 +15,11 @@ class File extends Base
     public function getElement($field_object, $layout, $tag)
     {
         $this->field_object = $field_object;
+
         $this->layout = $layout;
+
         $this->tag = $tag;
+
         $this->name = $field_object['_name'];
 
         $id = $field_object['ID'];
@@ -58,6 +61,7 @@ class File extends Base
         if (is_array($video)) {
             $content = "<video loop muted autoplay playsinline><source src='{$video['url']}' type='video/mp4' /></video>";
         }
+
         $wrapped = $this->wrap($content, $this->name, $this->layout, $this->tag);
 
         return $wrapped;

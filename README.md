@@ -54,7 +54,7 @@ Initialise with ACFs `the_row_layout()`
 
 use MVRK\Icenberg\Icenberg;
 
-$icenberg = new Icenberg(get_row_layout());
+$ice = new Icenberg(get_row_layout());
 
 ```
 Once that's intialised you're ready to build your flexible content block.
@@ -64,11 +64,11 @@ Once that's intialised you're ready to build your flexible content block.
 since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. 
 
 ```php
-$icenberg = new Icenberg(strtolower($block['title']));
+$ice = new Icenberg(strtolower($block['title']));
 
-$icenberg->the_element('quote');
-$icenberg->the_element('attribution');
-$icenberg->the_element('portrait');
+$ice->the_element('quote');
+$ice->the_element('attribution');
+$ice->the_element('portrait');
 ```
 
 ### Icenberg Methods
@@ -79,7 +79,7 @@ Returns an ACF field as a formatted string, wrapped up in all the divs you need 
 
 ```php
 
-$field_name = $icenberg->get_element('field_name');
+$field_name = $ice->get_element('field_name');
 
 echo $field_name;
 
@@ -91,7 +91,7 @@ As above, but echoes it out immediately.
 
 ```php
 
-$icenberg->the_element('field_name');
+$ice->the_element('field_name');
 
 ```
 Icenberg is smart enough to know what a field's type is, so you don't need to differentiate, you just pass the field name in.
@@ -115,9 +115,9 @@ So for example, in a 'Cta' block,  where cta_heading is a text field and cta_con
 
 ```php
 
-$icenberg->enclose('text', [
-    $icenberg->get_element('cta_heading')
-    $icenberg->get_element('cta_content'),
+$ice->enclose('text', [
+    $ice->get_element('cta_heading')
+    $ice->get_element('cta_content'),
 ]);
 
 ```
@@ -151,8 +151,8 @@ You could also pass any thing else you like to enclose as part of the array, as 
 
 $random_text = "<span>I am some random text, isn't it wonderful?</span>";
 
-$icenberg->enclose('text', [
-    $icenberg->get_element('cta_heading'),
+$ice->enclose('text', [
+    $ice->get_element('cta_heading'),
     $random_text
 ]);
 
@@ -164,10 +164,94 @@ Of course life is never simple, so you will most likely need more complex layout
 
 <div class="testimonial__corner-illustration_green_reversed">
     <?php if($motif_variation_5_purple === 'orange') :
-    $icenberg->the_element('motif_blurple');
+    $ice->the_element('motif_blurple');
     endif; ?>
 </div>
 
+```
+## Values
+You can us the `value()` method to return the 'raw', value of a given field without checking for existence or specifiying if it is a sub field.
+
+```php
+$lady_in_red = $ice->value('dancing_with_me');
+```
+as this just returns the value there are no special considerations for individual field types.
+
+## Conditionals and manipulations
+
+#### `field($field_name)`
+
+you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
+
+ ```php
+ $ice->field($field_name)
+ ```
+#### `get(string $tag = 'div')`
+Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
+
+```php
+$ice->field('saxaphone')->get()
+```
+
+#### `prune(array $exclusions)`
+
+pass an array of field names to the prune method to remove them from a group or from a repeater row.
+
+```php
+$group = $ice->field('bad_singers')->prune(['chris_de_burgh', 'cliff_richard'])->get();
+
+```
+
+#### `only(array $inclusions)`
+
+pass an array of field names to the only method to extract them from a group or set of repeater rows. 
+
+```php
+$group = $ice->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
+
+```
+
+#### `is($value)`
+
+returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
+
+```php
+ if ($ice->field('font_colour')->is('red')) :
+    $ice->the_element('font_colour');
+else :
+    echo 'oh no';
+endif;
+```
+
+#### `lessThan($value)` and `greaterThan($value)`
+
+Self explanatory, both take an integer as an argument. Warning: If you use it on a non numeric field it will return false.
+
+```php
+if ($ice->field('range_test')->lessThan(51)) :
+    $class = 'text_' . $ice->field('range_test')->field;
+    $ice->enclose($class, [
+        $ice->get_element('cta_content'),
+        $ice->get_element('cta_image'),
+    ]);
+endif;
+
+```
+
+## Special Fields
+
+#### Google Maps Field
+
+For the Google Maps field to work properly on front and backends you will need an API key. Once you have the key, add it to icenberg.yml in your project and the frontend will work. To make it work in the backend, add the following to your functions.php (in this example the key is defined in wp-config.php)
+
+```php
+function acf_google_map_field($api)
+{
+    $api['key'] = GOOGLE_MAPS_API_KEY;
+
+    return $api;
+}
+add_filter('acf/fields/google_map/api', 'acf_google_map_field');
 ```
 
 #### `settings($field_name, $additional_classes)`
@@ -181,11 +265,11 @@ $classes = ['banana', 'orange'];
 
 $block_settings = get_sub_field($block_settings);
 
-$settings = $icenberg->settings($block_settings, $classes);
+$settings = $ice->settings($block_settings, $classes);
 
-$icenberg->enclose ($settings, [
-    $icenberg->get_element('cheese_board'),
-    $icenberg->get_element('flame_thrower')
+$ice->enclose ($settings, [
+    $ice->get_element('cheese_board'),
+    $ice->get_element('flame_thrower')
 ])
 ```
 
@@ -206,74 +290,9 @@ which will print out something like
 Depending on the settings in your group.
 
 
-## Conditionals and manipulations
-
-#### `field($field_name)`
-
-you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
-
- ```php
- $icenberg->field($field_name)
- ```
-#### `get(string $tag = 'div')`
-Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
-
-```php
-$icenberg->field('saxaphone')->get()
-```
-
-#### `prune(array $exclusions)`
-
-pass an array of field names to the prune method to remove them from a group or from a repeater row.
-
-```php
-$group = $icenberg->field('bad_singers')->prune(['chris_de_burgh', 'cliff_richard'])->get();
-
-```
-
-#### `only(array $inclusions)`
-
-pass an array of field names to the only method to extract them from a group or set of repeater rows. 
-
-```php
-$group = $icenberg->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
-
-```
-
-#### `is($value)`
-
-returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
-
-```php
- if ($icenberg->field('font_colour')->is('red')) :
-    $icenberg->the_element('font_colour');
-else :
-    echo 'oh no';
-endif;
-```
-
-#### `lessThan($value)` and `greaterThan($value)`
-
-Self explanatory, both take an integer as an argument. Warning: If you use it on a non numeric field it will return false.
-
-```php
-if ($icenberg->field('range_test')->lessThan(51)) :
-    $class = 'text_' . $icenberg->field('range_test')->field;
-    $icenberg->enclose($class, [
-        $icenberg->get_element('cta_content'),
-        $icenberg->get_element('cta_image'),
-    ]);
-endif;
-
-```
-
-
-## Maverick Specific
-
 #### `get_buttons($field_name)` and `the_buttons($field_name)`
 
-Return a formatted button group with a huge range of styles catered for - very Maverick specific.
-Expects our usual button group format.
+Return a formatted group of buttons with a huge range of styles catered for - very Maverick specific.Expects our usual group of buttons format.
 
 ## CLI
 
@@ -315,12 +334,13 @@ Supported config options below with their default values:
 ```yaml
 block_directory_name: 'blocks' #change the default block directory name
 sass_path: 'src/sass/blocks' #specify a location for sass partials
-build_src: true #whether or not to create a sass file in a specified directory for those who prefer to seperate concerns.
+google_maps_api_key: '<your key here>'
+
 ```
 
 ## Supported fields
 
-#### Currently Supported fields
+#### Full Support
 - Gallery
 - Group
 - Image
@@ -333,6 +353,10 @@ build_src: true #whether or not to create a sass file in a specified directory f
 - Text
 - Textarea
 - Wysiwyg
+- Relationship
+- Post Object
+- Page Link
+- Google Maps
 
 #### Third party fields:
 - Forms

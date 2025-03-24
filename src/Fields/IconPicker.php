@@ -2,7 +2,7 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class TrueFalse extends Base
+class IconPicker extends Base
 {
     public function getElement($field_object, $layout, $tag)
     {
