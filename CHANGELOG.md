@@ -112,3 +112,8 @@ Paddy's day mega-release
 
 ### Fixed
 - Major regressions due to error in handling option fields
+
+## [v0.6.3] 2025-03-22
+
+### Added
+- CLI can now create flexible content blocks when the --flexible flag is used

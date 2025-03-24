@@ -314,16 +314,18 @@ if ($is_wp_cli) {
 
 this bootstraps an ACF gutenberg block with all relevant files ready to go.
 
-This assumes that your blocks are in a folder called 'blocks' in your template root directory but this is configurable.
+This assumes that your blocks are in a folder called 'blocks' in your template root directory but this is configurable via icenberg.yaml
 
-Icenberg generates a folder per block withing the blocks folder. This folder contains
+Icenberg generates a folder per block within the blocks folder. This folder contains
 - block.json
 - <block_name>.php
 - <block_name>.css
 
 It will also register an empty field group ready for access via the ACF GUI.
 
-if the `build_src` config option is `true` then a sass partial will also be generated at the specified `sass_path`
+`wp icenberg block --block_name --flexible`
+
+this is similar to the above but creates just the php and scss files for flexible content blocks. 
 
 
 ### Configurqation
