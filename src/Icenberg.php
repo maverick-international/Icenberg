@@ -96,7 +96,14 @@ class Icenberg
         return Base::icefield($name, $options);
     }
 
-
+    /**
+     * If there's a comma, its an option. We need this to pass
+     *  it down to field level as the post object gives no indication
+     *  of whther a given field is from options or not, sadly.
+     *
+     * @param string $field_name
+     * @return ?string
+     */
     public function optionValue($field_name)
     {
         if (strpos($field_name, ',')) {
@@ -121,6 +128,7 @@ class Icenberg
 
         return $this->getElementFromFieldObject($field_object, $tag, $options);
     }
+
 
     protected function getFieldObject($field_name)
     {
@@ -181,7 +189,8 @@ class Icenberg
      * check if it exists and get its field object.
      *
      * @param string $field the field name
-     * @return object $field_object ACF Field object
+     * @param ?string $option - is this a globl field?
+     * @return ?object $field_object ACF Field object | null
      *
      */
     protected function processFieldObject($field_name, $option = null)
@@ -206,7 +215,7 @@ class Icenberg
      * Remove unwanted sub fields from
      * group or repeater fields
      *
-     * @param array $exclusions
+     * @param array $exclusions - unwanted fields
      * @return Icenberg
      */
     public function prune($exclusions)
@@ -248,7 +257,7 @@ class Icenberg
      * Perform the exclusions
      *
      * @param array $sub_fields
-     * @param array $exclusions
+     * @param array $exclusions - unwanted fields
      * @return array
      */
     protected function pruneExcluded($sub_fields, $exclusions)
@@ -263,7 +272,7 @@ class Icenberg
      * Perform the inclusions
      *
      * @param array $sub_fields
-     * @param array $inclusions
+     * @param array $inclusions - whitelisted fields
      * @return array
      */
     protected function pruneIncluded($sub_fields, $inclusions)
@@ -278,7 +287,7 @@ class Icenberg
      * Prune non-whitelisted sub fields
      * from a repeater or group
      *
-     * @param array $inclusions
+     * @param array $inclusions - wanted fields
      * @return Icenberg
      */
     public function only($inclusions)
@@ -325,17 +334,23 @@ class Icenberg
      * field instance, at the end of the chain
      *
      * @param string $tag
-     * @return string
+     * @return ?string
      */
     public function get($tag = 'div')
     {
         return $this->getElementFromFieldObject($this->field_object, $tag, $this->options);
     }
 
-
+    /**
+     * Undocumented function
+     *
+     * @param object $field_object
+     * @param ?string $tag
+     * @param ?string $options
+     * @return ?string
+     */
     protected function getElementFromFieldObject($field_object, $tag, $options = null)
     {
-
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
             return null;
@@ -503,7 +518,7 @@ class Icenberg
     /**
      * Wrap up multiple icenberg elements together
      *
-     * @param string $class element classname - this method will BEM it up with the layout name
+     * @param string $class element classname - BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
      * @return string

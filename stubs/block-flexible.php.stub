@@ -1,0 +1,12 @@
+<?php
+
+use MVRK\Icenberg\Icenberg;
+
+$icenberg = new Icenberg(get_row_layout());
+
+$icenberg->enclose('text', [
+    //$icenberg->get_element('your_sub_field'),
+   // $icenberg->get_element('another_sub_field')
+]);
+
+// $icenberg->the_element('some_third_field');

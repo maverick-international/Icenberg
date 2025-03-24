@@ -19,7 +19,7 @@ class Base
     }
 
     /**
-     * Wrap content in a html list
+     * Wrap iterable content in a html list
      *
      * @param mixed $content
      * @param mixed $classes

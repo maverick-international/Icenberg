@@ -13,22 +13,41 @@ class Block
      * @param array $args
      * @return void
      */
-    public static function create($block_name, $args)
+    public static function create($block_name, $args, $assoc_args)
     {
-        $css_classes = self::generateCssClass($block_name, $args);
-        $php_stub = self::generatePhpStub($args);
-        $json_stub = self::generateJsonStub($block_name);
-        $directories = self::createDirectories($block_name);
+        if (!isset($assoc_args['flexible'])) {
+            /** @disregard P1009 */
+            WP_CLI::log('Generating a Gutenberg block..');
 
-        self::writeFile($directories['php_file_path'], $php_stub);
-        self::writeFile($directories['css_file_path'], $css_classes);
-        self::writeFile($directories['json_file_path'], $json_stub);
-        self::writeFile($directories['sass_file_path'], $css_classes);
+            $css_classes = self::generateCssClass($block_name, $args);
+            $php_stub = self::generatePhpStub($args, false);
+            $json_stub = self::generateJsonStub($block_name);
+            $directories = self::createDirectories($block_name, false);
 
-        self::createEmptyFieldGroup($block_name);
+            self::writeFile($directories['php_file_path'], $php_stub);
+            self::writeFile($directories['css_file_path'], $css_classes);
+            self::writeFile($directories['json_file_path'], $json_stub);
+            self::writeFile($directories['sass_file_path'], $css_classes);
 
-        /** @disregard P1009 */
-        WP_CLI::success("New block created at {$directories['single_dir']}");
+            self::createEmptyFieldGroup($block_name);
+
+            /** @disregard P1009 */
+            WP_CLI::success("New block created at {$directories['single_dir']}");
+        } else {
+
+            /** @disregard P1009 */            /** @disregard P1009 */
+            WP_CLI::log('Generating a flexible content block..');
+
+            $css_classes = self::generateCssClass($block_name, $args);
+            $php_stub = self::generatePhpStub($args, true);
+            $directories = self::createDirectories($block_name, true);
+
+            self::writeFile($directories['php_file_path'], $php_stub);
+            self::writeFile($directories['sass_file_path'], $css_classes);
+
+            /** @disregard P1009 */
+            WP_CLI::success("New block created at {$directories['single_dir']}");
+        }
     }
 
     /**
@@ -60,11 +79,15 @@ class Block
      * @param array $args
      * @return string
      */
-    public static function generatePhpStub($args)
+    public static function generatePhpStub($args, $is_flexible)
     {
         // Grab our stub files
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
-        $php_stub = file_get_contents($stubs_directory . "/block.php.stub", true);
+        if (!$is_flexible) {
+            $php_stub = file_get_contents($stubs_directory . "/block.php.stub", true);
+        } else {
+            $php_stub = file_get_contents($stubs_directory . "/block-flexible.php.stub", true);
+        }
 
         // Append the icenberg elements onto the stub for each specified field
         $fields = "";
@@ -183,11 +206,15 @@ class Block
      * @param string $block_name
      * @return array
      */
-    public static function createDirectories($block_name)
+    public static function createDirectories($block_name, $is_flexible)
     {
         $blocks_dir = Bootstrap::getBlocksDirectory();
         $sass_dir = Bootstrap::getSassDirectory();
-        $single_dir = $blocks_dir . "/{$block_name}";
+        if (!$is_flexible) {
+            $single_dir = $blocks_dir . "/{$block_name}";
+        } else {
+            $single_dir = $blocks_dir;
+        }
 
         $php_file_path = $single_dir . "/{$block_name}.php";
         $css_file_path = $single_dir . "/{$block_name}.css";
@@ -198,8 +225,10 @@ class Block
             mkdir($blocks_dir, 0755, true);
         }
 
-        if (!is_dir($single_dir)) {
-            mkdir($single_dir, 0755, true);
+        if (!$is_flexible) {
+            if (!is_dir($single_dir)) {
+                mkdir($single_dir, 0755, true);
+            }
         }
 
         if (!is_dir($sass_dir)) {

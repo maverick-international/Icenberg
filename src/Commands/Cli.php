@@ -18,7 +18,7 @@ class Cli extends Bootstrap
      * @param array $args
      * @return void
      */
-    public function block($args)
+    public function block($args, $flags)
     {
         if (!$args) {
             /** @disregard P1009 */
@@ -32,7 +32,7 @@ class Cli extends Bootstrap
         /** @disregard P1010 */
         $progress = WP_CLI\Utils\make_progress_bar('Generating blocks', 1);
 
-        Block::create($block_name, $args);
+        Block::create($block_name, $args, $flags);
 
         $progress->tick();
         $progress->finish();
