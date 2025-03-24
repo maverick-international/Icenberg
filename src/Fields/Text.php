@@ -12,18 +12,11 @@ class Text extends Base
      * @param string $tag
      * @return string
      */
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        /**
-         * we're passing the ID to identify if
-         * this is an options field, as all options
-         * field objects have an ID of 0
-         */
-        $id = $field_object['ID'];
-
-        $content = self::icefield($name, $id);
+        $content = self::icefield($name, $options);
 
         $wrapped = $this->wrap($content, $name, $layout, $tag);
 

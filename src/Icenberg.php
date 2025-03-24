@@ -43,6 +43,14 @@ class Icenberg
      */
     public $field_object;
 
+    /**
+     * Contains the value that indicates whether the field
+     * is a global options field or not.
+     *
+     * @var ?string 'options' or null
+     */
+    public $options;
+
 
     public function __construct($layout)
     {
@@ -81,11 +89,19 @@ class Icenberg
     {
         $field_object = $this->getFieldObject($field_name);
 
+        $options = $this->optionValue($field_name);
+
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'] ?? '';
+        return Base::icefield($name, $options);
+    }
 
-        return Base::icefield($name, $id);
+
+    public function optionValue($field_name)
+    {
+        if (strpos($field_name, ',')) {
+            return 'options';
+        }
     }
 
     /**
@@ -101,7 +117,9 @@ class Icenberg
     {
         $field_object = $this->getFieldObject($field_name);
 
-        return $this->getElementFromFieldObject($field_object, $tag);
+        $options = $this->optionValue($field_name);
+
+        return $this->getElementFromFieldObject($field_object, $tag, $options);
     }
 
     protected function getFieldObject($field_name)
@@ -123,11 +141,13 @@ class Icenberg
      */
     public function field($field_name)
     {
+        $this->options = $this->optionValue($field_name);
+
         if (strpos($field_name, ',')) {
             $args = array_map('trim', explode(',', $field_name));
             return $this->processField(...$args);
         } else {
-            return $this->processField($field_name);
+            return $this->processField($field_name, null);
         }
     }
 
@@ -139,18 +159,18 @@ class Icenberg
      * @param mixed $option
      * @return Icenberg
      */
-    public function processField($field_name, $option = null)
+    public function processField($field_name, $options = null)
     {
-        if (!get_sub_field($field_name) && !get_field($field_name, $option)) {
+        if (!get_sub_field($field_name) && !get_field($field_name, $options)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $this->field = get_sub_field($field_name);
             $this->field_object = get_sub_field_object($field_name);
-        } elseif (get_field($field_name, $option)) {
-            $this->field = get_field($field_name, $option);
-            $this->field_object = get_field_object($field_name);
+        } elseif (get_field($field_name, $options)) {
+            $this->field = get_field($field_name, $options);
+            $this->field_object = get_field_object($field_name, $options);
         }
 
         return $this;
@@ -166,6 +186,7 @@ class Icenberg
      */
     protected function processFieldObject($field_name, $option = null)
     {
+
         $field_object = null;
 
         if (!get_sub_field($field_name) && !get_field($field_name, $option)) {
@@ -308,12 +329,13 @@ class Icenberg
      */
     public function get($tag = 'div')
     {
-        return $this->getElementFromFieldObject($this->field_object, $tag);
+        return $this->getElementFromFieldObject($this->field_object, $tag, $this->options);
     }
 
 
-    protected function getElementFromFieldObject($field_object, $tag)
+    protected function getElementFromFieldObject($field_object, $tag, $options = null)
     {
+
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
             return null;
@@ -326,25 +348,25 @@ class Icenberg
          */
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this, $tag);
+            return (new Group())->getElement($field_object, $this, $tag, $options);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this, $tag);
+            return (new Repeater())->getElement($field_object, $this, $tag, $options);
         }
 
         /**
          * This is a dead end (for now)
          */
         if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this);
+            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $options);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname())->getElement($field_object, $this->layout, $tag);
+        return (new $classname())->getElement($field_object, $this->layout, $tag, $options);
     }
 
     /**

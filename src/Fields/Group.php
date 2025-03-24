@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class Group extends Base
 {
-    public function getElement($field_object, $icenberg, $tag = 'div')
+    public function getElement($field_object, $icenberg, $tag, $options)
     {
         $name = $field_object['_name'];
 
@@ -16,8 +16,6 @@ class Group extends Base
         }
 
         $innards = "";
-
-        $options = $field_object['ID'];
 
         if (have_rows($name, $options)) :
             while (have_rows($name, $options)) : the_row();

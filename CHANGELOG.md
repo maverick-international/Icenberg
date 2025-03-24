@@ -107,3 +107,8 @@ Paddy's day mega-release
 ### Fixed
 - Inconsistent variable naming in field classes
 - Dynamic property assignment in Form class 
+
+## [v0.6.2] 2025-03-22
+
+### Fixed
+- Major regressions due to error in handling option fields

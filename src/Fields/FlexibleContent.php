@@ -7,17 +7,8 @@ namespace MVRK\Icenberg\Fields;
  */
 class FlexibleContent extends Base
 {
-    public function getElement($field_object, $icenberg)
+    public function getElement($field_object, $icenberg, $tag, $options)
     {
-
-        $name = $field_object['_name'];
-
-        if (have_rows($name)) :
-            while (have_rows($name)) : the_row();
-
-                dump(get_row_layout());
-
-            endwhile;
-        endif;
+        return; // not yet supported
     }
 }

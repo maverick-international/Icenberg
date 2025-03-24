@@ -21,7 +21,7 @@ class Forms extends Base
 
     protected $name;
 
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $this->form = $field_object['value'];
 
@@ -35,7 +35,7 @@ class Forms extends Base
 
         $this->gravity_form = gravity_form($this->form['id'], $display_title = false, $display_description = false, $display_inactive = false, $field_values = null, $ajax = true, $tabindex = 0, $echo = false);
 
-        return  $this->build();
+        return $this->build();
     }
 
     protected function getTitles()

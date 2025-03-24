@@ -4,11 +4,11 @@ namespace MVRK\Icenberg\Fields;
 
 class Gallery extends Base
 {
-    public function getElement($field, $layout, $tag)
+    public function getElement($field, $layout, $tag, $options)
     {
         $name = $field['_name'];
 
-        $gallery = self::icefield($name);
+        $gallery = self::icefield($name, $options);
 
         $images = '';
 

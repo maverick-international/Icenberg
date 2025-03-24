@@ -4,13 +4,11 @@ namespace MVRK\Icenberg\Fields;
 
 class PageLink extends Base
 {
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
-        $links = self::icefield($name, $id);
+        $links = self::icefield($name, $options);
 
         if (is_string($links)) {
             $links = [$links];

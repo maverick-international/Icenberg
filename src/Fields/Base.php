@@ -54,10 +54,8 @@ class Base
      * @param mixed $id
      * @return mixed
      */
-    public static function icefield($field_name, $id = null)
+    public static function icefield($field_name, $options = null)
     {
-        $options = self::isOption($id);
-
         if (!get_sub_field($field_name) && !get_field($field_name, $options)) {
             return;
         }
@@ -71,20 +69,6 @@ class Base
         return $field;
     }
 
-    /**
-     * All options field objects have an ID of 0
-     *
-     * @param mixed $id
-     * @return boolean
-     */
-    public static function isOption($id)
-    {
-        if ($id === 0) {
-            return 'options';
-        } else {
-            return false;
-        }
-    }
 
     protected static function wrapInTag($content, $item_name, $class, $tag = 'span')
     {

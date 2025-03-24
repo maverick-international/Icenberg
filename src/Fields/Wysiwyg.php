@@ -11,13 +11,11 @@ class Wysiwyg extends Base
      * @param string $layout the current row
      * @return string
      */
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
-        $content = self::icefield($name, $id);
+        $content = self::icefield($name, $options);
 
         $wrapped = $this->wrap($content, $name, $layout, $tag);
 

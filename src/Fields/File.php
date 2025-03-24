@@ -12,7 +12,7 @@ class File extends Base
 
     public $name;
 
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $this->field_object = $field_object;
 
@@ -22,8 +22,6 @@ class File extends Base
 
         $this->name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
         /**
          * file by id is unsupported,
          * use array or url instead, array for best results.
@@ -32,7 +30,7 @@ class File extends Base
             return false;
         }
 
-        $file = self::icefield($this->name, $id);
+        $file = self::icefield($this->name, $options);
 
         if (is_array($file)) {
             if ($file['type'] === 'video') {

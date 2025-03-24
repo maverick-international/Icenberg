@@ -5,13 +5,11 @@ namespace MVRK\Icenberg\Fields;
 class Number extends Base
 {
 
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
-        $content = self::icefield($name, $id);
+        $content = self::icefield($name, $options);
 
         $wrapped = $this->wrap($content, $name, $layout, $tag);
 

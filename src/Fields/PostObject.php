@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class PostObject extends Base
 {
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 

@@ -8,7 +8,7 @@ class Relationship extends Base
      * Relationships can work in icenberg!
      *
      */
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['name'];
 

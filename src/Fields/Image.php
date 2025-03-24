@@ -11,13 +11,11 @@ class Image extends Base
      * @param string $layout
      * @return string
      */
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
-        $image = self::icefield($name, $id);
+        $image = self::icefield($name, $options);
 
         //handle each possible format of image uses array, url or id
         if (is_array($image)) {

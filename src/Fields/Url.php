@@ -11,13 +11,11 @@ class Url extends Base
      * @param string $layout the current row layout
      * @return string
      */
-    public function getElement($field_object, $layout, $tag)
+    public function getElement($field_object, $layout, $tag, $options)
     {
         $name = $field_object['_name'];
 
-        $id = $field_object['ID'];
-
-        $content = self::icefield($name, $id);
+        $content = self::icefield($name, $options);
 
         $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$content}'>{$content}</a>";
 
