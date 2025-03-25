@@ -16,6 +16,8 @@ class Block
     public static function create($block_name, $args, $assoc_args)
     {
         if (!isset($assoc_args['flexible'])) {
+            // gutenberg/acf csan't handle blocknames with underscores, spaces or hyphens apparently
+            $block_name = str_replace(['-', ' ', '_'], '', $block_name);
             /** @disregard P1009 */
             WP_CLI::log('Generating a Gutenberg block..');
 
