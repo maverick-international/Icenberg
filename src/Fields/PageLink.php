@@ -16,9 +16,13 @@ class PageLink extends Base
 
         $wrapped = '';
 
+        $class = "block--{$this->unSnake($layout)}__{$this->unSnake($name)}";
+
         foreach ($links as $link) {
-            $wrapped .= "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($name)}' href='{$link}'>{$link}</a>";
+            $wrapped .= "<li><a class='{$class}__item' href='{$link}'>{$link}</a></li>";
         }
+
+        $wrapped = sprintf('<ul %s>%s</ul>', $class, $wrapped);
 
         return $wrapped;
     }

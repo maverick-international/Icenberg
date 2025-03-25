@@ -7,11 +7,35 @@
         "mode": "preview",
         "renderTemplate": "{block_name}.php"
     },
-    "supports": {
+     "supports": {
         "anchor": true,
-           "align": [
+        "align": [
             "full",
             "wide"
         ],
+        "alignContent": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "alignText": true,
+        "spacing": {
+            "margin": [
+                "top",
+                "bottom"
+            ],
+            "padding": true
+        },
+        "typography": {
+            "lineHeight": true,
+            "fontSize": true
+        }
+    },
+    "attributes": {
+        "backgroundColor": {
+            "type": "string",
+            "default": "purple"
+        }
     }
 }
