@@ -117,3 +117,9 @@ Paddy's day mega-release
 
 ### Added
 - CLI can now create flexible content blocks when the --flexible flag is used
+
+## [v0.6.4] 2025-03-23
+
+### Fixed
+- Json stub now valid
+- hyphens and underscores in acf gutenberg blocks don't work for some reason, handled this in cli
