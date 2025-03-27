@@ -22,7 +22,7 @@ class PageLink extends Base
             $wrapped .= "<li><a class='{$class}__item' href='{$link}'>{$link}</a></li>";
         }
 
-        $wrapped = sprintf('<ul %s>%s</ul>', $class, $wrapped);
+        $wrapped = sprintf('<ul class="%s">%s</ul>', $class, $wrapped);
 
         return $wrapped;
     }
