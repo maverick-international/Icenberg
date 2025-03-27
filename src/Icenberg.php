@@ -91,6 +91,10 @@ class Icenberg
 
         $options = $this->optionValue($field_name);
 
+        if (!$field_object) {
+            return;
+        }
+
         $name = $field_object['_name'];
 
         return Base::icefield($name, $options);
