@@ -1,6 +1,7 @@
 # Icenberg 🥶
 
 
+
 - [Icenberg 🥶](#icenberg-)
     - [What is it?](#what-is-it)
     - [Getting Started](#getting-started)
@@ -26,25 +27,27 @@
       - [`get_buttons($field_name)` and `the_buttons($field_name)`](#get_buttonsfield_name-and-the_buttonsfield_name)
   - [CLI](#cli)
     - [Available commands](#available-commands)
-    - [Configurqation](#configurqation)
+    - [Configuration](#configuration)
   - [Supported fields](#supported-fields)
       - [Full Support](#full-support)
       - [Third party fields:](#third-party-fields)
       - [Special Fields](#special-fields-1)
+    - [VS Code Extension](#vs-code-extension)
 
 
 
 ### What is it?
 
-Icenberg is an attempt to clean up ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
+Icenberg is an opinionated abstrqaction for ACF Fields in WordPress. It cleans up and simplifies ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
 
 Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) object oriented fashion, while still allowing us to do things the old fashioned way if necessary. 
 
-Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It includes a convenient CLI for generating ACF Gutenberg blocks.
+![icenberg logo](images/comparison.png)
 
-It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but could also work within other scenarios, in theory.
 
-Note: The `buttons` and `settings` methods rely on Maverick specific setups and are not intended for general use.
+Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It also includes a convenient CLI for generating ACF Gutenberg blocks.
+
+It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but works with any field including option fields. It could also work within other scenarios, in theory.
 
 
 ### Getting Started
@@ -110,7 +113,7 @@ $ice->the_element('portrait');
 
 ## Using in an ACF Gutenberg Block
 
-since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. You can use the wrap method in a gutenberg block to wrap the block frontend in a similar way to how it is wrapped automatically by wp in the backend:
+Since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. You can use the wrap method in a gutenberg block to wrap the block frontend in a similar way to how it is wrapped automatically by wp in the backend:
 
 ```php
 use MVRK\Icenberg\Icenberg;
@@ -386,7 +389,7 @@ It will also register an empty field group ready for access via the ACF GUI.
 this is similar to the above but creates just the php and scss files for flexible content blocks. 
 
 
-### Configurqation
+### Configuration
 Config options are now available by placing an 'icenberg.yaml' file in your project's root directory. If this file doesn't exist or can't be parsed, icenberg will just go ahead and use its defaults.
 
 Supported config options below with their default values:
@@ -425,3 +428,8 @@ google_maps_api_key: '<your key here>'
 #### Special Fields
 - Buttons
 - Settings
+
+### VS Code Extension
+An extension with useful snippets is available for Virtual Studio Code.
+
+[Icenberg Snippets](https://marketplace.visualstudio.com/items?itemName=coderjerk.icenberg-snippets&ssr=false#overview)
