@@ -100,4 +100,18 @@ class Base
 
         return $content;
     }
+
+    public function postLink($wp_post, $name, $layout, $tag)
+    {
+        if (!$wp_post) {
+            return false;
+        }
+
+        $permalink = esc_url(get_the_permalink($wp_post));
+        $title = get_the_title($wp_post);
+        $class = "post-link--{$this->unSnake($layout)}__{$this->unSnake($name)}";
+        $content = "<a class='{$class}' href='{$permalink}'>{$title}</a>";
+
+        return $content;
+    }
 }

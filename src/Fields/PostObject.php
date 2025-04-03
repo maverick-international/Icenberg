@@ -18,7 +18,8 @@ class PostObject extends Base
 
         if ($values) {
             foreach ($values as $value) {
-                $content .= $this->preview($value, $name, $layout, $tag);
+                // $content .= $this->preview($value, $name, $layout, $tag);
+                $content .= $this->postLink($value, $name, $layout, $tag);
             }
         }
 
