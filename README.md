@@ -6,25 +6,26 @@
     - [What is it?](#what-is-it)
     - [Getting Started](#getting-started)
       - [Initialise](#initialise)
+      - [`Icenberg::__construct($layout, $prefix = 'block', $post_id = false)`](#icenberg__constructlayout-prefix--block-post_id--false)
     - [Using with ACF Flexible Content blocks](#using-with-acf-flexible-content-blocks)
   - [Using in an ACF Gutenberg Block](#using-in-an-acf-gutenberg-block)
     - [Icenberg Methods](#icenberg-methods)
       - [`get_element($field_name, $tag = 'div')`](#get_elementfield_name-tag--div)
       - [`the_element($field_name, $tag = 'div')`](#the_elementfield_name-tag--div)
       - [Global Options](#global-options)
-      - [`enclose()`](#enclose)
+      - [`enclose($class, array $elements)`](#encloseclass-array-elements)
   - [Values](#values)
   - [Conditionals and manipulations](#conditionals-and-manipulations)
       - [`field($field_name)`](#fieldfield_name)
-      - [`get(string $tag = 'div')`](#getstring-tag--div)
+      - [`get($tag = 'div')`](#gettag--div)
       - [`prune(array $exclusions)`](#prunearray-exclusions)
       - [`only(array $inclusions)`](#onlyarray-inclusions)
       - [`is($value)`](#isvalue)
-      - [`lessThan($value)` and `greaterThan($value)`](#lessthanvalue-and-greaterthanvalue)
+      - [`lessThan($value)` / `greaterThan($value)`](#lessthanvalue--greaterthanvalue)
   - [Special Fields](#special-fields)
       - [Google Maps Field](#google-maps-field)
-      - [`settings($field_name, $additional_classes)`](#settingsfield_name-additional_classes)
-      - [`get_buttons($field_name)` and `the_buttons($field_name)`](#get_buttonsfield_name-and-the_buttonsfield_name)
+      - [`settings($field_name, $additional_classes = [])`](#settingsfield_name-additional_classes--)
+      - [`get_buttons($field_name)` / `the_buttons($field_name)`](#get_buttonsfield_name--the_buttonsfield_name)
   - [CLI](#cli)
     - [Available commands](#available-commands)
     - [Configuration](#configuration)
@@ -78,9 +79,19 @@ Make sure you have ACF Pro installed. The library also supports [ACF Gravity for
 
 use MVRK\Icenberg\Icenberg;
 
-$ice = new Icenberg('block_name');
+$ice = new Icenberg($layout = 'block_name', $prefix = 'block', $post_id = false);
 
 ```
+
+#### `Icenberg::__construct($layout, $prefix = 'block', $post_id = false)`
+
+| Argument     | Type    | Required | Description                       |
+|--------------|---------|----------|-----------------------------------|
+| `$layout`    | string  | Yes      | ACF layout or block name          |
+| `$prefix`    | string  | No       | Prefix used for classnames etc. Defaults to `'block'` |
+| `$post_id`   | mixed   | No       | Override the default post ID. Defaults to `false` |
+
+---
 
 ### Using with ACF Flexible Content blocks
 The following example takes place inside ACF's the_row() - ie:
@@ -136,6 +147,11 @@ $icenberg::wrap(
 
 #### `get_element($field_name, $tag = 'div')`
 
+| Argument     | Type   | Required | Description                      |
+|--------------|--------|----------|----------------------------------|
+| `$field_name`| string | Yes      | The ACF field name to render     |
+| `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+
 Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any  special considerations applied. Takes the field name as an argument and optionally a tag for the uppermost element. If no tag is set it will use 'div'
 
 ```php
@@ -147,6 +163,11 @@ echo $field_name;
 ```
 
 #### `the_element($field_name, $tag = 'div')`
+
+| Argument     | Type   | Required | Description                      |
+|--------------|--------|----------|----------------------------------|
+| `$field_name`| string | Yes      | The ACF field name to echo       |
+| `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
 
 As above, but echoes it out immediately.
 
@@ -168,7 +189,12 @@ $ice->the_element('field_name, options');
 ```
 
 
-#### `enclose()`
+#### `enclose($class, array $elements)`
+
+| Argument     | Type    | Required | Description                       |
+|--------------|---------|----------|-----------------------------------|
+| `$class`     | string  | Yes      | Classname to apply to wrapper div (BEM modifiers will be appended automatically) |
+| `$elements`  | array   | Yes      | Array of rendered HTML elements (e.g. `get_element()` results or strings) |
 
 Enclose is a utility for wrapping multiple icenberg fields in a container div without having to use a ?> anywhere. You just need to pass it a classname (without prefixes as these will be applied by icenberg). So clean!
 
@@ -242,12 +268,21 @@ as this just returns the value there are no special considerations for individua
 
 #### `field($field_name)`
 
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$field_name`| string | Yes      | Name of the field to work with    |
+
 you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
 
  ```php
  $ice->field($field_name)
  ```
-#### `get(string $tag = 'div')`
+#### `get($tag = 'div')`
+
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$tag`       | string | No       | Tag to use for the wrapper. Defaults to `'div'` |
+
 Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
 
 ```php
@@ -255,6 +290,10 @@ $ice->field('saxaphone')->get()
 ```
 
 #### `prune(array $exclusions)`
+
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$exclusions`| array  | Yes      | Field names to exclude from the group/repeater output |
 
 pass an array of field names to the prune method to remove them from a group or from a repeater row.
 
@@ -265,7 +304,9 @@ $group = $ice->field('bad_singers')->prune(['chris_de_burgh', 'cliff_richard'])-
 
 #### `only(array $inclusions)`
 
-pass an array of field names to the only method to extract them from a group or set of repeater rows. 
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$inclusions`| array  | Yes      | Field names to include in the group/repeater output |
 
 ```php
 $group = $ice->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
@@ -273,6 +314,10 @@ $group = $ice->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
 ```
 
 #### `is($value)`
+
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$value`     | mixed  | Yes      | Value to compare against the field value |
 
 returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
 
@@ -284,7 +329,12 @@ else :
 endif;
 ```
 
-#### `lessThan($value)` and `greaterThan($value)`
+#### `lessThan($value)` / `greaterThan($value)`
+
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$value`     | int    | Yes      | Integer to compare field value against |
+
 
 Self explanatory, both take an integer as an argument. Warning: If you use it on a non numeric field it will return false.
 
@@ -315,7 +365,12 @@ function acf_google_map_field($api)
 add_filter('acf/fields/google_map/api', 'acf_google_map_field');
 ```
 
-#### `settings($field_name, $additional_classes)`
+#### `settings($field_name, $additional_classes = [])`
+
+| Argument            | Type          | Required | Description                                |
+|---------------------|---------------|----------|--------------------------------------------|
+| `$field_name`       | string|array | Yes      | Field group name or settings array         |
+| `$additional_classes` | array      | No       | Additional classnames to append as modifiers |
 
 Pass in a field group of settings and optionally an array of manually set classes and it will attach them as CSS modifier classes. if you include a text field called 'unique_id' in your group icenberg will attach it as a id too.
 
@@ -351,7 +406,11 @@ which will print out something like
 Depending on the settings in your group.
 
 
-#### `get_buttons($field_name)` and `the_buttons($field_name)`
+#### `get_buttons($field_name)` / `the_buttons($field_name)`
+
+| Argument     | Type   | Required | Description                       |
+|--------------|--------|----------|-----------------------------------|
+| `$field_name`| string | Yes      | Field group name for buttons      |
 
 Return a formatted group of buttons with a huge range of styles catered for - very Maverick specific.Expects our usual group of buttons format.
 

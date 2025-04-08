@@ -123,3 +123,13 @@ Paddy's day mega-release
 ### Fixed
 - Json stub now valid
 - hyphens and underscores in acf gutenberg blocks don't work for some reason, handled this in cli
+
+## [v0.7.0] 2025-84-08
+Major changes to allow Icenberg to work well outside of the loop and the confines of 'block'
+
+### Added 
+- Ability to pass an alternative BEM block
+- Ability to specify a post_id for fields outside of the loop
+
+### Removed
+- removed experimental Preview formatting as was too specific to be useful and was an annoyance on relationship fields and post objects where you're more likely to just want a ormatted link.
