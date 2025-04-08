@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class Group extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         $name = $field_object['_name'];
 
@@ -17,8 +17,8 @@ class Group extends Base
 
         $innards = "";
 
-        if (have_rows($name, $options)) :
-            while (have_rows($name, $options)) : the_row();
+        if (have_rows($name, $post_id)) :
+            while (have_rows($name, $post_id)) : the_row();
 
                 foreach ($sub_fields as $sub_field) {
                     $innards .= $icenberg->get_element($sub_field);
@@ -28,7 +28,7 @@ class Group extends Base
 
         endif;
 
-        $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
         $group = "<{$tag} class='{$class}'>{$innards}</{$tag}>";
 
         return $group;

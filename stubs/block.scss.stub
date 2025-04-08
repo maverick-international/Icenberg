@@ -1,5 +1,5 @@
 .wp-block-acf-{{ block }},
-.block-- {{ block }} {
+.block--{{ block }} {
 
    &__wrapper {
 

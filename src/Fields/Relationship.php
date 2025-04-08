@@ -8,7 +8,7 @@ class Relationship extends Base
      * Relationships can work in icenberg!
      *
      */
-    public function getElement($field_object, $layout, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id = false)
     {
         $name = $field_object['name'];
 
@@ -18,8 +18,7 @@ class Relationship extends Base
 
         if ($values) {
             foreach ($values as $value) {
-                // $content .= $this->preview($value, $name, $layout, $tag);
-                $content .= $this->postLink($value, $name, $layout, $tag);
+                $content .= $this->postLink($value, $name, $icenberg->layout, $tag);
             }
         }
 

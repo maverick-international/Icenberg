@@ -13,9 +13,9 @@ class Base
      * @param mixed $tag
      * @return string
      */
-    public function wrap($content, $classes, $layout, $tag)
+    public function wrap($content, $classes, $icenberg, $tag)
     {
-        return "<{$tag} class='block--{$this->unSnake($layout)}__{$this->unSnake($classes)}'>{$content}</{$tag}>";
+        return "<{$tag} class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}'>{$content}</{$tag}>";
     }
 
     /**
@@ -26,7 +26,7 @@ class Base
      * @param mixed $layout
      * @return string
      */
-    public function listWrap($content, $classes, $layout)
+    public function listWrap($content, $classes, $icenberg)
     {
         $list = "";
 
@@ -34,7 +34,7 @@ class Base
             $list .= "<li>{$item}</li>";
         }
 
-        return "<ul class='block--{$this->unSnake($layout)}__{$this->unSnake($classes)}'>{$list}</ul>";
+        return "<ul class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}'>{$list}</ul>";
     }
 
     public function unSnake($text)
@@ -51,54 +51,27 @@ class Base
      * Prepare the field when retrieved from the field object
      *
      * @param mixed $field_name
-     * @param mixed $id
+     * @param mixed $post_id
      * @return mixed
      */
-    public static function icefield($field_name, $options = null)
+    public static function icefield($field_name, $post_id = false)
     {
-        if (!get_sub_field($field_name) && !get_field($field_name, $options)) {
+        if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $field = get_sub_field($field_name);
-        } else if (get_field($field_name, $options)) {
-            $field = get_field($field_name, $options);
+        } else if (get_field($field_name, $post_id)) {
+            $field = get_field($field_name, $post_id);
         }
 
         return $field;
     }
 
-
     protected static function wrapInTag($content, $item_name, $class, $tag = 'span')
     {
         return "<{$tag} class='{$class}__{$item_name}'>{$content}</{$tag}>";
-    }
-
-    public function preview($wp_post, $name, $layout, $tag)
-    {
-        if (!$wp_post) {
-            return false;
-        }
-
-        $permalink = esc_url(get_the_permalink($wp_post));
-        $title = get_the_title($wp_post);
-        $excerpt = get_the_excerpt($wp_post);
-        $thumbnail = get_the_post_thumbnail($wp_post);
-        $date = get_the_date('j M Y', $wp_post);
-        $class = "preview--{$this->unSnake($layout)}__{$this->unSnake($name)}";
-        $linked_title = "<a href='{$permalink}'>{$title}</a>";
-        $link = "<a href='{$permalink}'>Read More</a>";
-
-        $content = "<{$tag} class='{$class}'>";
-        $content .= self::wrapInTag($date, 'date', $class, 'div');
-        $content .= self::wrapInTag($thumbnail, 'thumbnail', $class, "div");
-        $content .= self::wrapInTag($linked_title, 'title', $class, 'h4');
-        $content .= self::wrapInTag($excerpt, 'excerpt', $class, 'div');
-        $content .= self::wrapInTag($link, 'link', $class, "div");
-        $content .= "</{$tag}>";
-
-        return $content;
     }
 
     public function postLink($wp_post, $name, $layout, $tag)

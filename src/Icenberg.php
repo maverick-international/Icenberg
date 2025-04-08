@@ -30,6 +30,22 @@ class Icenberg
     public $layout;
 
     /**
+     * The top level BEM block used in
+     * constructing the css classes
+     * e.g 'block' will prepend 'block--' to the class.
+     *
+     * @var string
+     */
+    public $prefix = 'block--';
+
+    /**
+     * The post ID, defaults to current post ID
+     * if blank.
+     * @var string
+     */
+    public $post_id = false;
+
+    /**
      * The value of the acf sub field.
      *
      * @var mixed
@@ -43,18 +59,15 @@ class Icenberg
      */
     public $field_object;
 
-    /**
-     * Contains the value that indicates whether the field
-     * is a global options field or not.
-     *
-     * @var ?string 'options' or null
-     */
-    public $options;
-
-
-    public function __construct($layout)
+    public function __construct($layout, $prefix = 'block', $post_id = false)
     {
         $this->layout = $layout;
+        $this->post_id = $post_id;
+        if ($prefix === false) {
+            $this->prefix = false; // trust me this is needed
+        } else {
+            $this->prefix = $prefix . '--';
+        }
     }
 
     /**
@@ -89,7 +102,7 @@ class Icenberg
     {
         $field_object = $this->getFieldObject($field_name);
 
-        $options = $this->optionValue($field_name);
+        $post_id = $this->postId($field_name);
 
         if (!$field_object) {
             return;
@@ -97,21 +110,28 @@ class Icenberg
 
         $name = $field_object['_name'];
 
-        return Base::icefield($name, $options);
+        return Base::icefield($name, $post_id);
     }
 
     /**
-     * If there's a comma, its an option. We need this to pass
-     *  it down to field level as the post object gives no indication
-     *  of whther a given field is from options or not, sadly.
+     *  Retuns the post->ID to enable access outside of the loop,
+     *  or If there's a comma, its an option so we return that.
+     *
+     *  We need this to pass 'options' down to field level as the post
+     *  object gives no indication of whther a given field is from options
+     *  or not, sadly.
      *
      * @param string $field_name
      * @return ?string
      */
-    public function optionValue($field_name)
+    public function postId($field_name)
     {
         if (strpos($field_name, ',')) {
             return 'options';
+        }
+
+        if ($this->post_id) {
+            return $this->post_id;
         }
     }
 
@@ -128,9 +148,9 @@ class Icenberg
     {
         $field_object = $this->getFieldObject($field_name);
 
-        $options = $this->optionValue($field_name);
+        $post_id = $this->postId($field_name);
 
-        return $this->getElementFromFieldObject($field_object, $tag, $options);
+        return $this->getElementFromFieldObject($field_object, $tag, $post_id);
     }
 
 
@@ -153,7 +173,7 @@ class Icenberg
      */
     public function field($field_name)
     {
-        $this->options = $this->optionValue($field_name);
+        $this->post_id = $this->postId($field_name);
 
         if (strpos($field_name, ',')) {
             $args = array_map('trim', explode(',', $field_name));
@@ -168,21 +188,22 @@ class Icenberg
      * retrieve its field object and set the class properties for method chaining.
      *
      * @param mixed $field_name
-     * @param mixed $option
+     * @param mixed $post_id
      * @return Icenberg
      */
-    public function processField($field_name, $options = null)
+    public function processField($field_name, $post_id = false)
     {
-        if (!get_sub_field($field_name) && !get_field($field_name, $options)) {
+
+        if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $this->field = get_sub_field($field_name);
             $this->field_object = get_sub_field_object($field_name);
-        } elseif (get_field($field_name, $options)) {
-            $this->field = get_field($field_name, $options);
-            $this->field_object = get_field_object($field_name, $options);
+        } elseif (get_field($field_name, $post_id)) {
+            $this->field = get_field($field_name, $post_id);
+            $this->field_object = get_field_object($field_name, $post_id);
         }
 
         return $this;
@@ -193,23 +214,22 @@ class Icenberg
      * check if it exists and get its field object.
      *
      * @param string $field the field name
-     * @param ?string $option - is this a globl field?
+     * @param ?string $post_id - is this a globl field or outside the loop?
      * @return ?object $field_object ACF Field object | null
      *
      */
-    protected function processFieldObject($field_name, $option = null)
+    protected function processFieldObject($field_name, $post_id = false)
     {
-
         $field_object = null;
 
-        if (!get_sub_field($field_name) && !get_field($field_name, $option)) {
+        if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
         }
 
         if (get_sub_field($field_name)) {
             $field_object = get_sub_field_object($field_name);
-        } elseif (get_field($field_name, $option)) {
-            $field_object = get_field_object($field_name, $option);
+        } elseif (get_field($field_name, $post_id)) {
+            $field_object = get_field_object($field_name, $post_id);
         }
 
         return $field_object;
@@ -342,7 +362,7 @@ class Icenberg
      */
     public function get($tag = 'div')
     {
-        return $this->getElementFromFieldObject($this->field_object, $tag, $this->options);
+        return $this->getElementFromFieldObject($this->field_object, $tag, $this->post_id);
     }
 
     /**
@@ -350,10 +370,10 @@ class Icenberg
      *
      * @param object $field_object
      * @param ?string $tag
-     * @param ?string $options
+     * @param ?string $post_id
      * @return ?string
      */
-    protected function getElementFromFieldObject($field_object, $tag, $options = null)
+    protected function getElementFromFieldObject($field_object, $tag, $post_id = false)
     {
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
@@ -367,25 +387,25 @@ class Icenberg
          */
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this, $tag, $options);
+            return (new Group())->getElement($field_object, $this, $tag, $post_id);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this, $tag, $options);
+            return (new Repeater())->getElement($field_object, $this, $tag, $post_id);
         }
 
         /**
          * This is a dead end (for now)
          */
         if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $options);
+            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname())->getElement($field_object, $this->layout, $tag, $options);
+        return (new $classname())->getElement($field_object, $this, $tag, $post_id);
     }
 
     /**
@@ -511,7 +531,7 @@ class Icenberg
             return null;
         }
 
-        return (new Buttons())->getElement($field_object, $this->layout);
+        return (new Buttons())->getElement($field_object, $this);
     }
 
     public function the_buttons($field_name)
@@ -537,9 +557,9 @@ class Icenberg
         $layout = str_replace('_', '-', $this->layout);
 
         if ($class) {
-            return "<{$tag} class='block--{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
+            return "<{$tag} class='{$this->prefix}{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
         } else {
-            return "<{$tag} class='block--{$layout}'>" . implode($elements)  . "</{$tag}>";
+            return "<{$tag} class='{$this->prefix}{$layout}'>" . implode($elements)  . "</{$tag}>";
         }
     }
 

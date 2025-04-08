@@ -7,6 +7,8 @@ class Forms extends Base
 
     protected $titles;
 
+    public $icenberg;
+
     protected $title;
 
     protected $description;
@@ -15,19 +17,17 @@ class Forms extends Base
 
     public $gravity_form;
 
-    protected $layout;
-
     protected $tag;
 
     protected $name;
 
-    public function getElement($field_object, $layout, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         $this->form = $field_object['value'];
 
         $this->name = $field_object['_name'];
 
-        $this->layout = $layout;
+        $this->icenberg = $icenberg;
 
         $this->tag = $tag;
 
@@ -44,11 +44,11 @@ class Forms extends Base
 
         $this->description = $this->form['description'];
 
-        $content =  $this->wrap($this->title, $this->name . '__heading', $this->layout, 'h3');
+        $content =  $this->wrap($this->title, $this->name . '__heading', $this->icenberg, 'h3');
 
-        $content .=  $this->wrap($this->description, $this->name . '__description', $this->layout, 'p');
+        $content .=  $this->wrap($this->description, $this->name . '__description', $this->icenberg, 'p');
 
-        $this->titles =  $this->wrap($content, $this->name . '__titles', $this->layout, $this->tag);
+        $this->titles =  $this->wrap($content, $this->name . '__titles', $this->icenberg, $this->tag);
     }
 
     public function build()
@@ -56,8 +56,8 @@ class Forms extends Base
 
         $content = $this->titles;
 
-        $content .=  $this->wrap($this->gravity_form, $this->name . '__form', $this->layout, $this->tag);
+        $content .=  $this->wrap($this->gravity_form, $this->name . '__form', $this->icenberg, $this->tag);
 
-        return $this->wrap($content, $this->name, $this->layout, $this->tag);
+        return $this->wrap($content, $this->name, $this->icenberg, $this->tag);
     }
 }

@@ -4,18 +4,12 @@ namespace MVRK\Icenberg\Fields;
 
 class Image extends Base
 {
-    /**
-     * Scaffolds an image field
-     *
-     * @param object $field_object
-     * @param string $layout
-     * @return string
-     */
-    public function getElement($field_object, $layout, $tag, $options)
+
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         $name = $field_object['_name'];
 
-        $image = self::icefield($name, $options);
+        $image = self::icefield($name, $post_id);
 
         //handle each possible format of image uses array, url or id
         if (is_array($image)) {
@@ -26,7 +20,7 @@ class Image extends Base
             $content =  wp_get_attachment_image($image, 'full');
         }
 
-        $wrapped = $this->wrap($content, $name, $layout, $tag);
+        $wrapped = $this->wrap($content, $name, $icenberg, $tag);
 
         return $wrapped;
     }

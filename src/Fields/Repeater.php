@@ -4,16 +4,16 @@ namespace MVRK\Icenberg\Fields;
 
 class Repeater extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         $name = $field_object['_name'];
 
         $innards = "";
 
-        $class = "block--{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
 
-        if (have_rows($name, $options)) :
-            while (have_rows($name, $options)) : the_row();
+        if (have_rows($name, $post_id)) :
+            while (have_rows($name, $post_id)) : the_row();
 
                 $gizzards = '';
 

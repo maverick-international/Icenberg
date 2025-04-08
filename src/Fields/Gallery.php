@@ -4,11 +4,11 @@ namespace MVRK\Icenberg\Fields;
 
 class Gallery extends Base
 {
-    public function getElement($field, $layout, $tag, $options)
+    public function getElement($field, $icenberg, $tag, $post_id)
     {
         $name = $field['_name'];
 
-        $gallery = self::icefield($name, $options);
+        $gallery = self::icefield($name, $post_id);
 
         $images = '';
 
@@ -20,10 +20,10 @@ class Gallery extends Base
             } else {
                 $content = wp_get_attachment_image($image, 'full');
             }
-            $images .= "<div class='block--{$layout}__image'>{$content}</div>";
+            $images .= "<div class='{$icenberg->prefix}{$icenberg->layout}__image'>{$content}</div>";
         }
 
-        $wrapped = $this->wrap($images, $name, $layout, $tag);
+        $wrapped = $this->wrap($images, $name, $icenberg, $tag);
 
         return $wrapped;
     }

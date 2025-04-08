@@ -7,7 +7,7 @@ namespace MVRK\Icenberg\Fields;
  */
 class FlexibleContent extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         return; // not yet supported
     }

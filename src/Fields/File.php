@@ -6,17 +6,21 @@ class File extends Base
 {
     public $field_object;
 
+    public $icenberg;
+
     public $layout;
 
     public $tag;
 
     public $name;
 
-    public function getElement($field_object, $layout, $tag, $options)
+    public function getElement($field_object, $icenberg, $tag, $post_id)
     {
         $this->field_object = $field_object;
 
-        $this->layout = $layout;
+        $this->icenberg = $icenberg;
+
+        $this->layout = $icenberg->layout;
 
         $this->tag = $tag;
 
@@ -30,16 +34,16 @@ class File extends Base
             return false;
         }
 
-        $file = self::icefield($this->name, $options);
+        $file = self::icefield($this->name, $post_id);
 
         if (is_array($file)) {
             if ($file['type'] === 'video') {
                 return  $this->getVideo($file);
             }
 
-            $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($this->name)}' href='{$file['url']}'>{$file['title']}</a>";
+            $wrapped = "<a class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($this->name)}' href='{$file['url']}'>{$file['title']}</a>";
         } else {
-            $wrapped = "<a class='block--{$this->unSnake($layout)}__{$this->unSnake($this->name)}' href='{$file}'>{$file}</a>";
+            $wrapped = "<a class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($this->name)}' href='{$file}'>{$file}</a>";
         }
 
         return $wrapped;
@@ -60,7 +64,7 @@ class File extends Base
             $content = "<video loop muted autoplay playsinline><source src='{$video['url']}' type='video/mp4' /></video>";
         }
 
-        $wrapped = $this->wrap($content, $this->name, $this->layout, $this->tag);
+        $wrapped = $this->wrap($content, $this->name, $this->icenberg, $this->tag);
 
         return $wrapped;
     }

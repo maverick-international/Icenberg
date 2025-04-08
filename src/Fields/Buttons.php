@@ -6,7 +6,7 @@ use MVRK\Icenberg\Fields\Button;
 
 class Buttons extends Base
 {
-    public function getElement($field_object, $layout)
+    public function getElement($field_object, $icenberg)
     {
         $name = $field_object['_name'];
 
@@ -22,7 +22,7 @@ class Buttons extends Base
             endwhile;
         endif;
 
-        $class = "buttons block--{$this->unSnake($layout)}__{$this->unSnake($name)}";
+        $class = "buttons {$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
         $group = "<div class='{$class}'>{$innards}</div>";
 
         return $group;
