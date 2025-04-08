@@ -39,7 +39,7 @@
 
 ### What is it?
 
-Icenberg is an opinionated abstrqaction for ACF Fields in WordPress. It cleans up and simplifies ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
+Icenberg is an opinionated abstraction for ACF Fields in WordPress. It cleans up and simplifies ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
 
 Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) object oriented fashion, while still allowing us to do things the old fashioned way if necessary. 
 

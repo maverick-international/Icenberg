@@ -156,12 +156,9 @@ class Icenberg
 
     protected function getFieldObject($field_name)
     {
-        if (strpos($field_name, ',')) {
-            $args = array_map('trim', explode(',', $field_name));
-            return $this->processFieldObject(...$args);
-        } else {
-            return $this->processFieldObject($field_name);
-        }
+        $post_id = $this->postId($field_name);
+
+        return $this->processFieldObject($field_name, $post_id);
     }
 
     /**
@@ -173,14 +170,9 @@ class Icenberg
      */
     public function field($field_name)
     {
-        $this->post_id = $this->postId($field_name);
+        $post_id = $this->postId($field_name);
 
-        if (strpos($field_name, ',')) {
-            $args = array_map('trim', explode(',', $field_name));
-            return $this->processField(...$args);
-        } else {
-            return $this->processField($field_name, null);
-        }
+        return $this->processField($field_name, $post_id);
     }
 
     /**
@@ -193,6 +185,9 @@ class Icenberg
      */
     public function processField($field_name, $post_id = false)
     {
+        if ($post_id === 'options') {
+            $field_name = strstr($field_name, ',', true);
+        }
 
         if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
@@ -221,6 +216,10 @@ class Icenberg
     protected function processFieldObject($field_name, $post_id = false)
     {
         $field_object = null;
+
+        if ($post_id === 'options') {
+            $field_name = strstr($field_name, ',', true);
+        }
 
         if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
