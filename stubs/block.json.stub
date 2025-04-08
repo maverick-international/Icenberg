@@ -10,8 +10,7 @@
      "supports": {
         "anchor": true,
         "align": [
-            "full",
-            "wide"
+            "full"
         ],
         "alignContent": false,
         "color": {
@@ -36,6 +35,39 @@
         "backgroundColor": {
             "type": "string",
             "default": "purple"
+        },
+         "supports": {
+        "align": [
+            "full"
+        ],
+        "anchor": true,
+        "alignContent": false,
+        "color": {
+            "text": true,
+            "background": true,
+            "link": true
+        },
+        "alignText": true,
+        "spacing": {
+            "margin": [
+                "top",
+                "bottom"
+            ],
+            "padding": true
+        },
+        "typography": {
+            "lineHeight": true,
+            "fontSize": true
+        }
+    },
+    "attributes": {
+        "backgroundColor": {
+            "type": "string",
+            "default": "base"
+        },
+        "align": {
+            "type": "string",
+            "default": "full"
         }
     }
 }
