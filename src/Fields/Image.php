@@ -5,7 +5,7 @@ namespace MVRK\Icenberg\Fields;
 class Image extends Base
 {
 
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
@@ -20,7 +20,7 @@ class Image extends Base
             $content =  wp_get_attachment_image($image, 'full');
         }
 
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag);
+        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
 
         return $wrapped;
     }

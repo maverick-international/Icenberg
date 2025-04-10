@@ -21,7 +21,9 @@ class Forms extends Base
 
     protected $name;
 
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    protected $modifiers;
+
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $this->form = $field_object['value'];
 
@@ -30,6 +32,8 @@ class Forms extends Base
         $this->icenberg = $icenberg;
 
         $this->tag = $tag;
+
+        $this->modifiers = $modifiers;
 
         $this->getTitles();
 
@@ -58,6 +62,6 @@ class Forms extends Base
 
         $content .=  $this->wrap($this->gravity_form, $this->name . '__form', $this->icenberg, $this->tag);
 
-        return $this->wrap($content, $this->name, $this->icenberg, $this->tag);
+        return $this->wrap($content, $this->name, $this->icenberg, $this->tag, $this->modifiers);
     }
 }

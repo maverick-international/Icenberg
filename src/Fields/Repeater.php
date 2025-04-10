@@ -2,15 +2,18 @@
 
 namespace MVRK\Icenberg\Fields;
 
+use MVRK\Icenberg\Icenberg;
+
 class Repeater extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
         $innards = "";
 
-        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
+        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
 
         if (have_rows($name, $post_id)) :
             while (have_rows($name, $post_id)) : the_row();
@@ -27,7 +30,7 @@ class Repeater extends Base
 
         endif;
 
-        $repeater = "<{$tag} class='{$class}'>{$innards}</{$tag}>";
+        $repeater = "<{$tag} class='{$class} {$modifier_classes}'>{$innards}</{$tag}>";
 
         return $repeater;
     }

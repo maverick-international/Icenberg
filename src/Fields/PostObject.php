@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class PostObject extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id = false)
+    public function getElement($field_object, $icenberg, $tag, $post_id = false, $modifiers = [])
     {
         $name = $field_object['_name'];
 
@@ -18,7 +18,7 @@ class PostObject extends Base
 
         if ($values) {
             foreach ($values as $value) {
-                $content .= $this->postLink($value, $name, $icenberg->layout, $tag);
+                $content .= $this->postLink($value, $name, $icenberg->layout, $tag, $modifiers);
             }
         }
 

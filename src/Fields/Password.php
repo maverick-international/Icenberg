@@ -9,7 +9,7 @@ class Password extends Base
      *
      * @return void
      */
-    public function getElement()
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         return false;
     }

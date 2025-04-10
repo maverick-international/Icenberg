@@ -73,23 +73,27 @@ class Icenberg
     /**
      * Echoes out the wrapped up and formatted element
      *
-     * @param string $field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return void
      */
-    public function the_element($field_name, $tag = 'div')
+    public function the_element($field_name, $tag = 'div', $modifiers = [])
     {
-        echo $this->sortElement($field_name, $tag);
+        echo $this->sortElement($field_name, $tag, $modifiers);
     }
 
     /**
      * Returns the wrapped up and formatted element
      *
-     * @param string $field - The name of the sub field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
-    public function get_element($field_name, $tag = 'div')
+    public function get_element($field_name, $tag = 'div', $modifiers = [])
     {
-        return $this->sortElement($field_name, $tag);
+        return $this->sortElement($field_name, $tag, $modifiers);
     }
 
     /**
@@ -141,16 +145,18 @@ class Icenberg
      * Depends on the magic of consistent naming.
      * Indvivdual field types can be overriden here.
      *
-     * @param object $field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
-    protected function sortElement($field_name, $tag)
+    protected function sortElement($field_name, $tag, $modifiers = [])
     {
         $field_object = $this->getFieldObject($field_name);
 
         $post_id = $this->postId($field_name);
 
-        return $this->getElementFromFieldObject($field_object, $tag, $post_id);
+        return $this->getElementFromFieldObject($field_object, $tag, $post_id, $modifiers);
     }
 
 
@@ -356,12 +362,13 @@ class Icenberg
      * Delivers the icenberged string from an Icenberg
      * field instance, at the end of the chain
      *
-     * @param string $tag
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return ?string
      */
-    public function get($tag = 'div')
+    public function get($tag = 'div', $modifiers = [])
     {
-        return $this->getElementFromFieldObject($this->field_object, $tag, $this->post_id);
+        return $this->getElementFromFieldObject($this->field_object, $tag, $this->post_id, $modifiers);
     }
 
     /**
@@ -370,9 +377,10 @@ class Icenberg
      * @param object $field_object
      * @param ?string $tag
      * @param ?string $post_id
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return ?string
      */
-    protected function getElementFromFieldObject($field_object, $tag, $post_id = false)
+    protected function getElementFromFieldObject($field_object, $tag, $post_id = false, $modifiers = [])
     {
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
@@ -386,25 +394,25 @@ class Icenberg
          */
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this, $tag, $post_id);
+            return (new Group())->getElement($field_object, $this, $tag, $post_id, $modifiers);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this, $tag, $post_id);
+            return (new Repeater())->getElement($field_object, $this, $tag, $post_id, $modifiers);
         }
 
         /**
          * This is a dead end (for now)
          */
         if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id);
+            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id, $modifiers);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname())->getElement($field_object, $this, $tag, $post_id);
+        return (new $classname())->getElement($field_object, $this, $tag, $post_id, $modifiers);
     }
 
     /**
@@ -520,8 +528,14 @@ class Icenberg
         return (new Settings($block_settings, $classes))->applySettings();
     }
 
-
-    public function get_buttons($field_name)
+    /**
+     * Wrap up buttons
+     *
+     * @param string $field_name The name of the sub field
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return string
+     */
+    public function get_buttons($field_name, $modifiers = [])
     {
         $field_object = $this->processFieldObject($field_name);
 
@@ -530,12 +544,33 @@ class Icenberg
             return null;
         }
 
-        return (new Buttons())->getElement($field_object, $this);
+        return (new Buttons())->getElement($field_object, $this, $modifiers);
     }
 
-    public function the_buttons($field_name)
+    /**
+     * Wrap up buttons and output them
+     *
+     * @param string $field_name The name of the sub field
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return void
+     */
+    public function the_buttons($field_name, $modifiers = [])
     {
-        echo $this->get_buttons($field_name);
+        echo $this->get_buttons($field_name, $modifiers);
+    }
+
+    /**
+     * Wrap up multiple icenberg elements together and output them
+     *
+     * @param string $class element classname - BEM it up with the layout name
+     * @param array $elements array of icenberg elements
+     * @param string $tag HTML tag used for enclosing element
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return void
+     */
+    public function enclose($class, $elements = [], $tag = 'div', $modifiers = [])
+    {
+        echo $this->get_enclose($class, $elements, $tag, $modifiers);
     }
 
     /**
@@ -544,22 +579,21 @@ class Icenberg
      * @param string $class element classname - BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
-    public function enclose($class, $elements = [], $tag = 'div')
-    {
-        echo $this->get_enclose($class, $elements, $tag);
-    }
-
-    public function get_enclose($class, $elements = [], $tag = 'div')
+    public function get_enclose($class, $elements = [], $tag = 'div', $modifiers = [])
     {
         $layout = str_replace('_', '-', $this->layout);
+        $base_class = "{$this->prefix}{$layout}";
 
         if ($class) {
-            return "<{$tag} class='{$this->prefix}{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
-        } else {
-            return "<{$tag} class='{$this->prefix}{$layout}'>" . implode($elements)  . "</{$tag}>";
+            $base_class .= "__{$class}";
         }
+
+        $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
+
+        return "<{$tag} class='{$base_class} {$modifier_classes}'>" . implode($elements)  . "</{$tag}>";
     }
 
     /**
@@ -573,5 +607,55 @@ class Icenberg
     public static function wrap($content, $block_settings = null, $wrap_inner = true)
     {
         echo Wrap::create($content, $block_settings, $wrap_inner);
+    }
+
+    /**
+     * Converts $string from snake_case to kebab-case
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function unSnake($string)
+    {
+        return str_replace('_', '-', $string);
+    }
+
+    /**
+     * Converts $string to snake_case
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function unSpace($string)
+    {
+        return str_replace([' ', '-'], '_', $string);
+    }
+
+    /**
+     * Generates BEM modifier class strings
+     *
+     * @param string $base_class
+     * @param array $modifiers
+     * @return string
+     */
+    public static function generateModifierClasses($base_class, $modifiers)
+    {
+        $modifier_classes = '';
+
+        if (count($modifiers)) {
+            $modifier_classes = implode(' ', array_map(function ($key) use ($base_class, $modifiers) {
+                $val = $modifiers[$key];
+
+                if (is_string($key)) {
+                    if ($val) {
+                        return $base_class . '--' . self::unSnake(self::unSpace($key));
+                    }
+                } else {
+                    return $base_class . '--' . self::unSnake(self::unSpace($val));
+                }
+            }, array_keys($modifiers)));
+        }
+
+        return $modifier_classes;
     }
 }

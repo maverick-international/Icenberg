@@ -11,13 +11,13 @@ class Textarea extends Base
      * @param string $layout the current row layout
      * @return string
      */
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
         $content = self::icefield($name, $post_id);
 
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag);
+        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
 
         return $wrapped;
     }

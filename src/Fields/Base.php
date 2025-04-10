@@ -2,6 +2,8 @@
 
 namespace MVRK\Icenberg\Fields;
 
+use MVRK\Icenberg\Icenberg;
+
 class Base
 {
     /**
@@ -13,9 +15,12 @@ class Base
      * @param mixed $tag
      * @return string
      */
-    public function wrap($content, $classes, $icenberg, $tag)
+    public function wrap($content, $classes, $icenberg, $tag, $modifiers = [])
     {
-        return "<{$tag} class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}'>{$content}</{$tag}>";
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
+        $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+
+        return "<{$tag} class='{$base_class} {$modifier_classes}'>{$content}</{$tag}>";
     }
 
     /**
@@ -26,7 +31,7 @@ class Base
      * @param mixed $layout
      * @return string
      */
-    public function listWrap($content, $classes, $icenberg)
+    public function listWrap($content, $classes, $icenberg, $modifiers = [])
     {
         $list = "";
 
@@ -34,17 +39,10 @@ class Base
             $list .= "<li>{$item}</li>";
         }
 
-        return "<ul class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}'>{$list}</ul>";
-    }
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
+        $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
 
-    public function unSnake($text)
-    {
-        return str_replace('_', '-', $text);
-    }
-
-    public function unSpace($string)
-    {
-        return str_replace([' ', '-'], '_', $string);
+        return "<ul class='{$base_class} {$modifier_classes}'>{$list}</ul>";
     }
 
     /**
@@ -74,7 +72,7 @@ class Base
         return "<{$tag} class='{$class}__{$item_name}'>{$content}</{$tag}>";
     }
 
-    public function postLink($wp_post, $name, $layout, $tag)
+    public function postLink($wp_post, $name, $layout, $tag, $modifiers = [])
     {
         if (!$wp_post) {
             return false;
@@ -82,8 +80,9 @@ class Base
 
         $permalink = esc_url(get_the_permalink($wp_post));
         $title = get_the_title($wp_post);
-        $class = "post-link--{$this->unSnake($layout)}__{$this->unSnake($name)}";
-        $content = "<a class='{$class}' href='{$permalink}'>{$title}</a>";
+        $class = "post-link--{$icenberg::unSnake($layout)}__{$icenberg::unSnake($name)}";
+        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
+        $content = "<a class='{$class} {$modifier_classes}' href='{$permalink}'>{$title}</a>";
 
         return $content;
     }

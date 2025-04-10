@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class Gallery extends Base
 {
-    public function getElement($field, $icenberg, $tag, $post_id)
+    public function getElement($field, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field['_name'];
 
@@ -23,7 +23,7 @@ class Gallery extends Base
             $images .= "<div class='{$icenberg->prefix}{$icenberg->layout}__image'>{$content}</div>";
         }
 
-        $wrapped = $this->wrap($images, $name, $icenberg, $tag);
+        $wrapped = $this->wrap($images, $name, $icenberg, $tag, $modifiers);
 
         return $wrapped;
     }

@@ -2,9 +2,11 @@
 
 namespace MVRK\Icenberg\Fields;
 
+use MVRK\Icenberg\Icenberg;
+
 class Group extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
@@ -28,8 +30,9 @@ class Group extends Base
 
         endif;
 
-        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
-        $group = "<{$tag} class='{$class}'>{$innards}</{$tag}>";
+        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
+        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
+        $group = "<{$tag} class='{$class} {$modifier_classes}'>{$innards}</{$tag}>";
 
         return $group;
     }
