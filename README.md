@@ -10,22 +10,22 @@
     - [Using with ACF Flexible Content blocks](#using-with-acf-flexible-content-blocks)
   - [Using in an ACF Gutenberg Block](#using-in-an-acf-gutenberg-block)
     - [Icenberg Methods](#icenberg-methods)
-      - [`get_element($field_name, $tag = 'div')`](#get_elementfield_name-tag--div)
-      - [`the_element($field_name, $tag = 'div')`](#the_elementfield_name-tag--div)
+      - [`get_element($field_name, $tag = 'div', $modifiers = [])`](#get_elementfield_name-tag--div-modifiers)
+      - [`the_element($field_name, $tag = 'div', $modifiers = [])`](#the_elementfield_name-tag--div-modifiers)
       - [Global Options](#global-options)
-      - [`enclose($class, array $elements)`](#encloseclass-array-elements)
+      - [`enclose($class, array $elements, $tag = 'div', $modifiers = [])`](#encloseclass-array-elements-tag--div-modifiers)
   - [Values](#values)
   - [Conditionals and manipulations](#conditionals-and-manipulations)
       - [`field($field_name)`](#fieldfield_name)
-      - [`get($tag = 'div')`](#gettag--div)
+      - [`get($tag = 'div', $modifiers = [])`](#gettag--div-modifiers)
       - [`prune(array $exclusions)`](#prunearray-exclusions)
       - [`only(array $inclusions)`](#onlyarray-inclusions)
       - [`is($value)`](#isvalue)
       - [`lessThan($value)` / `greaterThan($value)`](#lessthanvalue--greaterthanvalue)
   - [Special Fields](#special-fields)
       - [Google Maps Field](#google-maps-field)
-      - [`settings($field_name, $additional_classes = [])`](#settingsfield_name-additional_classes--)
-      - [`get_buttons($field_name)` / `the_buttons($field_name)`](#get_buttonsfield_name--the_buttonsfield_name)
+      - [`settings($field_name, $additional_classes = [])`](#settingsfield_name-additional_classes)
+      - [`get_buttons($field_name, $modifiers = [])` / `the_buttons($field_name, $modifiers = [])`](#get_buttonsfield_name-modifiers--the_buttonsfield_name-modifiers)
   - [CLI](#cli)
     - [Available commands](#available-commands)
     - [Configuration](#configuration)
@@ -108,7 +108,7 @@ if (have_rows('content_blocks', $id)) :
 
 endif;
 ```
-Initialise with ACFs `the_row_layout()` in your block template:
+Initialise with ACFs `get_row_layout()` in your block template:
 
 ```php
 
@@ -145,12 +145,13 @@ $icenberg::wrap(
 
 ### Icenberg Methods
 
-#### `get_element($field_name, $tag = 'div')`
+#### `get_element($field_name, $tag = 'div', $modifiers = [])`
 
 | Argument     | Type   | Required | Description                      |
 |--------------|--------|----------|----------------------------------|
 | `$field_name`| string | Yes      | The ACF field name to render     |
 | `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
 
 Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any  special considerations applied. Takes the field name as an argument and optionally a tag for the uppermost element. If no tag is set it will use 'div'
 
@@ -162,12 +163,13 @@ echo $field_name;
 
 ```
 
-#### `the_element($field_name, $tag = 'div')`
+#### `the_element($field_name, $tag = 'div', $modifiers = [])`
 
 | Argument     | Type   | Required | Description                      |
 |--------------|--------|----------|----------------------------------|
 | `$field_name`| string | Yes      | The ACF field name to echo       |
 | `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
 
 As above, but echoes it out immediately.
 
@@ -189,12 +191,14 @@ $ice->the_element('field_name, options');
 ```
 
 
-#### `enclose($class, array $elements)`
+#### `enclose($class, array $elements, $tag = 'div', $modifiers = [])`
 
 | Argument     | Type    | Required | Description                       |
 |--------------|---------|----------|-----------------------------------|
 | `$class`     | string  | Yes      | Classname to apply to wrapper div (BEM modifiers will be appended automatically) |
 | `$elements`  | array   | Yes      | Array of rendered HTML elements (e.g. `get_element()` results or strings) |
+| `$tag`       | string  | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$modifiers` | array   | No       | An array of modifiers to use as BEM classes |
 
 Enclose is a utility for wrapping multiple icenberg fields in a container div without having to use a ?> anywhere. You just need to pass it a classname (without prefixes as these will be applied by icenberg). So clean!
 
@@ -277,11 +281,12 @@ you can use icenberg to evaluate fields and do some more comlplex field manipual
  ```php
  $ice->field($field_name)
  ```
-#### `get($tag = 'div')`
+#### `get($tag = 'div', $modifiers = [])`
 
 | Argument     | Type   | Required | Description                       |
 |--------------|--------|----------|-----------------------------------|
 | `$tag`       | string | No       | Tag to use for the wrapper. Defaults to `'div'` |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
 
 Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
 
@@ -406,11 +411,12 @@ which will print out something like
 Depending on the settings in your group.
 
 
-#### `get_buttons($field_name)` / `the_buttons($field_name)`
+#### `get_buttons($field_name, $modifiers = [])` / `the_buttons($field_name, $modifiers = [])`
 
 | Argument     | Type   | Required | Description                       |
 |--------------|--------|----------|-----------------------------------|
 | `$field_name`| string | Yes      | Field group name for buttons      |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
 
 Return a formatted group of buttons with a huge range of styles catered for - very Maverick specific.Expects our usual group of buttons format.
 
