@@ -59,13 +59,6 @@ class Icenberg
      */
     public $field_object;
 
-    /**
-     * modifiers for generating additional BEM classes.
-     *
-     * @var array
-     */
-    public $bem_modifiers = [];
-
     public function __construct($layout, $prefix = 'block', $post_id = false)
     {
         $this->layout = $layout;
@@ -83,9 +76,9 @@ class Icenberg
      * @param string $field
      * @return void
      */
-    public function the_element($field_name, $tag = 'div')
+    public function the_element($field_name, $tag = 'div', $modifiers = [])
     {
-        echo $this->sortElement($field_name, $tag);
+        echo $this->sortElement($field_name, $tag, $modifiers);
     }
 
     /**
@@ -94,9 +87,9 @@ class Icenberg
      * @param string $field - The name of the sub field
      * @return string
      */
-    public function get_element($field_name, $tag = 'div')
+    public function get_element($field_name, $tag = 'div', $modifiers = [])
     {
-        return $this->sortElement($field_name, $tag);
+        return $this->sortElement($field_name, $tag, $modifiers);
     }
 
     /**
@@ -151,13 +144,13 @@ class Icenberg
      * @param object $field
      * @return string
      */
-    protected function sortElement($field_name, $tag)
+    protected function sortElement($field_name, $tag, $modifiers = [])
     {
         $field_object = $this->getFieldObject($field_name);
 
         $post_id = $this->postId($field_name);
 
-        return $this->getElementFromFieldObject($field_object, $tag, $post_id);
+        return $this->getElementFromFieldObject($field_object, $tag, $post_id, $modifiers);
     }
 
 
@@ -366,9 +359,9 @@ class Icenberg
      * @param string $tag
      * @return ?string
      */
-    public function get($tag = 'div')
+    public function get($tag = 'div', $modifiers = [])
     {
-        return $this->getElementFromFieldObject($this->field_object, $tag, $this->post_id);
+        return $this->getElementFromFieldObject($this->field_object, $tag, $this->post_id, $modifiers);
     }
 
     /**
@@ -379,7 +372,7 @@ class Icenberg
      * @param ?string $post_id
      * @return ?string
      */
-    protected function getElementFromFieldObject($field_object, $tag, $post_id = false)
+    protected function getElementFromFieldObject($field_object, $tag, $post_id = false, $modifiers = [])
     {
         // N.B fails quietly if field doesn't exist.
         if (!$field_object) {
@@ -393,25 +386,25 @@ class Icenberg
          */
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
+            return (new Group())->getElement($field_object, $this, $tag, $post_id, $modifiers);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
+            return (new Repeater())->getElement($field_object, $this, $tag, $post_id, $modifiers);
         }
 
         /**
          * This is a dead end (for now)
          */
         if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id, $this->bem_modifiers);
+            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id, $modifiers);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
+        return (new $classname())->getElement($field_object, $this, $tag, $post_id, $modifiers);
     }
 
     /**
@@ -528,7 +521,7 @@ class Icenberg
     }
 
 
-    public function get_buttons($field_name)
+    public function get_buttons($field_name, $modifiers = [])
     {
         $field_object = $this->processFieldObject($field_name);
 
@@ -537,12 +530,12 @@ class Icenberg
             return null;
         }
 
-        return (new Buttons())->getElement($field_object, $this);
+        return (new Buttons())->getElement($field_object, $this, $modifiers);
     }
 
-    public function the_buttons($field_name)
+    public function the_buttons($field_name, $modifiers = [])
     {
-        echo $this->get_buttons($field_name);
+        echo $this->get_buttons($field_name, $modifiers);
     }
 
     /**
@@ -553,20 +546,23 @@ class Icenberg
      * @param string $tag HTML tag used for enclosing element
      * @return string
      */
-    public function enclose($class, $elements = [], $tag = 'div')
+    public function enclose($class, $elements = [], $tag = 'div', $modifiers = [])
     {
-        echo $this->get_enclose($class, $elements, $tag);
+        echo $this->get_enclose($class, $elements, $tag, $modifiers);
     }
 
-    public function get_enclose($class, $elements = [], $tag = 'div')
+    public function get_enclose($class, $elements = [], $tag = 'div', $modifiers = [])
     {
         $layout = str_replace('_', '-', $this->layout);
+        $base_class = "{$this->prefix}{$layout}";
 
         if ($class) {
-            return "<{$tag} class='{$this->prefix}{$layout}__{$class}'>" . implode($elements)  . "</{$tag}>";
-        } else {
-            return "<{$tag} class='{$this->prefix}{$layout}'>" . implode($elements)  . "</{$tag}>";
+            $base_class .= "__{$class}";
         }
+
+        $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
+
+        return "<{$tag} class='{$base_class} {$modifier_classes}'>" . implode($elements)  . "</{$tag}>";
     }
 
     /**
@@ -580,21 +576,6 @@ class Icenberg
     public static function wrap($content, $block_settings = null, $wrap_inner = true)
     {
         echo Wrap::create($content, $block_settings, $wrap_inner);
-    }
-
-    /**
-     * Add modifiers for BEM class generation
-     *
-     * Indexed items will output values as BEM classes.
-     * Associative items will output keys BEM classes based on truthiness of their associated value.
-     *
-     * @param array $modifiers
-     * @return Icenberg
-     */
-    public function modifiers(array $modifiers)
-    {
-        $this->bem_modifiers = array_merge($this->bem_modifiers, $modifiers);
-        return $this;
     }
 
     public static function generateModifierClasses($base_class, $modifiers)
