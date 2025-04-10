@@ -610,6 +610,28 @@ class Icenberg
     }
 
     /**
+     * Converts $string from snake_case to kebab-case
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function unSnake($string)
+    {
+        return str_replace('_', '-', $string);
+    }
+
+    /**
+     * Converts $string to snake_case
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function unSpace($string)
+    {
+        return str_replace([' ', '-'], '_', $string);
+    }
+
+    /**
      * Generates BEM modifier class strings
      *
      * @param string $base_class
@@ -626,10 +648,10 @@ class Icenberg
 
                 if (is_string($key)) {
                     if ($val) {
-                        return $base_class . '--' . $key;
+                        return $base_class . '--' . self::unSnake(self::unSpace($key));
                     }
                 } else {
-                    return $base_class . '--' . $val;
+                    return $base_class . '--' . self::unSnake(self::unSpace($val));
                 }
             }, array_keys($modifiers)));
         }

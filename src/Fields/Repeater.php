@@ -12,7 +12,7 @@ class Repeater extends Base
 
         $innards = "";
 
-        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
 
         if (have_rows($name, $post_id)) :

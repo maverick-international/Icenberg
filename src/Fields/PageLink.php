@@ -18,7 +18,7 @@ class PageLink extends Base
 
         $wrapped = '';
 
-        $class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
         $all_classes = implode(' ', [$class, $modifier_classes]);
 

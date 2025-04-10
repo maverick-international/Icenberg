@@ -2,6 +2,8 @@
 
 namespace MVRK\Icenberg\Fields;
 
+use MVRK\Icenberg\Icenberg;
+
 /**
  * Creates CSS classes and id from an acf group.
  */
@@ -178,7 +180,7 @@ class Settings extends Base
             }
 
             if ($value) {
-                $this->classes[] = "block_" . $this->unSnake($key) . '--' . $this->unSpace($value);
+                $this->classes[] = "block_" . Icenberg::unSnake($key) . '--' . Icenberg::unSpace($value);
             }
         } elseif (is_array($value)) {
 
@@ -195,8 +197,8 @@ class Settings extends Base
                     }
 
                     if ($v) {
-                        $this->classes[] = "block_" . $this->unSnake($key) . '_' . $this->unSnake($k) .
-                            '--' . $this->unSpace($v);
+                        $this->classes[] = "block_" . Icenberg::unSnake($key) . '_' . Icenberg::unSnake($k) .
+                            '--' . Icenberg::unSpace($v);
                     }
                 } else {
                     $this->parseFields($k, $v);

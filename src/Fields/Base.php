@@ -17,7 +17,7 @@ class Base
      */
     public function wrap($content, $classes, $icenberg, $tag, $modifiers = [])
     {
-        $base_class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}";
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
 
         return "<{$tag} class='{$base_class} {$modifier_classes}'>{$content}</{$tag}>";
@@ -39,20 +39,10 @@ class Base
             $list .= "<li>{$item}</li>";
         }
 
-        $base_class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($classes)}";
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
 
         return "<ul class='{$base_class} {$modifier_classes}'>{$list}</ul>";
-    }
-
-    public function unSnake($text)
-    {
-        return str_replace('_', '-', $text);
-    }
-
-    public function unSpace($string)
-    {
-        return str_replace([' ', '-'], '_', $string);
     }
 
     /**
@@ -90,7 +80,7 @@ class Base
 
         $permalink = esc_url(get_the_permalink($wp_post));
         $title = get_the_title($wp_post);
-        $class = "post-link--{$this->unSnake($layout)}__{$this->unSnake($name)}";
+        $class = "post-link--{$icenberg::unSnake($layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
         $content = "<a class='{$class} {$modifier_classes}' href='{$permalink}'>{$title}</a>";
 

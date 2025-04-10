@@ -13,7 +13,7 @@ class Url extends Base
 
         $content = self::icefield($name, $post_id);
 
-        $base_class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
 
         $wrapped = "<a class='{$base_class} {$modifier_classes}' href='{$content}'>{$content}</a>";

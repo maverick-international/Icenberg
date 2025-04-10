@@ -12,7 +12,7 @@ class Link extends Base
 
         $link = self::icefield($name, $post_id);
 
-        $base_class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
 
         if (is_array($link)) {
