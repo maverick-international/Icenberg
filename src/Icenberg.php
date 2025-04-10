@@ -73,7 +73,9 @@ class Icenberg
     /**
      * Echoes out the wrapped up and formatted element
      *
-     * @param string $field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return void
      */
     public function the_element($field_name, $tag = 'div', $modifiers = [])
@@ -84,7 +86,9 @@ class Icenberg
     /**
      * Returns the wrapped up and formatted element
      *
-     * @param string $field - The name of the sub field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
     public function get_element($field_name, $tag = 'div', $modifiers = [])
@@ -141,7 +145,9 @@ class Icenberg
      * Depends on the magic of consistent naming.
      * Indvivdual field types can be overriden here.
      *
-     * @param object $field
+     * @param string $field_name The name of the sub field
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
     protected function sortElement($field_name, $tag, $modifiers = [])
@@ -356,7 +362,8 @@ class Icenberg
      * Delivers the icenberged string from an Icenberg
      * field instance, at the end of the chain
      *
-     * @param string $tag
+     * @param string $tag The tag to use for the wrapping element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return ?string
      */
     public function get($tag = 'div', $modifiers = [])
@@ -370,6 +377,7 @@ class Icenberg
      * @param object $field_object
      * @param ?string $tag
      * @param ?string $post_id
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return ?string
      */
     protected function getElementFromFieldObject($field_object, $tag, $post_id = false, $modifiers = [])
@@ -520,7 +528,13 @@ class Icenberg
         return (new Settings($block_settings, $classes))->applySettings();
     }
 
-
+    /**
+     * Wrap up buttons
+     *
+     * @param string $field_name The name of the sub field
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return string
+     */
     public function get_buttons($field_name, $modifiers = [])
     {
         $field_object = $this->processFieldObject($field_name);
@@ -533,9 +547,30 @@ class Icenberg
         return (new Buttons())->getElement($field_object, $this, $modifiers);
     }
 
+    /**
+     * Wrap up buttons and output them
+     *
+     * @param string $field_name The name of the sub field
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return void
+     */
     public function the_buttons($field_name, $modifiers = [])
     {
         echo $this->get_buttons($field_name, $modifiers);
+    }
+
+    /**
+     * Wrap up multiple icenberg elements together and output them
+     *
+     * @param string $class element classname - BEM it up with the layout name
+     * @param array $elements array of icenberg elements
+     * @param string $tag HTML tag used for enclosing element
+     * @param ?array $modifiers BEM modifiers for class generation
+     * @return void
+     */
+    public function enclose($class, $elements = [], $tag = 'div', $modifiers = [])
+    {
+        echo $this->get_enclose($class, $elements, $tag, $modifiers);
     }
 
     /**
@@ -544,13 +579,9 @@ class Icenberg
      * @param string $class element classname - BEM it up with the layout name
      * @param array $elements array of icenberg elements
      * @param string $tag HTML tag used for enclosing element
+     * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
-    public function enclose($class, $elements = [], $tag = 'div', $modifiers = [])
-    {
-        echo $this->get_enclose($class, $elements, $tag, $modifiers);
-    }
-
     public function get_enclose($class, $elements = [], $tag = 'div', $modifiers = [])
     {
         $layout = str_replace('_', '-', $this->layout);
@@ -578,6 +609,13 @@ class Icenberg
         echo Wrap::create($content, $block_settings, $wrap_inner);
     }
 
+    /**
+     * Generates BEM modifier class strings
+     *
+     * @param string $base_class
+     * @param array $modifiers
+     * @return string
+     */
     public static function generateModifierClasses($base_class, $modifiers)
     {
         $modifier_classes = '';
