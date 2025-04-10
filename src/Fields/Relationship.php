@@ -18,7 +18,7 @@ class Relationship extends Base
 
         if ($values) {
             foreach ($values as $value) {
-                $content .= $this->postLink($value, $name, $icenberg->layout, $tag, $modifiers);
+                $content .= $this->postLink($value, $name, $icenberg, $tag, $modifiers);
             }
         }
 

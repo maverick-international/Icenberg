@@ -72,7 +72,7 @@ class Base
         return "<{$tag} class='{$class}__{$item_name}'>{$content}</{$tag}>";
     }
 
-    public function postLink($wp_post, $name, $layout, $tag, $modifiers = [])
+    public function postLink($wp_post, $name, $icenberg, $tag, $modifiers = [])
     {
         if (!$wp_post) {
             return false;
@@ -80,7 +80,7 @@ class Base
 
         $permalink = esc_url(get_the_permalink($wp_post));
         $title = get_the_title($wp_post);
-        $class = "post-link--{$icenberg::unSnake($layout)}__{$icenberg::unSnake($name)}";
+        $class = "post-link--{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
         $content = "<a class='{$class} {$modifier_classes}' href='{$permalink}'>{$title}</a>";
 
