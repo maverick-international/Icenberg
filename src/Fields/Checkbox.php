@@ -4,7 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 class Checkbox extends Base
 {
-    public function getElement()
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         return false; // shouldn't ususally have a frontend representation
     }

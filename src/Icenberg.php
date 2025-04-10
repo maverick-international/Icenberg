@@ -59,6 +59,13 @@ class Icenberg
      */
     public $field_object;
 
+    /**
+     * modifiers for generating additional BEM classes.
+     *
+     * @var array
+     */
+    public $bem_modifiers = [];
+
     public function __construct($layout, $prefix = 'block', $post_id = false)
     {
         $this->layout = $layout;
@@ -386,25 +393,25 @@ class Icenberg
          */
 
         if ($type === 'group') {
-            return (new Group())->getElement($field_object, $this, $tag, $post_id);
+            return (new Group())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
         }
 
         if ($type === 'repeater') {
-            return (new Repeater())->getElement($field_object, $this, $tag, $post_id);
+            return (new Repeater())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
         }
 
         /**
          * This is a dead end (for now)
          */
         if ($type === 'flexible_content') {
-            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id);
+            return (new FlexibleContent())->getElement($field_object, $this, $tag,  $post_id, $this->bem_modifiers);
         }
 
         $pascal = str_replace('_', '', ucwords($type, '_'));
 
         $classname = "\\MVRK\Icenberg\Fields\\" . $pascal;
 
-        return (new $classname())->getElement($field_object, $this, $tag, $post_id);
+        return (new $classname())->getElement($field_object, $this, $tag, $post_id, $this->bem_modifiers);
     }
 
     /**
@@ -573,5 +580,41 @@ class Icenberg
     public static function wrap($content, $block_settings = null, $wrap_inner = true)
     {
         echo Wrap::create($content, $block_settings, $wrap_inner);
+    }
+
+    /**
+     * Add modifiers for BEM class generation
+     *
+     * Indexed items will output values as BEM classes.
+     * Associative items will output keys BEM classes based on truthiness of their associated value.
+     *
+     * @param array $modifiers
+     * @return Icenberg
+     */
+    public function modifiers(array $modifiers)
+    {
+        $this->bem_modifiers = array_merge($this->bem_modifiers, $modifiers);
+        return $this;
+    }
+
+    public static function generateModifierClasses($base_class, $modifiers)
+    {
+        $modifier_classes = '';
+
+        if (count($modifiers)) {
+            $modifier_classes = implode(' ', array_map(function ($key) use ($base_class, $modifiers) {
+                $val = $modifiers[$key];
+
+                if (is_string($key)) {
+                    if ($val) {
+                        return $base_class . '--' . $key;
+                    }
+                } else {
+                    return $base_class . '--' . $val;
+                }
+            }, array_keys($modifiers)));
+        }
+
+        return $modifier_classes;
     }
 }

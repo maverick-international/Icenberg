@@ -2,16 +2,21 @@
 
 namespace MVRK\Icenberg\Fields;
 
+use MVRK\Icenberg\Icenberg;
+
 class Url extends Base
 {
 
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
         $content = self::icefield($name, $post_id);
 
-        $wrapped = "<a class='{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}' href='{$content}'>{$content}</a>";
+        $base_class = "{$icenberg->prefix}{$this->unSnake($icenberg->layout)}__{$this->unSnake($name)}";
+        $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+
+        $wrapped = "<a class='{$base_class} {$modifier_classes}' href='{$content}'>{$content}</a>";
 
         return $wrapped;
     }

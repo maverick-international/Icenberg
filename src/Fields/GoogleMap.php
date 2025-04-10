@@ -6,7 +6,7 @@ use MVRK\Icenberg\Config\Config;
 
 class GoogleMap extends Base
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id)
+    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
     {
         $name = $field_object['_name'];
 
@@ -16,7 +16,7 @@ class GoogleMap extends Base
 
         $content .= self::jsMap($map);
 
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag);
+        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
 
         return $wrapped;
     }
