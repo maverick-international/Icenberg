@@ -191,9 +191,11 @@ class Icenberg
      */
     public function processField($field_name, $post_id = false)
     {
-        if ($post_id === 'options') {
+
+        if (strpos($field_name, ',')) {
             $field_name = strstr($field_name, ',', true);
-        }
+            $this->post_id = 'options';
+        };
 
         if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
@@ -223,9 +225,10 @@ class Icenberg
     {
         $field_object = null;
 
-        if ($post_id === 'options') {
+        if (strpos($field_name, ',')) {
             $field_name = strstr($field_name, ',', true);
-        }
+            $this->post_id = 'options';
+        };
 
         if (!get_sub_field($field_name) && !get_field($field_name, $post_id)) {
             return;
