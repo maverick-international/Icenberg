@@ -142,9 +142,14 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 ## [v0.8.0] 2025-84-10
 
 ### Added
-- Modifiers to compelte the BEM
+- Modifiers to complete the BEM
 
 ## [v0.8.2] 2025-84-11
 
 ### Fixed
 - Bug where the field name was being wiped in option fields
+
+## [v0.8.2] 2025-84-11
+
+### Fixed
+- Whitespace at tail of css classes
