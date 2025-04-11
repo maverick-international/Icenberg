@@ -44,15 +44,16 @@ class File extends Base
 
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($this->name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses($base_class, $modifier_classes);
 
         if (is_array($file)) {
             if ($file['type'] === 'video') {
                 return  $this->getVideo($file);
             }
 
-            $wrapped = "<a class='{$base_class} {$modifier_classes}' href='{$file['url']}'>{$file['title']}</a>";
+            $wrapped = "<a class='{$classes_string}' href='{$file['url']}'>{$file['title']}</a>";
         } else {
-            $wrapped = "<a class='{$base_class} {$modifier_classes}' href='{$file}'>{$file}</a>";
+            $wrapped = "<a class='{$classes_string}' href='{$file}'>{$file}</a>";
         }
 
         return $wrapped;

@@ -25,9 +25,9 @@ class Buttons extends Base
 
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses('buttons', $base_class, $modifier_classes);
 
-        $class = "buttons {$base_class} {$modifier_classes}";
-        $group = "<div class='{$class}'>{$innards}</div>";
+        $group = "<div class='{$classes_string}'>{$innards}</div>";
 
         return $group;
     }

@@ -32,7 +32,9 @@ class Group extends Base
 
         $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $group = "<{$tag} class='{$class} {$modifier_classes}'>{$innards}</{$tag}>";
+        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
+
+        $group = "<{$tag} class='{$classes_string}'>{$innards}</{$tag}>";
 
         return $group;
     }

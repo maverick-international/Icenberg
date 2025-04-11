@@ -19,8 +19,9 @@ class Base
     {
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses($base_class, $modifier_classes);
 
-        return "<{$tag} class='{$base_class} {$modifier_classes}'>{$content}</{$tag}>";
+        return "<{$tag} class='{$classes_string}'>{$content}</{$tag}>";
     }
 
     /**
@@ -41,8 +42,9 @@ class Base
 
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($classes)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses($base_class, $modifier_classes);
 
-        return "<ul class='{$base_class} {$modifier_classes}'>{$list}</ul>";
+        return "<ul class='{$classes_string}'>{$list}</ul>";
     }
 
     /**
@@ -82,7 +84,8 @@ class Base
         $title = get_the_title($wp_post);
         $class = "post-link--{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $content = "<a class='{$class} {$modifier_classes}' href='{$permalink}'>{$title}</a>";
+        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
+        $content = "<a class='{$classes_string}' href='{$permalink}'>{$title}</a>";
 
         return $content;
     }

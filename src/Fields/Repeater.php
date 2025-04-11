@@ -14,6 +14,7 @@ class Repeater extends Base
 
         $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
+        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
 
         if (have_rows($name, $post_id)) :
             while (have_rows($name, $post_id)) : the_row();
@@ -30,7 +31,7 @@ class Repeater extends Base
 
         endif;
 
-        $repeater = "<{$tag} class='{$class} {$modifier_classes}'>{$innards}</{$tag}>";
+        $repeater = "<{$tag} class='{$classes_string}'>{$innards}</{$tag}>";
 
         return $repeater;
     }

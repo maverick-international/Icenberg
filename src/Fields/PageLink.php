@@ -20,13 +20,13 @@ class PageLink extends Base
 
         $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $all_classes = implode(' ', [$class, $modifier_classes]);
+        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
 
         foreach ($links as $link) {
             $wrapped .= "<li><a class='{$class}__item' href='{$link}'>{$link}</a></li>";
         }
 
-        $wrapped = sprintf('<ul class="%s">%s</ul>', $all_classes, $wrapped);
+        $wrapped = sprintf('<ul class="%s">%s</ul>', $classes_string, $wrapped);
 
         return $wrapped;
     }

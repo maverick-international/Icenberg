@@ -15,8 +15,9 @@ class Url extends Base
 
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses($base_class, $modifier_classes);
 
-        $wrapped = "<a class='{$base_class} {$modifier_classes}' href='{$content}'>{$content}</a>";
+        $wrapped = "<a class='{$classes_string}' href='{$content}'>{$content}</a>";
 
         return $wrapped;
     }

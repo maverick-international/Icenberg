@@ -14,11 +14,12 @@ class Link extends Base
 
         $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
         $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
+        $classes_string = Icenberg::implodeClasses('button', $base_class, $modifier_classes);
 
         if (is_array($link)) {
-            $wrapped = "<a class='button {$base_class} {$modifier_classes}' href='{$link['url']}' target='{$link['target']}'>{$link['title']}</a>";
+            $wrapped = "<a class='{$classes_string}' href='{$link['url']}' target='{$link['target']}'>{$link['title']}</a>";
         } else {
-            $wrapped = "<a class='button {$base_class} {$modifier_classes}' href='{$link}'>{$link}</a>";
+            $wrapped = "<a class='{$classes_string}' href='{$link}'>{$link}</a>";
         }
 
         return $wrapped;

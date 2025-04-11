@@ -595,8 +595,9 @@ class Icenberg
         }
 
         $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
+        $classes_string = self::implodeClasses($base_class, $modifier_classes);
 
-        return "<{$tag} class='{$base_class} {$modifier_classes}'>" . implode($elements)  . "</{$tag}>";
+        return "<{$tag} class='{$classes_string}'>" . implode($elements)  . "</{$tag}>";
     }
 
     /**
@@ -646,7 +647,7 @@ class Icenberg
         $modifier_classes = '';
 
         if (count($modifiers)) {
-            $modifier_classes = implode(' ', array_map(function ($key) use ($base_class, $modifiers) {
+            $modifier_classes = self::implodeClasses(...array_map(function ($key) use ($base_class, $modifiers) {
                 $val = $modifiers[$key];
 
                 if (is_string($key)) {
@@ -660,5 +661,10 @@ class Icenberg
         }
 
         return $modifier_classes;
+    }
+
+    public static function implodeClasses(...$classes)
+    {
+        return trim(implode(' ', $classes));
     }
 }
