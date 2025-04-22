@@ -571,9 +571,9 @@ class Icenberg
      * @param ?array $modifiers BEM modifiers for class generation
      * @return void
      */
-    public function enclose($class, $elements = [], $tag = 'div', $modifiers = [])
+    public function enclose($class, $elements = [], $tag = 'div', $attrs = [], $modifiers = [])
     {
-        echo $this->get_enclose($class, $elements, $tag, $modifiers);
+        echo $this->get_enclose($class, $elements, $tag, $attrs, $modifiers);
     }
 
     /**
@@ -585,7 +585,7 @@ class Icenberg
      * @param ?array $modifiers BEM modifiers for class generation
      * @return string
      */
-    public function get_enclose($class, $elements = [], $tag = 'div', $modifiers = [])
+    public function get_enclose($class, $elements = [], $tag = 'div', $attrs = [], $modifiers = [])
     {
         $layout = str_replace('_', '-', $this->layout);
         $base_class = "{$this->prefix}{$layout}";
@@ -594,10 +594,24 @@ class Icenberg
             $base_class .= "__{$class}";
         }
 
-        $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
-        $classes_string = self::implodeClasses($base_class, $modifier_classes);
+        $additional_classes = '';
+        $additional_attrs = '';
 
-        return "<{$tag} class='{$classes_string}'>" . implode($elements)  . "</{$tag}>";
+        if (count($attrs)) {
+            if (isset($attrs['class'])) { // handle classes separately as we already have a class attribute
+                $additional_classes = $attrs['class'];
+                unset($attrs['class']);
+            }
+
+            $additional_attrs = implode(' ', array_map(function ($key, $val) {
+                return "{$key}='{$val}'";
+            }, array_keys($attrs), array_values($attrs)));
+        }
+
+        $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
+        $classes_string = self::implodeClasses($base_class, $modifier_classes, $additional_classes);
+
+        return "<{$tag} class='{$classes_string}' {$additional_attrs}>" . implode($elements)  . "</{$tag}>";
     }
 
     /**
