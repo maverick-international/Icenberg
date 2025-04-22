@@ -13,7 +13,7 @@
       - [`get_element($field_name, $tag = 'div', $modifiers = [])`](#get_elementfield_name-tag--div-modifiers--)
       - [`the_element($field_name, $tag = 'div', $modifiers = [])`](#the_elementfield_name-tag--div-modifiers--)
       - [Global Options](#global-options)
-      - [`enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`](#encloseclass-array-elements-tag--div-attrs--modifiers--)
+      - [`enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`](#encloseclass-array-elements-tag--div-attrs---modifiers--)
   - [Values](#values)
   - [Conditionals and manipulations](#conditionals-and-manipulations)
       - [`field($field_name)`](#fieldfield_name)
