@@ -13,7 +13,7 @@
       - [`get_element($field_name, $tag = 'div', $modifiers = [])`](#get_elementfield_name-tag--div-modifiers--)
       - [`the_element($field_name, $tag = 'div', $modifiers = [])`](#the_elementfield_name-tag--div-modifiers--)
       - [Global Options](#global-options)
-      - [`enclose($class, array $elements, $tag = 'div', $modifiers = [])`](#encloseclass-array-elements-tag--div-modifiers--)
+      - [`enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`](#encloseclass-array-elements-tag--div-attrs---modifiers--)
   - [Values](#values)
   - [Conditionals and manipulations](#conditionals-and-manipulations)
       - [`field($field_name)`](#fieldfield_name)
@@ -191,13 +191,14 @@ $ice->the_element('field_name, options');
 ```
 
 
-#### `enclose($class, array $elements, $tag = 'div', $modifiers = [])`
+#### `enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`
 
 | Argument     | Type    | Required | Description                       |
 |--------------|---------|----------|-----------------------------------|
 | `$class`     | string  | Yes      | Classname to apply to wrapper div (BEM modifiers will be appended automatically) |
 | `$elements`  | array   | Yes      | Array of rendered HTML elements (e.g. `get_element()` results or strings) |
 | `$tag`       | string  | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$attrs`     | array   | No       | An array of additional attributes to apply to the wrapper element |
 | `$modifiers` | array   | No       | An array of modifiers to use as BEM classes |
 
 Enclose is a utility for wrapping multiple icenberg fields in a container div without having to use a ?> anywhere. You just need to pass it a classname (without prefixes as these will be applied by icenberg). So clean!

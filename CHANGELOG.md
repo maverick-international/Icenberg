@@ -124,7 +124,7 @@ Paddy's day mega-release
 - Json stub now valid
 - hyphens and underscores in acf gutenberg blocks don't work for some reason, handled this in cli
 
-## [v0.7.0] 2025-84-08
+## [v0.7.0] 2025-04-08
 Major changes to allow Icenberg to work well outside of the loop and the confines of 'block'
 
 ### Added 
@@ -134,22 +134,27 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 ### Removed
 - removed experimental Preview formatting as was too specific to be useful and was an annoyance on relationship fields and post objects where you're more likely to just want a formatted link.
 
-## [v0.7.1] 2025-84-08
+## [v0.7.1] 2025-04-08
 
 ### Fixed
 - implementation bugs in out of loop fields
 
-## [v0.8.0] 2025-84-10
+## [v0.8.0] 2025-04-10
 
 ### Added
 - Modifiers to complete the BEM
 
-## [v0.8.2] 2025-84-11
+## [v0.8.2] 2025-04-11
 
 ### Fixed
 - Bug where the field name was being wiped in option fields
 
-## [v0.8.3] 2025-84-11
+## [v0.8.3] 2025-04-11
 
 ### Fixed
 - Whitespace at tail of css classes
+
+## [v0.8.4] 2025-04-23
+
+### Fixed
+- Ability to pass custom attributes to `enclose` and `get_enclose` re-added
