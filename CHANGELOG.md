@@ -158,3 +158,8 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 
 ### Fixed
 - Ability to pass custom attributes to `enclose` and `get_enclose` re-added
+
+## [v0.8.5] 2025-04-30
+
+### Fixed
+- Correct path to autoloader in Bootstrap method, looks in root and theme root 
