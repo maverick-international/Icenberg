@@ -2,7 +2,7 @@
 
 use MVRK\Icenberg\Icenberg;
 
-$icenberg = new Icenberg(strtolower($block['title']));
+$icenberg = new Icenberg('wp-block-acf-{{ block }}, false);
 
 $icenberg::wrap(
     [

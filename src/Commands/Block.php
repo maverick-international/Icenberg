@@ -62,8 +62,7 @@ class Block
     public static function generateCssClass($block_name, $args)
     {
         $css_name = str_replace('_', '-', $block_name);
-        $classes = ".block--{$css_name} {" . PHP_EOL;
-        $classes .= ".section__inner {}" . PHP_EOL;
+        $classes = ".wp-block-acf-{$css_name} {" . PHP_EOL;
         $classes .= ".wrapper {}" . PHP_EOL;
 
         foreach ($args as $arg) {

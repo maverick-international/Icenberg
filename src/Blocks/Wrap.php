@@ -22,7 +22,6 @@ class Wrap
      */
     public static function create($content, $block = null, $wrap_inner = true,)
     {
-
         if (!$content) {
             return '';
         }

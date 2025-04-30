@@ -24,7 +24,29 @@ class Bootstrap extends WP_CLI_Command
 
     public static function setup()
     {
-        require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+        // look in the root for the vendor folder or else look in the theme root for non-maverick users
+        $autoload_paths = [
+            dirname(ABSPATH) . '/vendor/autoload.php',
+            ABSPATH . 'vendor/autoload.php',
+        ];
+
+        $found = false;
+
+        foreach ($autoload_paths as $path) {
+            if (file_exists($path)) {
+                require_once $path;
+                $found = true;
+                break;
+            }
+        }
+
+        if (! $found) {
+            if (defined('WP_CLI') && WP_CLI) {
+                WP_CLI::error('Could not find vendor/autoload.php in either ABSPATH or its parent directory.');
+            } else {
+                exit('Autoloader not found. Please run `composer install`.');
+            }
+        }
 
         Config::load();
 
