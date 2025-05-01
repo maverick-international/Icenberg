@@ -163,3 +163,13 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 
 ### Fixed
 - Correct path to autoloader in Bootstrap method, looks in root and theme root 
+
+## [v0.8.6] 2025-05-01
+
+### Fixed
+- php blocks not generating correctly from stub
+
+## [v0.8.7] 2025-05-01
+
+### Added
+- ability to pass background content to an ACF gutenberg block

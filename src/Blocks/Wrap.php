@@ -20,7 +20,7 @@ class Wrap
      * @param [type] $content
      * @return void
      */
-    public static function create($content, $block = null, $wrap_inner = true,)
+    public static function create($content, $block = null, $wrap_inner = true, $background = null)
     {
         if (!$content) {
             return '';
@@ -30,7 +30,9 @@ class Wrap
             $content = implode($content);
         }
 
-        return self::buildInner($content, $block, $wrap_inner);
+        $inner = self::buildInner($content, $block, $wrap_inner);
+
+        return self::buildOuter($inner, $background);
     }
 
     /**
@@ -42,8 +44,14 @@ class Wrap
      * @param [type] $content
      * @return void
      */
-    public static function buildOuter($content)
+    public static function buildOuter($inner, $background)
     {
+        if ($background) {
+            $content  = $background . $inner;
+        } else {
+            $content = $inner;
+        }
+
         if (is_admin() && acf_is_block_editor()) {
             return $content;
         }
@@ -82,6 +90,6 @@ class Wrap
             $content =  sprintf('<div %s>%s</div>', $settings, $content);
         }
 
-        return self::buildOuter($content);
+        return $content;
     }
 }

@@ -620,11 +620,12 @@ class Icenberg
      * @param [type] $content
      * @param [type] $block_settings
      * @param boolean $wrap_inner
+     * @param [type] $background
      * @return void
      */
-    public static function wrap($content, $block_settings = null, $wrap_inner = true)
+    public static function wrap($content, $block_settings = null, $wrap_inner = true, $background = null)
     {
-        echo Wrap::create($content, $block_settings, $wrap_inner);
+        echo Wrap::create($content, $block_settings, $wrap_inner, $background);
     }
 
     /**
