@@ -22,7 +22,7 @@ class Block
             WP_CLI::log('Generating a Gutenberg block..');
 
             $css_classes = self::generateCssClass($block_name, $args);
-            $php_stub = self::generatePhpStub($args, false);
+            $php_stub = self::generatePhpStub($block_name, $args, false);
             $json_stub = self::generateJsonStub($block_name);
             $directories = self::createDirectories($block_name, false);
 
@@ -41,7 +41,7 @@ class Block
             WP_CLI::log('Generating a flexible content block..');
 
             $css_classes = self::generateCssClass($block_name, $args);
-            $php_stub = self::generatePhpStub($args, true);
+            $php_stub = self::generatePhpStub($block_name, $args, true);
             $directories = self::createDirectories($block_name, true);
 
             self::writeFile($directories['php_file_path'], $php_stub);
@@ -80,15 +80,18 @@ class Block
      * @param array $args
      * @return string
      */
-    public static function generatePhpStub($args, $is_flexible)
+    public static function generatePhpStub($block_name, $args, $is_flexible)
     {
         // Grab our stub files
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
+
         if (!$is_flexible) {
             $php_stub = file_get_contents($stubs_directory . "/block.php.stub", true);
         } else {
             $php_stub = file_get_contents($stubs_directory . "/block-flexible.php.stub", true);
         }
+
+        $php_stub = str_replace('{block_name}', $block_name, $php_stub);
 
         // Append the icenberg elements onto the stub for each specified field
         $fields = "";

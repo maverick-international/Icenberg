@@ -2,7 +2,7 @@
 
 use MVRK\Icenberg\Icenberg;
 
-$icenberg = new Icenberg('wp-block-acf-{{ block }}, false);
+$icenberg = new Icenberg('wp-block-acf-{block_name}', false);
 
 $icenberg::wrap(
     [
