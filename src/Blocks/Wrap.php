@@ -84,6 +84,12 @@ class Wrap
             }
 
             $settings = (new Icenberg($block['title']))->settings($block_settings, $classes);
+
+            if (isset($block['anchor'])) {
+                $id = " id='{$block['anchor']}'";
+
+                $settings .= $id;
+            }
         }
 
         if ($wrap_inner) {
