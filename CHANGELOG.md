@@ -174,7 +174,17 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 ### Added
 - ability to pass background content to an ACF gutenberg block
 
-## [v0.8.8] 2025-05-28
+## [v0.9.0] 2025-05-12
+
+### Improved
+- form field implementation
+
+## [v0.9.1] 2025-05-28
 
 ### Added
 - support for native gutenberg anchors in wrapped icenberg blocks
+
+## [v0.9.2] 2025-11-19
+
+### Added
+- aditional generic and media containing classes to wrapped icenblocks plus data attribute for easy identification. 
