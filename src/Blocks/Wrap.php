@@ -46,8 +46,11 @@ class Wrap
      */
     public static function buildOuter($inner, $background)
     {
+        $backdrop_class = '';
+
         if ($background) {
             $content  = $background . $inner;
+            $backdrop_class = 'has-media-background';
         } else {
             $content = $inner;
         }
@@ -56,7 +59,13 @@ class Wrap
             return $content;
         }
 
-        $wrapper_attributes = get_block_wrapper_attributes();
+
+        $wrapper_attributes = get_block_wrapper_attributes(
+            [
+                'data-icenberg-attribute' => 'icenberg-block',
+                'class' => $backdrop_class
+            ]
+        );
 
         return sprintf('<div %s>%s</div>', $wrapper_attributes, $content);
     }
