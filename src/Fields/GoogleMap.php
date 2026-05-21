@@ -3,12 +3,13 @@
 namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Config\Config;
+use MVRK\Icenberg\Icenberg;
 
-class GoogleMap extends Base
+class GoogleMap extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
+        $field_name = $field_object['_name'];
 
         $map = $field_object['value'] ?? null;
 
@@ -16,12 +17,10 @@ class GoogleMap extends Base
 
         $content .= self::jsMap($map);
 
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
-
-        return $wrapped;
+        return $this->wrap($field_name, $tag, $post_id, $field_classes, $content);
     }
 
-    public static function jsSetup()
+    public static function jsSetup(): bool|string
     {
         require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
@@ -36,7 +35,7 @@ class GoogleMap extends Base
         return "<script src='https://maps.googleapis.com/maps/api/js?key={$key}&libraries=maps,marker' defer></script>";
     }
 
-    public static function jsMap($map)
+    public static function jsMap($map): string
     {
         return "<gmp-map center='{$map['lat']},{$map['lng']}' zoom='{$map['zoom']}' map-id='{$map['place_id']}' style='height: 400px'>
          <gmp-advanced-marker

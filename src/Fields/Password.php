@@ -2,15 +2,7 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class Password extends Base
+class Password extends Field
 {
-    /**
-     * Don't display passwords!
-     *
-     * @return void
-     */
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
-    {
-        return false;
-    }
+
 }

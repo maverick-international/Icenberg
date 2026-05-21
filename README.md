@@ -66,7 +66,6 @@ make sure autoloading is set up in functions.php - something like:
 $composer_path = $_SERVER['DOCUMENT_ROOT'] . '/../vendor/';
 
 if (file_exists($composer_path)) {
-
     require_once $composer_path . 'autoload.php';
 }
 

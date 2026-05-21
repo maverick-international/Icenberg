@@ -2,25 +2,17 @@
 
 namespace MVRK\Icenberg\Blocks;
 
-use MVRK\Icenberg\Fields\Settings;
-use MVRK\Icenberg\Icenberg;
+use MVRK\Icenberg\Settings;
 
 /**
- * Prepare ACF Gutenberg blocks so that their structure
- * is more flexible content block like (good, normal) and
- * less Gutenberg block like (lame, bad).
+ * Prepare ACF Gutenberg blocks so that their structure is more flexible content
+ * block-like (good, normal) and less Gutenberg block like (lame, bad).
  */
 class Wrap
 {
-    /**
-     * We want to wrap our block on the frontend but not in the wordpress
-     * editor where its already wrapped. This makes consistent styling
-     * possible across both, theoretically anywway.
-     *
-     * @param [type] $content
-     * @return void
-     */
-    public static function create($content, $block = null, $wrap_inner = true, $background = null)
+    protected static array $editor_context = [];
+
+    public static function create(string $prefix, mixed $content, ?array $block = null, bool $wrap_inner = true, mixed $background = null): ?string
     {
         if (!$content) {
             return '';
@@ -30,81 +22,135 @@ class Wrap
             $content = implode($content);
         }
 
+        $outer = self::computeOuterAttrs($block, (bool)$background, $prefix);
+
+        if ($block && isset($block['name'])) {
+            self::$editor_context[$block['name']] = $outer;
+        }
+
         $inner = self::buildInner($content, $block, $wrap_inner);
 
-        return self::buildOuter($inner, $background);
+        return self::buildOuter($inner, $background, $outer);
     }
 
     /**
-     * matches the outer wrapper that wordpress puts over the block
-     * in the preview screen (but not on the frontend).
-     *
-     * native settings are applied here.
-     *
-     * @param [type] $content
-     * @return void
+     * Hook ACF's editor wrapper filter so that WordPress's auto-generated block
+     * wrapper in the editor has the same attributes as the frontend outer wrapper.
+     * call this once in functions.php.
      */
-    public static function buildOuter($inner, $background)
+    public static function register(): void
     {
-        $backdrop_class = '';
+        add_filter('acf/blocks/wrap_attributes', [self::class, 'filterEditorWrapAttributes'], 10, 2);
+    }
 
+    public static function filterEditorWrapAttributes(array $attributes, array $block): array
+    {
+        $context = self::$editor_context[$block['name']] ?? null;
+
+        if (!$context) {
+            return $attributes;
+        }
+
+        $attributes['class'] = trim(($attributes['class'] ?? '') . ' ' . ($context['class'] ?? ''));
+        $attributes['data-icenberg-attribute'] = $context['data-icenberg-attribute'];
+
+        if (!empty($context['id'])) {
+            $attributes['id'] = $context['id'];
+        }
+
+        return $attributes;
+    }
+
+    protected static function computeOuterAttrs(?array $block, bool $hasBackground, string $prefix): array
+    {
+        $classes = [];
+        $id = null;
+
+        if ($hasBackground) {
+            $classes[] = 'has-media-background';
+        }
+
+        if ($block) {
+            $block_settings = get_field('block_settings') ?: null;
+
+            if ($block_settings) {
+                $settings = new Settings($block_settings, [], $prefix);
+                $settings->applySettings();
+                $classes = array_merge($classes, $settings->classes);
+
+                if (!empty($block_settings['unique_id'])) {
+                    $id = $block_settings['unique_id'];
+                }
+            }
+
+            if (!empty($block['anchor'])) {
+                $id = $block['anchor'];
+            }
+        }
+
+        return [
+            'class' => strtolower(trim(implode(' ', array_filter($classes)))),
+            'id' => $id,
+            'data-icenberg-attribute' => 'icenberg-block',
+        ];
+    }
+
+    public static function buildOuter(?string $inner, ?string $background, ?array $outer = []): ?string
+    {
         if ($background) {
-            $content  = $background . $inner;
-            $backdrop_class = 'has-media-background';
+            $content = $background . $inner;
         } else {
             $content = $inner;
         }
 
-        if (is_admin() && acf_is_block_editor()) {
+        if (self::isEditorRender()) {
             return $content;
         }
 
+        $extra = [
+            'class' => $outer['class'] ?? '',
+            'data-icenberg-attribute' => $outer['data-icenberg-attribute'] ?? 'icenberg-block',
+        ];
 
-        $wrapper_attributes = get_block_wrapper_attributes(
-            [
-                'data-icenberg-attribute' => 'icenberg-block',
-                'class' => $backdrop_class
-            ]
-        );
+        if (!empty($outer['id'])) {
+            $extra['id'] = $outer['id'];
+        }
+
+        $wrapper_attributes = get_block_wrapper_attributes($extra);
 
         return sprintf('<div %s>%s</div>', $wrapper_attributes, $content);
     }
 
-    /**
-     * Wraps content in an internal wrapper with non default
-     * settings applied via an icenberg settings field.
-     *
-     */
-    public static function buildInner($content, $block, $wrap_inner)
+    protected static function isEditorRender(): bool
     {
-        $settings = '';
-
-        if ($block) {
-            $classname = str_replace('acf/', '', $block['name']);
-
-            $classname = str_replace('_', '-', $classname);
-
-            $classes = ['wrapper', 'wp-block-acf-' . $classname . "__wrapper"];
-
-            $block_settings = null;
-
-            if (get_field('block_settings')) {
-                $block_settings = get_field('block_settings');
-            }
-
-            $settings = (new Icenberg($block['title']))->settings($block_settings, $classes);
-
-            if (isset($block['anchor'])) {
-                $id = " id='{$block['anchor']}'";
-
-                $settings .= $id;
-            }
+        if (is_admin()) {
+            return true;
         }
 
-        if ($wrap_inner) {
-            $content =  sprintf('<div %s>%s</div>', $settings, $content);
+        if (defined('REST_REQUEST') && REST_REQUEST) {
+            return true;
         }
 
-        return $content;
+        if (function_exists('acf_is_block_editor') && acf_is_block_editor()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function buildInner(mixed $content, ?array $block, bool $wrap_inner): mixed
+    {
+        if (!$wrap_inner) {
+            return $content;
+        }
+
+        $classes = ['wrapper'];
+
+        if ($block && isset($block['name'])) {
+            $classname = str_replace(['acf/', '_'], ['', '-'], $block['name']);
+            $classes[] = 'wp-block-acf-' . $classname . '__wrapper';
+        }
+
+        return sprintf('<div class="%s">%s</div>', implode(' ', $classes), $content);
     }
 }

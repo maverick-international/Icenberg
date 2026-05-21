@@ -6,22 +6,17 @@ use WP_CLI;
 
 class Cli extends Bootstrap
 {
-    public function make()
+    public function make(): void
     {
-        /** @disregard P1009 */
         WP_CLI::success('Icenberg make command executed.');
     }
 
     /**
      * Generates php and scss files for icenberg friendly blocks
-     *
-     * @param array $args
-     * @return void
      */
-    public function block($args, $flags)
+    public function block($args, $flags): void
     {
         if (!$args) {
-            /** @disregard P1009 */
             WP_CLI::error('Hey, meathead - you need to give me a snake_case block name.');
         }
 
@@ -29,7 +24,6 @@ class Cli extends Bootstrap
         $block_name = array_shift($args);
 
         // Display progress bar as a ui nicety
-        /** @disregard P1010 */
         $progress = WP_CLI\Utils\make_progress_bar('Generating blocks', 1);
 
         Block::create($block_name, $args, $flags);

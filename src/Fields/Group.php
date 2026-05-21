@@ -4,38 +4,29 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-class Group extends Base
+class Group extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    /** @noinspection PhpUndefinedFunctionInspection */
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
         $name = $field_object['_name'];
-
         $sub_fields = [];
+        $content = "";
 
         foreach ($field_object['value'] as $key => $value) {
-
-            array_push($sub_fields, $key);
+            $sub_fields[] = $key;
         }
-
-        $innards = "";
-
+        
         if (have_rows($name, $post_id)) :
             while (have_rows($name, $post_id)) : the_row();
 
                 foreach ($sub_fields as $sub_field) {
-                    $innards .= $icenberg->get_element($sub_field);
+                    $content .= $icenberg->get_element($sub_field);
                 }
 
             endwhile;
-
         endif;
 
-        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
-        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
-
-        $group = "<{$tag} class='{$classes_string}'>{$innards}</{$tag}>";
-
-        return $group;
+        return "<{$tag} class='{$field_classes}'>{$content}</{$tag}>";
     }
 }

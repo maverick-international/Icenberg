@@ -2,10 +2,7 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class RadioButton extends Base
+class RadioButton extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
-    {
-        return false; // shouldn't ususally have a frontend representation
-    }
+
 }

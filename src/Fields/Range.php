@@ -2,16 +2,14 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class Range extends Base
+use MVRK\Icenberg\Icenberg;
+
+class Range extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
+        $field_name = $field_object['_name'];
 
-        $content = self::icefield($name, $post_id);
-
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
-
-        return $wrapped;
+        return $this->wrap($field_name, $tag, $post_id, $field_classes);
     }
 }

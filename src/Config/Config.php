@@ -2,22 +2,18 @@
 
 namespace MVRK\Icenberg\Config;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 class Config
 {
-    protected static $config = [];
+    protected static array $config = [];
 
     /**
      * Load the YAML file and parse it into the static $config property.
-     *
-     * @param string $file
-     * @return void
      */
-    public static function load($file = null)
+    public static function load(string $file = null): void
     {
-        /** @disregard P1011 */
         $file = $file ?? dirname(ABSPATH) . '/icenberg.yaml';
 
         if (file_exists($file)) {
@@ -31,23 +27,12 @@ class Config
         }
     }
 
-    /**
-     * Get the value of a specific config key.
-     *
-     * @param string $key The config key to retrieve.
-     * @return mixed|null
-     */
-    public static function get($key)
+    public static function get($key): mixed
     {
         return self::$config[$key] ?? null;
     }
 
-    /**
-     * Get all configurations.
-     *
-     * @return array The entire configuration array.
-     */
-    public static function getAll()
+    public static function getAll(): array
     {
         return self::$config;
     }

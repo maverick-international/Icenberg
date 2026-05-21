@@ -2,27 +2,24 @@
 
 namespace MVRK\Icenberg\Commands;
 
+use MVRK\Icenberg\Config\Config;
 use WP_CLI;
 use WP_CLI_Command;
-use MVRK\Icenberg\Config\Config;
 
-/**
- * Bootstraps our commands.
- * @disregard 1009
- */
 class Bootstrap extends WP_CLI_Command
 {
-    protected static $theme_directory;
 
-    protected static $blocks_directory;
+    protected static string $theme_directory;
 
-    protected static $block_directory_name;
+    protected static string $blocks_directory;
 
-    protected static $sass_directory;
+    protected static string $block_directory_name;
 
-    protected static $sass_directory_name;
+    protected static string $sass_directory;
 
-    public static function setup()
+    protected static string $sass_directory_name;
+
+    public static function setup(): void
     {
         // look in the root for the vendor folder or else look in the theme root for non-maverick users
         $autoload_paths = [
@@ -40,7 +37,7 @@ class Bootstrap extends WP_CLI_Command
             }
         }
 
-        if (! $found) {
+        if (!$found) {
             if (defined('WP_CLI') && WP_CLI) {
                 WP_CLI::error('Could not find vendor/autoload.php in either ABSPATH or its parent directory.');
             } else {
@@ -51,19 +48,11 @@ class Bootstrap extends WP_CLI_Command
         Config::load();
 
         static::$block_directory_name = Config::get('block_directory_name') ?? 'blocks';
-
-        /** @disregard P1010 */
         static::$blocks_directory = get_template_directory() . "/" . static::$block_directory_name;
-
-        /** @disregard P1010 */
         static::$theme_directory = get_template_directory();
-
-        static::$sass_directory_name =  Config::get('sass_directory') ?? 'src/sass/blocks';
-
-        /** @disregard P1011 */
+        static::$sass_directory_name = Config::get('sass_directory') ?? 'src/sass/blocks';
         static::$sass_directory = dirname(ABSPATH) . '/' . static::$sass_directory_name;
 
-        /** @disregard P1009 */
         WP_CLI::add_command('icenberg', 'MVRK\\Icenberg\\Commands\\Cli');
     }
 

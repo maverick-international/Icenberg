@@ -4,30 +4,22 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-class PageLink extends Base
+class PageLink extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
-
-        $links = self::icefield($name, $post_id);
+        $field_name = $field_object['_name'];
+        $links = self::icefield($field_name, $post_id);
+        $content = [];
 
         if (is_string($links)) {
             $links = [$links];
         }
 
-        $wrapped = '';
-
-        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
-        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
-
         foreach ($links as $link) {
-            $wrapped .= "<li><a class='{$class}__item' href='{$link}'>{$link}</a></li>";
+            $content[] = "<a class='{$base_class}__item' href='{$link}'>{$link}</a>";
         }
 
-        $wrapped = sprintf('<ul class="%s">%s</ul>', $classes_string, $wrapped);
-
-        return $wrapped;
+        return $this->listWrap($field_name, $tag, $post_id, $field_classes, $content);
     }
 }

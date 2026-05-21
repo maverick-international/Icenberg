@@ -4,7 +4,7 @@ use MVRK\Icenberg\Icenberg;
 
 $ice = new Icenberg('tests');
 
-$ice::wrap(
+$ice->wrap(
     [
         $ice->get_element('test_text, options'),
         $ice->get_element('test_textarea, options'),

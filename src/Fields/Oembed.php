@@ -4,10 +4,7 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-/**
- * @link https://www.advancedcustomfields.com/resources/number/
- */
-class Number extends Field
+class Oembed extends Field
 {
     public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {

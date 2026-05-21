@@ -2,26 +2,22 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class Relationship extends Base
+use MVRK\Icenberg\Icenberg;
+
+class Relationship extends Field
 {
-    /**
-     * Relationships can work in icenberg!
-     *
-     */
-    public function getElement($field_object, $icenberg, $tag, $post_id = false, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['name'];
-
+        $field_name = $field_object['name'];
         $values = $field_object['value'] ?? null;
-
-        $content = '';
+        $content = [];
 
         if ($values) {
             foreach ($values as $value) {
-                $content .= $this->postLink($value, $name, $icenberg, $tag, $modifiers);
+                $content[] = "{$this->postLink($value, $base_class)}";
             }
         }
 
-        return $content;
+        return $this->listWrap($field_name, $tag, $post_id, $field_classes, $content);
     }
 }

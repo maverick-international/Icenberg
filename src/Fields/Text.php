@@ -2,24 +2,14 @@
 
 namespace MVRK\Icenberg\Fields;
 
-class Text extends Base
+use MVRK\Icenberg\Icenberg;
+
+class Text extends Field
 {
-    /**
-     * Scaffold a text field
-     *
-     * @param object $field_object
-     * @param string $layout the current row layout
-     * @param string $tag
-     * @return string
-     */
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
+        $field_name = $field_object['_name'];
 
-        $content = self::icefield($name, $post_id);
-
-        $wrapped = $this->wrap($content, $name, $icenberg, $tag, $modifiers);
-
-        return $wrapped;
+        return $this->wrap($field_name, $tag, $post_id, $field_classes);
     }
 }

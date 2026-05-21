@@ -4,20 +4,47 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-class Email extends Base
+/**
+ * @link https://www.advancedcustomfields.com/resources/email/
+ * @link https://developer.wordpress.org/reference/functions/antispambot/
+ */
+class Email extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
         $name = $field_object['_name'];
-
         $content = self::icefield($name, $post_id);
+        $hexed_email = $this->antiSpamBot($content, 1);
+        $email = $this->antiSpamBot($content, 0);
 
-        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
-        $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
-        $classes_string = Icenberg::implodeClasses($base_class, $modifier_classes);
-
-        $wrapped = "<a class='{$classes_string}' href='mailto:{$content}'>{$content}</a>";
-
-        return $wrapped;
+        return "<a class='{$field_classes}' href='mailto:$hexed_email'>{$email}</a>";
     }
+
+    /**
+     * Copied from antispambot function in WP
+     *
+     * @param     $email_address
+     * @param int $hex_encoding
+     *
+     * @return array|string
+     */
+    protected function antiSpamBot($email_address, int $hex_encoding = 0): array|string
+    {
+        $email_no_spam_address = '';
+
+        for ($i = 0, $len = strlen($email_address); $i < $len; $i++) {
+            $j = rand(0, 1 + $hex_encoding);
+
+            if (0 === $j) {
+                $email_no_spam_address .= '&#' . ord($email_address[$i]) . ';';
+            } elseif (1 === $j) {
+                $email_no_spam_address .= $email_address[$i];
+            } elseif (2 === $j) {
+                $email_no_spam_address .= '%' . zeroise(dechex(ord($email_address[$i])), 2);
+            }
+        }
+
+        return str_replace('@', '&#64;', $email_no_spam_address);
+    }
+
 }

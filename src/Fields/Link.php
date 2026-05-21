@@ -4,22 +4,21 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-class Link extends Base
+/**
+ * @link https://www.advancedcustomfields.com/resources/link/
+ */
+class Link extends Field
 {
-    public function getElement($field, $icenberg, $tag, $post_id, $modifiers = [])
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field['_name'];
+        $name = $field_object['_name'];
 
-        $link = self::icefield($name, $post_id);
+        $content = self::icefield($name, $post_id);
 
-        $base_class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
-        $modifier_classes = Icenberg::generateModifierClasses($base_class, $modifiers);
-        $classes_string = Icenberg::implodeClasses('button', $base_class, $modifier_classes);
-
-        if (is_array($link)) {
-            $wrapped = "<a class='{$classes_string}' href='{$link['url']}' target='{$link['target']}'>{$link['title']}</a>";
+        if (is_array($content)) {
+            $wrapped = "<a class='{$field_classes}' href='{$content['url']}' target='{$content['target']}'>{$content['title']}</a>";
         } else {
-            $wrapped = "<a class='{$classes_string}' href='{$link}'>{$link}</a>";
+            $wrapped = "<a class='{$field_classes}' href='{$content}'>{$content}</a>";
         }
 
         return $wrapped;

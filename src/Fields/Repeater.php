@@ -4,35 +4,27 @@ namespace MVRK\Icenberg\Fields;
 
 use MVRK\Icenberg\Icenberg;
 
-class Repeater extends Base
+class Repeater extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
+    /** @noinspection PhpUndefinedFunctionInspection */
+    public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
+        $field_name = $field_object['_name'];
+        $content = '';
 
-        $innards = "";
-
-        $class = "{$icenberg->prefix}{$icenberg::unSnake($icenberg->layout)}__{$icenberg::unSnake($name)}";
-        $modifier_classes = Icenberg::generateModifierClasses($class, $modifiers);
-        $classes_string = Icenberg::implodeClasses($class, $modifier_classes);
-
-        if (have_rows($name, $post_id)) :
-            while (have_rows($name, $post_id)) : the_row();
-
-                $gizzards = '';
+        if (have_rows($field_name, $post_id)) :
+            while (have_rows($field_name, $post_id)) : the_row();
+                $repeater_item = '';
 
                 foreach ($field_object['sub_fields'] as $sub_field) {
-                    $gizzards .= $icenberg->get_element($sub_field['name']);
+                    $repeater_item .= $icenberg->get_element($sub_field['name']);
                 }
 
-                $innards .= "<div class='{$class}__item'>{$gizzards}</div>";
+                $content .= "<div class='{$base_class}__item'>{$repeater_item}</div>";
 
             endwhile;
-
         endif;
 
-        $repeater = "<{$tag} class='{$classes_string}'>{$innards}</{$tag}>";
-
-        return $repeater;
+        return "<{$tag} class='{$field_classes}'>{$content}</{$tag}>";
     }
 }

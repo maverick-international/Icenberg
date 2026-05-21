@@ -4,7 +4,7 @@ use MVRK\Icenberg\Icenberg;
 
 $icenberg = new Icenberg('wp-block-acf-{block_name}', false);
 
-$icenberg::wrap(
+$icenberg->wrap(
     [
         $icenberg->get_element('a_field'),
         $icenberg->get_element('another_field'),

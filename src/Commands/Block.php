@@ -8,17 +8,13 @@ class Block
 {
     /**
      * Creates a new block with necessary files
-     *
-     * @param string $block_name
-     * @param array $args
-     * @return void
      */
-    public static function create($block_name, $args, $assoc_args)
+    public static function create(string $block_name, array $args, $assoc_args): void
     {
         if (!isset($assoc_args['flexible'])) {
-            // gutenberg/acf csan't handle blocknames with underscores, spaces or hyphens apparently
-            $block_name = str_replace(['-', ' ', '_'], '', $block_name);
-            /** @disregard P1009 */
+            // gutenberg/acf can't handle block names with underscores or spaces
+            $block_name = str_replace([' ', '_'], '-', $block_name);
+
             WP_CLI::log('Generating a Gutenberg block..');
 
             $css_classes = self::generateCssClass($block_name, $args);
@@ -33,11 +29,7 @@ class Block
 
             self::createEmptyFieldGroup($block_name);
 
-            /** @disregard P1009 */
-            WP_CLI::success("New block created at {$directories['single_dir']}");
         } else {
-
-            /** @disregard P1009 */            /** @disregard P1009 */
             WP_CLI::log('Generating a flexible content block..');
 
             $css_classes = self::generateCssClass($block_name, $args);
@@ -46,20 +38,15 @@ class Block
 
             self::writeFile($directories['php_file_path'], $php_stub);
             self::writeFile($directories['sass_file_path'], $css_classes);
-
-            /** @disregard P1009 */
-            WP_CLI::success("New block created at {$directories['single_dir']}");
         }
+
+        WP_CLI::success("New block created at {$directories['single_dir']}");
     }
 
     /**
      * Generates the CSS classes for the block
-     *
-     * @param string $block_name
-     * @param array $args
-     * @return string
      */
-    public static function generateCssClass($block_name, $args)
+    public static function generateCssClass(string $block_name, array $args): string
     {
         $css_name = str_replace('_', '-', $block_name);
         $classes = ".wp-block-acf-{$css_name} {" . PHP_EOL;
@@ -71,16 +58,14 @@ class Block
         }
 
         $classes .= '}' . PHP_EOL;
+
         return $classes;
     }
 
     /**
      * Generates the PHP stub for the block
-     *
-     * @param array $args
-     * @return string
      */
-    public static function generatePhpStub($block_name, $args, $is_flexible)
+    public static function generatePhpStub(string $block_name, array $args, bool $is_flexible): string
     {
         // Grab our stub files
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
@@ -104,18 +89,15 @@ class Block
         return $php_stub . $fields;
     }
 
-
     /**
      * Creates an empty field group in ACF for the block
      *
      * @link https://make.wordpress.org/cli/handbook/references/internal-api/wp-cli-add-hook/
-     * @param string $block_name
-     * @return void
+     *
      */
-    public static function createEmptyFieldGroup($block_name)
+    public static function createEmptyFieldGroup(string $block_name): void
     {
         if (!function_exists('acf_add_local_field_group')) {
-            /** @disregard P1009 */
             WP_CLI::error('ACF is not active.');
             return;
         }
@@ -123,7 +105,6 @@ class Block
         $title = 'Block: ' . ucfirst($block_name);
         $group_key = 'group_' . strtolower(str_replace(' ', '_', $block_name));
 
-        /** @disregard P1010 */
         $existing = get_posts(array(
             'post_type' => 'acf-field-group',
             'name' => $group_key,
@@ -132,12 +113,10 @@ class Block
         ));
 
         if ($existing) {
-            /** @disregard P1009 */
             WP_CLI::warning("Field group '{$title}' already exists.");
             return;
         }
 
-        /** @disregard p1010 */
         $post_id = wp_insert_post(array(
             'post_title' => $title,
             'post_name' => $group_key,
@@ -145,9 +124,7 @@ class Block
             'post_status' => 'publish',
         ));
 
-        /** @disregard P1010 */
         if (is_wp_error($post_id)) {
-            /** @disregard P1009 */
             WP_CLI::error("Failed to create field group: " . $post_id->get_error_message());
             return;
         }
@@ -155,65 +132,54 @@ class Block
         $location_rules = array(
             array(
                 array(
-                    'param'    => 'block',
+                    'param' => 'block',
                     'operator' => '==',
-                    'value'    => 'acf/' . $block_name,
+                    'value' => 'acf/' . $block_name,
                 ),
             ),
         );
 
         $post_content = array(
-            'location'             => $location_rules,
-            'position'             => 'normal',
-            'style'                => 'default',
-            'label_placement'      => 'top',
+            'location' => $location_rules,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
             'instruction_placement' => 'label',
-            'hide_on_screen'       => '',
-            'description'          => '',
-            'show_in_rest'         => 0,
+            'hide_on_screen' => '',
+            'description' => '',
+            'show_in_rest' => 0,
         );
 
         $serialized_content = serialize($post_content);
 
-        /** @disregard P1010 */
         wp_update_post(array(
-            'ID'           => $post_id,
+            'ID' => $post_id,
             'post_content' => $serialized_content,
         ));
 
-        /** @disregard P1009 */
         WP_CLI::success("ACF field group '{$title}' created and registered in the GUI.");
     }
 
-
     /**
      * Generates the PHP stub for the block
-     *
-     * @param array $args
-     * @return string
      */
-    public static function generateJsonStub($block_name)
+    public static function generateJsonStub(string $block_name): string
     {
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
 
         $json_stub = file_get_contents($stubs_directory . "/block.json.stub", true);
         $json_stub = str_replace('{block_name}', $block_name, $json_stub);
-        $json_stub = str_replace('{block_title}', ucwords(str_replace('_', ' ', $block_name)), $json_stub);
-
-        return $json_stub;
+        return str_replace('{block_title}', ucwords(str_replace('-', ' ', $block_name)), $json_stub);
     }
-
 
     /**
      * Checks if the directories exist, and creates them if not
-     *
-     * @param string $block_name
-     * @return array
      */
-    public static function createDirectories($block_name, $is_flexible)
+    public static function createDirectories(string $block_name, bool $is_flexible): array
     {
         $blocks_dir = Bootstrap::getBlocksDirectory();
         $sass_dir = Bootstrap::getSassDirectory();
+
         if (!$is_flexible) {
             $single_dir = $blocks_dir . "/{$block_name}";
         } else {
@@ -251,12 +217,8 @@ class Block
 
     /**
      * Writes a file to the specified location
-     *
-     * @param string $file_path
-     * @param string $content
-     * @return void
      */
-    public static function writeFile($file_path, $content)
+    public static function writeFile(string $file_path, string $content): void
     {
         file_put_contents($file_path, $content);
         chmod($file_path, 0644);

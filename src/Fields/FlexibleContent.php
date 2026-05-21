@@ -5,10 +5,7 @@ namespace MVRK\Icenberg\Fields;
 /**
  * @todo - get this working for flexible content inception
  */
-class FlexibleContent extends Base
+class FlexibleContent extends Field
 {
-    public function getElement($field_object, $icenberg, $tag, $post_id, $modifiers = [])
-    {
-        return; // not yet supported
-    }
+
 }
