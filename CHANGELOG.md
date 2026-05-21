@@ -218,7 +218,7 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 
 ### Added
 
-- support for native gutenberg anchors in wrapped icenberg blocks
+- support for native Gutenberg anchors in wrapped icenberg blocks
 
 ## [v0.9.2] 2025-11-19
 
@@ -232,16 +232,24 @@ Major changes to allow Icenberg to work well outside of the loop and the confine
 
 - Converts wrap method to non-static to allow for passing of block prefix
 - Removes legacy standard setting presets
-- allows settings to flow into the outer wrapper class
-- standardised BEM in settings classes
+- Allows settings to flow into the outer wrapper class
+- Standardised BEM in settings classes
 - Initialisation required in functions.php
 - Requires php 8+
-- deprecates legacy button and buttons
+- Removes legacy button and buttons pseudo fields
 
 ### Added/Improved
 
-- stricter typing
-- general code cleanup
+- Settings and classes applied to outer wrapper
+- Strict(er) typing
+- General code clean-up
 - Utils/Format string manipulation helpers
-- improved kebab casing
-- rewritten fields
+- Improved kebab casing
+- Rewritten and restructured fields
+- Spam protection for email field
+- Non rendering fields return false by default
+- Support for ACF table field plugin
+
+### Fixed
+
+- Implied nullable field in Config

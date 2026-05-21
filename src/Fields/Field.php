@@ -63,11 +63,6 @@ class Field
         return $field;
     }
 
-    protected static function wrapInTag($content, $item_name, $class, $tag = 'span'): string
-    {
-        return "<{$tag} class='{$class}__{$item_name}'>{$content}</{$tag}>";
-    }
-
     public function postLink($wp_post, $base_class): bool|string
     {
         if (!$wp_post) {

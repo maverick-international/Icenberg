@@ -12,7 +12,7 @@ class Config
     /**
      * Load the YAML file and parse it into the static $config property.
      */
-    public static function load(string $file = null): void
+    public static function load(?string $file = null): void
     {
         $file = $file ?? dirname(ABSPATH) . '/icenberg.yaml';
 

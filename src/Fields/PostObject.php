@@ -10,20 +10,22 @@ class PostObject extends Field
     {
         $field_name = $field_object['_name'];
 
-        $values = $field_object['value'] ?? null;
+        $posts = $field_object['value'] ?? null;
 
-        if (!is_array($values)) {
-            $values = [$values];
+        if (!is_array($posts)) {
+            $posts = [$posts];
         }
 
         $content = [];
 
-        if ($values) {
-            foreach ($values as $value) {
-                $content[] = "{$this->postLink($value, $base_class)}>";
+        if ($posts) {
+            foreach ($posts as $post) {
+                setup_postdata($post);
+                $content[] = "{$this->postLink($post, $base_class)}";
             }
+            wp_reset_postdata();
         }
-
+        
         return $this->listWrap($field_name, $tag, $post_id, $field_classes, $content);
     }
 }

@@ -5,6 +5,8 @@ namespace MVRK\Icenberg\Fields;
 use MVRK\Icenberg\Icenberg;
 
 /**
+ * Email featuring spam protection.
+ *
  * @link https://www.advancedcustomfields.com/resources/email/
  * @link https://developer.wordpress.org/reference/functions/antispambot/
  */
@@ -23,12 +25,12 @@ class Email extends Field
     /**
      * Copied from antispambot function in WP
      *
-     * @param     $email_address
-     * @param int $hex_encoding
+     * @param string $email_address
+     * @param int    $hex_encoding
      *
      * @return array|string
      */
-    protected function antiSpamBot($email_address, int $hex_encoding = 0): array|string
+    protected function antiSpamBot(string $email_address, int $hex_encoding = 0): array|string
     {
         $email_no_spam_address = '';
 
