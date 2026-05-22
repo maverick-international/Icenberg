@@ -16,31 +16,10 @@ use MVRK\Icenberg\Utils\Format;
  */
 class Icenberg
 {
-    /**
-     * The block, component or flexible content row name
-     * primarily used for generating CSS classes.
-     */
     public string $layout;
-
-    /**
-     * The top level BEM block used in constructing the CSS classes
-     * e.g 'block' will prepend 'block--' to the class.
-     */
     public string $prefix;
-
-    /**
-     * The post ID, defaults to current post ID.
-     */
     public mixed $post_id = false;
-
-    /**
-     * The value of the acf field.
-     */
     public mixed $field;
-
-    /**
-     * the acf sub-field object.
-     */
     public mixed $field_object;
 
     public function __construct(string $layout, string $prefix = 'block', mixed $post_id = false)
@@ -50,25 +29,11 @@ class Icenberg
         $this->post_id = $post_id;
     }
 
-    /**
-     * Echoes the wrapped up and formatted element.
-     *
-     * @param string $field_name The name of the field
-     * @param string $tag        The tag to use for the wrapping element
-     * @param ?array $modifiers  BEM modifiers for class generation
-     */
     public function the_element(string $field_name, string $tag = 'div', ?array $modifiers = []): void
     {
         echo $this->findElement($field_name, $tag, $modifiers);
     }
 
-    /**
-     * Returns the wrapped up and formatted element.
-     *
-     * @param string $field_name The name of the sub field
-     * @param string $tag        The tag to use for the wrapping element
-     * @param ?array $modifiers  BEM modifiers for class generation
-     */
     public function get_element(string $field_name, string $tag = 'div', ?array $modifiers = []): ?string
     {
         return $this->findElement($field_name, $tag, $modifiers);
@@ -84,7 +49,6 @@ class Icenberg
 
     protected function getElementFromFieldObject(mixed $field_object, string $tag, mixed $post_id = false, ?array $modifiers = [])
     {
-        // fails quietly if field doesn't exist.
         if (!$field_object) {
             return null;
         }
@@ -110,9 +74,6 @@ class Icenberg
         );
     }
 
-    /**
-     * 'raw' value of a given field.
-     */
     public function value(string $field_name): mixed
     {
         $post_id = $this->postId($field_name);
@@ -128,14 +89,6 @@ class Icenberg
         return Field::icefield($field_name, $post_id);
     }
 
-    /**
-     *  Returns the post->ID to enable access outside the loop,
-     *  or if there's a comma, it's an option so we return that.
-     *
-     *  We need this to pass 'options' down to field level as the post
-     *  object gives no indication of whther a given field is from options
-     *  or not, sadly.
-     */
     public function postId(string $field_name): mixed
     {
         if (strpos($field_name, ',')) {
@@ -179,9 +132,6 @@ class Icenberg
         return $this;
     }
 
-    /**
-     * Remove unwanted sub-fields from group or repeater fields.
-     */
     public function prune(array $exclusions): Icenberg
     {
         if (!$this->field_object) {
@@ -233,9 +183,6 @@ class Icenberg
         ));
     }
 
-    /**
-     * Prune non-whitelisted sub-fields from a repeater or group.
-     */
     public function only($inclusions): Icenberg
     {
         if (!$this->field_object) {
@@ -304,20 +251,14 @@ class Icenberg
         return (new Settings($block_settings, $classes))->applySettings();
     }
 
-    /**
-     * Wrap up multiple icenberg elements together and output them.
-     */
     public function enclose($class, $elements = [], $tag = 'div', $attrs = [], $modifiers = []): void
     {
         echo $this->get_enclose($class, $elements, $tag, $attrs, $modifiers);
     }
 
-    /**
-     * Wrap up multiple icenberg elements together.
-     */
     public function get_enclose($class, $elements = [], $tag = 'div', $attrs = [], $modifiers = []): string
     {
-        return Enclose::get($class, $this->layout, $elements, $tag, $attrs, $modifiers);
+        return Enclose::get($class, $this->layout, $this->prefix, $elements, $tag, $attrs, $modifiers);
     }
 
     public function wrap(
@@ -327,7 +268,7 @@ class Icenberg
         mixed  $background = null
     ): void
     {
-        echo Wrap::create($this->prefix, $content, $block, $wrap_inner, $background);
+        echo (new Wrap($this->prefix, $content, $block, $wrap_inner, $background))->create();
     }
 
 }

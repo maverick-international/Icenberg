@@ -7,10 +7,14 @@ use MVRK\Icenberg\Utils\Format;
 
 class Enclose
 {
-    public static function get($class, $layout, $elements = [], $tag = 'div', $attrs = [], $modifiers = []): string
+    public static function get($class, $layout, $prefix, $elements = [], $tag = 'div', $attrs = [], $modifiers = []): string
     {
         $layout = Format::kebabCase($layout);
-        $base_class = $layout;
+        if ($prefix) {
+            $base_class = $prefix . '--' . $layout;
+        } else {
+            $base_class = $layout;
+        }
 
         if ($class) {
             $base_class .= "__{$class}";
