@@ -15,7 +15,7 @@ class Hooks
      * We need to use js to force WordPress to add our custom block classes.
      * Initialise in functions.php or wherever.
      *
-     * The use of a config value can potentially lead to a mismatch in classes if the suer defines a different prefix
+     * The use of a config value can potentially lead to a mismatch in classes if the user defines a different prefix
      * when initalising icenberg but can't think of a good way around that, so caveat emptor.
      *
      * @link https://developer.wordpress.org/block-editor/reference-guides/packages/packages-compose/

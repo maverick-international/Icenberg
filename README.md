@@ -1,55 +1,21 @@
 # Icenberg 🥶
 
-
-
-- [Icenberg 🥶](#icenberg-)
-    - [What is it?](#what-is-it)
-    - [Getting Started](#getting-started)
-      - [Initialise](#initialise)
-      - [`Icenberg::__construct($layout, $prefix = 'block', $post_id = false)`](#icenberg__constructlayout-prefix--block-post_id--false)
-    - [Using with ACF Flexible Content blocks](#using-with-acf-flexible-content-blocks)
-  - [Using in an ACF Gutenberg Block](#using-in-an-acf-gutenberg-block)
-    - [Icenberg Methods](#icenberg-methods)
-      - [`get_element($field_name, $tag = 'div', $modifiers = [])`](#get_elementfield_name-tag--div-modifiers--)
-      - [`the_element($field_name, $tag = 'div', $modifiers = [])`](#the_elementfield_name-tag--div-modifiers--)
-      - [Global Options](#global-options)
-      - [`enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`](#encloseclass-array-elements-tag--div-attrs---modifiers--)
-  - [Values](#values)
-  - [Conditionals and manipulations](#conditionals-and-manipulations)
-      - [`field($field_name)`](#fieldfield_name)
-      - [`get($tag = 'div', $modifiers = [])`](#gettag--div-modifiers--)
-      - [`prune(array $exclusions)`](#prunearray-exclusions)
-      - [`only(array $inclusions)`](#onlyarray-inclusions)
-      - [`is($value)`](#isvalue)
-      - [`lessThan($value)` / `greaterThan($value)`](#lessthanvalue--greaterthanvalue)
-  - [Special Fields](#special-fields)
-      - [Google Maps Field](#google-maps-field)
-      - [`settings($field_name, $additional_classes = [])`](#settingsfield_name-additional_classes--)
-      - [`get_buttons($field_name, $modifiers = [])` / `the_buttons($field_name, $modifiers = [])`](#get_buttonsfield_name-modifiers----the_buttonsfield_name-modifiers--)
-  - [CLI](#cli)
-    - [Available commands](#available-commands)
-    - [Configuration](#configuration)
-  - [Supported fields](#supported-fields)
-      - [Full Support](#full-support)
-      - [Third party fields:](#third-party-fields)
-      - [Special Fields](#special-fields-1)
-    - [VS Code Extension](#vs-code-extension)
-
-
-
 ### What is it?
 
-Icenberg is an opinionated abstraction for ACF Fields in WordPress. It cleans up and simplifies ACF Flexible content and ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true WordPress style). 
+Icenberg is an opinionated abstraction for ACF Fields in WordPress. It cleans up and simplifies ACF Flexible content and
+ACF Gutenberg block templates which often involve a lot of repetition and logic tangled up in presentation (in true
+WordPress style).
 
-Using Icenberg's methods we can render acf fields complete with BEM classes and settings in a clean(er) object oriented fashion, while still allowing us to do things the old fashioned way if necessary. 
+Using Icenberg's methods we can render acf fields and blocks complete with BEM classes and settings in a clean(er)
+object-oriented fashion, while still allowing us to do things the old-fashioned way if necessary.
 
 ![icenberg logo](images/comparison.png)
 
+Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any
+WordPress template using ACF fields. It also includes a convenient CLI for generating ACF Gutenberg blocks.
 
-Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any WordPress template using ACF fields. It also includes a convenient CLI for generating ACF Gutenberg blocks.
-
-It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but works with any field including option fields. It could also work within other scenarios, in theory.
-
+It is designed to be used primarily with flexible content fields and ACF Gutenberg blocks but works with any field
+including option fields. It could also work within other scenarios, in theory.
 
 ### Getting Started
 
@@ -70,7 +36,13 @@ if (file_exists($composer_path)) {
 }
 
 ```
-Make sure you have ACF Pro installed. The library also supports [ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/) plugin.
+
+Make sure you have ACF Pro installed.
+
+The library also supports the following ACF plugins:
+
+[ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/)
+[]
 
 #### Initialise
 
@@ -84,15 +56,16 @@ $ice = new Icenberg($layout = 'block_name', $prefix = 'block', $post_id = false)
 
 #### `Icenberg::__construct($layout, $prefix = 'block', $post_id = false)`
 
-| Argument     | Type    | Required | Description                       |
-|--------------|---------|----------|-----------------------------------|
-| `$layout`    | string  | Yes      | ACF layout or block name          |
-| `$prefix`    | string  | No       | Prefix used for classnames etc. Defaults to `'block'` |
-| `$post_id`   | mixed   | No       | Override the default post ID. Defaults to `false` |
+| Argument   | Type   | Required | Description                                           |
+|------------|--------|----------|-------------------------------------------------------|
+| `$layout`  | string | Yes      | ACF layout or block name                              |
+| `$prefix`  | string | No       | Prefix used for classnames etc. Defaults to `'block'` |
+| `$post_id` | mixed  | No       | Override the default post ID. Defaults to `false`     |
 
 ---
 
 ### Using with ACF Flexible Content blocks
+
 The following example takes place inside ACF's the_row() - ie:
 
 ```php
@@ -107,6 +80,7 @@ if (have_rows('content_blocks', $id)) :
 
 endif;
 ```
+
 Initialise with ACFs `get_row_layout()` in your block template:
 
 ```php
@@ -123,14 +97,16 @@ $ice->the_element('portrait');
 
 ## Using in an ACF Gutenberg Block
 
-Since v0.5.0 you can use Icenberg in an ACF gutenberg block, just pass the block title instead of the row layout. You can use the wrap method in a gutenberg block to wrap the block frontend in a similar way to how it is wrapped automatically by wp in the backend:
+Since v0.5.0 you can use Icenberg in an ACF Gutenberg block, just pass the block title instead of the row layout. You
+can use the wrap method in a Gutenberg block to wrap the block frontend in a similar way to how it is wrapped
+automatically by wp in the backend:
 
 ```php
 use MVRK\Icenberg\Icenberg;
 
 $icenberg = new Icenberg(strtolower($block['title']));
 
-$icenberg::wrap(
+$icenberg->wrap(
     [
         $icenberg->get_element('quote'),
         $icenberg->get_element('attribution'),
@@ -146,13 +122,15 @@ $icenberg::wrap(
 
 #### `get_element($field_name, $tag = 'div', $modifiers = [])`
 
-| Argument     | Type   | Required | Description                      |
-|--------------|--------|----------|----------------------------------|
-| `$field_name`| string | Yes      | The ACF field name to render     |
-| `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
-| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
+| Argument      | Type   | Required | Description                                              |
+|---------------|--------|----------|----------------------------------------------------------|
+| `$field_name` | string | Yes      | The ACF field name to render                             |
+| `$tag`        | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$modifiers`  | array  | No       | An array of modifiers to use as BEM classes              |
 
-Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any  special considerations applied. Takes the field name as an argument and optionally a tag for the uppermost element. If no tag is set it will use 'div'
+Returns an ACF field as a formatted string, wrapped up in all the divs you need and with any special considerations
+applied. Takes the field name as an argument and optionally a tag for the uppermost element. If no tag is set it will
+use 'div'
 
 ```php
 
@@ -164,11 +142,11 @@ echo $field_name;
 
 #### `the_element($field_name, $tag = 'div', $modifiers = [])`
 
-| Argument     | Type   | Required | Description                      |
-|--------------|--------|----------|----------------------------------|
-| `$field_name`| string | Yes      | The ACF field name to echo       |
-| `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
-| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
+| Argument      | Type   | Required | Description                                              |
+|---------------|--------|----------|----------------------------------------------------------|
+| `$field_name` | string | Yes      | The ACF field name to echo                               |
+| `$tag`        | string | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
+| `$modifiers`  | array  | No       | An array of modifiers to use as BEM classes              |
 
 As above, but echoes it out immediately.
 
@@ -177,11 +155,16 @@ As above, but echoes it out immediately.
 $ice->the_element('field_name');
 
 ```
-Icenberg is smart enough to know what a field's type is, so you don't need to differentiate, you just pass the field name in.
+
+Icenberg is smart enough to know what a field's type is, so you don't need to differentiate, you just pass the field
+name in.
 
 #### Global Options
 
-To retrieve a global option simply pass a comma delimeted string to `the_element()` or `get_element()` - it must be all as one string as opposed to seperate args and it must be comma delimited, where the first part is the field name and the second part is the options name, eg
+To retrieve a global option simply pass a comma-delimited string to `the_element()` or `get_element()` - it must be all
+as one string as opposed to separate args, and it must be comma-delimited, where the first part is the field name and
+the
+second part is the options name, eg
 
 ```php
 
@@ -189,20 +172,20 @@ $ice->the_element('field_name, options');
 
 ```
 
-
 #### `enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`
 
-| Argument     | Type    | Required | Description                       |
-|--------------|---------|----------|-----------------------------------|
-| `$class`     | string  | Yes      | Classname to apply to wrapper div (BEM modifiers will be appended automatically) |
-| `$elements`  | array   | Yes      | Array of rendered HTML elements (e.g. `get_element()` results or strings) |
-| `$tag`       | string  | No       | The HTML tag to wrap the element in. Defaults to `'div'` |
-| `$attrs`     | array   | No       | An array of additional attributes to apply to the wrapper element |
-| `$modifiers` | array   | No       | An array of modifiers to use as BEM classes |
+| Argument     | Type   | Required | Description                                                                      |
+|--------------|--------|----------|----------------------------------------------------------------------------------|
+| `$class`     | string | Yes      | Classname to apply to wrapper div (BEM modifiers will be appended automatically) |
+| `$elements`  | array  | Yes      | Array of rendered HTML elements (e.g. `get_element()` results or strings)        |
+| `$tag`       | string | No       | The HTML tag to wrap the element in. Defaults to `'div'`                         |
+| `$attrs`     | array  | No       | An array of additional attributes to apply to the wrapper element                |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes                                      |
 
-Enclose is a utility for wrapping multiple icenberg fields in a container div without having to use a ?> anywhere. You just need to pass it a classname (without prefixes as these will be applied by icenberg). So clean!
+Enclose is a utility for wrapping multiple icenberg fields in a container div without having to use a ?> anywhere. You
+just need to pass it a classname (without prefixes as these will be applied by icenberg). So clean!
 
-So for example, in a 'Cta' block,  where cta_heading is a text field and cta_content is a wysiwyg field:
+So for example, in a 'Cta' block, where cta_heading is a text field and cta_content is a wysiwyg field:
 
 ```php
 
@@ -212,6 +195,7 @@ $ice->enclose('text', [
 ]);
 
 ```
+
 will generate:
 
 ```html
@@ -225,7 +209,8 @@ will generate:
                 </div>
                 <div class="block--cta__cta-content">
                     <p>
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                     </p>
                 </div>
             </div>
@@ -236,7 +221,8 @@ will generate:
 
 ```
 
-You could also pass any thing else you like to enclose as part of the array, as long as its storable as a variable (for example inserting a `get_template_part()` won't work here because it effectively prints the content).
+You could also pass any thing else you like to enclose as part of the array, as long as its storable as a variable (for
+example inserting a `get_template_part()` won't work here because it effectively prints the content).
 
 ```php
 
@@ -249,7 +235,8 @@ $ice->enclose('text', [
 
 ```
 
-Of course life is never simple, so you will most likely need more complex layouts, but icenberg doesn't mind. You can insert it in html if you want to.
+Of course life is never simple, so you will most likely need more complex layouts, but icenberg doesn't mind. You can
+insert it in html if you want to.
 
 ```html
 
@@ -260,45 +247,52 @@ Of course life is never simple, so you will most likely need more complex layout
 </div>
 
 ```
+
 ## Values
-You can us the `value()` method to return the 'raw', value of a given field without checking for existence or specifiying if it is a sub field.
+
+You can us the `value()` method to return the 'raw', value of a given field without checking for existence or
+specifiying if it is a sub field.
 
 ```php
 $lady_in_red = $ice->value('dancing_with_me');
 ```
+
 as this just returns the value there are no special considerations for individual field types.
 
 ## Conditionals and manipulations
 
 #### `field($field_name)`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$field_name`| string | Yes      | Name of the field to work with    |
+| Argument      | Type   | Required | Description                    |
+|---------------|--------|----------|--------------------------------|
+| `$field_name` | string | Yes      | Name of the field to work with |
 
-you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for method chaining.
+you can use icenberg to evaluate fields and do some more comlplex field manipualtion too, using the `field()` method in
+conjucntion with the below methods. `field()` takes the field name as an argument and returns the icenberg instance for
+method chaining.
 
  ```php
  $ice->field($field_name)
  ```
+
 #### `get($tag = 'div', $modifiers = [])`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
+| Argument     | Type   | Required | Description                                     |
+|--------------|--------|----------|-------------------------------------------------|
 | `$tag`       | string | No       | Tag to use for the wrapper. Defaults to `'div'` |
-| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
+| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes     |
 
-Returns the icenbergified field html (in the same way as get_element). Optionally pass a tag for the wrapper.
+Returns the icenbergified field HTML (in the same way as get_element). Optionally pass a tag for the wrapper.
 
 ```php
-$ice->field('saxaphone')->get()
+$ice->field('saxophone')->get()
 ```
 
 #### `prune(array $exclusions)`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$exclusions`| array  | Yes      | Field names to exclude from the group/repeater output |
+| Argument      | Type  | Required | Description                                           |
+|---------------|-------|----------|-------------------------------------------------------|
+| `$exclusions` | array | Yes      | Field names to exclude from the group/repeater output |
 
 pass an array of field names to the prune method to remove them from a group or from a repeater row.
 
@@ -309,9 +303,9 @@ $group = $ice->field('bad_singers')->prune(['chris_de_burgh', 'cliff_richard'])-
 
 #### `only(array $inclusions)`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$inclusions`| array  | Yes      | Field names to include in the group/repeater output |
+| Argument      | Type  | Required | Description                                         |
+|---------------|-------|----------|-----------------------------------------------------|
+| `$inclusions` | array | Yes      | Field names to include in the group/repeater output |
 
 ```php
 $group = $ice->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
@@ -320,11 +314,12 @@ $group = $ice->field('great_singers')->only(['chris_de_burgh'])->get('marquee');
 
 #### `is($value)`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$value`     | mixed  | Yes      | Value to compare against the field value |
+| Argument | Type  | Required | Description                              |
+|----------|-------|----------|------------------------------------------|
+| `$value` | mixed | Yes      | Value to compare against the field value |
 
-returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields existance before using these methods as they will do it for you and return `false` if they don't.
+returns true if the value of the field equals the argument passed to `is()`. You don't need to check for a fields
+existence before using these methods as they will do it for you and return `false` if they don't.
 
 ```php
  if ($ice->field('font_colour')->is('red')) :
@@ -336,12 +331,12 @@ endif;
 
 #### `lessThan($value)` / `greaterThan($value)`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$value`     | int    | Yes      | Integer to compare field value against |
+| Argument | Type | Required | Description                            |
+|----------|------|----------|----------------------------------------|
+| `$value` | int  | Yes      | Integer to compare field value against |
 
-
-Self explanatory, both take an integer as an argument. Warning: If you use it on a non numeric field it will return false.
+Self-explanatory, both take an integer as an argument. Warning: If you use it on a non-numeric field it will return
+false.
 
 ```php
 if ($ice->field('range_test')->lessThan(51)) :
@@ -358,7 +353,9 @@ endif;
 
 #### Google Maps Field
 
-For the Google Maps field to work properly on front and backends you will need an API key. Once you have the key, add it to icenberg.yml in your project and the frontend will work. To make it work in the backend, add the following to your functions.php (in this example the key is defined in wp-config.php)
+For the Google Maps field to work properly on front and backends you will need an API key. Once you have the key, add it
+to icenberg.yml in your project and the frontend will work. To make it work in the backend, add the following to your
+functions.php (in this example the key is defined in wp-config.php)
 
 ```php
 function acf_google_map_field($api)
@@ -372,12 +369,13 @@ add_filter('acf/fields/google_map/api', 'acf_google_map_field');
 
 #### `settings($field_name, $additional_classes = [])`
 
-| Argument            | Type          | Required | Description                                |
-|---------------------|---------------|----------|--------------------------------------------|
-| `$field_name`       | string|array | Yes      | Field group name or settings array         |
-| `$additional_classes` | array      | No       | Additional classnames to append as modifiers |
+| Argument              | Type   | Required | Description                                  |
+|-----------------------|--------|----------|----------------------------------------------|
+| `$field_name`         | string | array    | Yes                                          | Field group name or settings array         |
+| `$additional_classes` | array  | No       | Additional classnames to append as modifiers |
 
-Pass in a field group of settings and optionally an array of manually set classes and it will attach them as CSS modifier classes. if you include a text field called 'unique_id' in your group icenberg will attach it as a id too.
+Pass in a field group of settings and optionally an array of manually set classes and it will attach them as CSS
+modifier classes. if you include a text field called 'unique_id' in your group icenberg will attach it as a id too.
 
 Example using settings in  `enclose()`:
 
@@ -399,30 +397,32 @@ or in regular php/html
 ```html
 
 <div <?php echo $settings; ?>>
-    ...whatever you want
+...whatever you want
 </div>
 ```
 
 which will print out something like
+
 ```html
 "class='orange orange_padding_top_300 orange_skin_purple' id='cheese_board'"
 ```
 
 Depending on the settings in your group.
 
-
 #### `get_buttons($field_name, $modifiers = [])` / `the_buttons($field_name, $modifiers = [])`
 
-| Argument     | Type   | Required | Description                       |
-|--------------|--------|----------|-----------------------------------|
-| `$field_name`| string | Yes      | Field group name for buttons      |
-| `$modifiers` | array  | No       | An array of modifiers to use as BEM classes |
+| Argument      | Type   | Required | Description                                 |
+|---------------|--------|----------|---------------------------------------------|
+| `$field_name` | string | Yes      | Field group name for buttons                |
+| `$modifiers`  | array  | No       | An array of modifiers to use as BEM classes |
 
-Return a formatted group of buttons with a huge range of styles catered for - very Maverick specific.Expects our usual group of buttons format.
+Return a formatted group of buttons with a huge range of styles catered for - very Maverick specific.Expects our usual
+group of buttons format.
 
 ## CLI
 
-you can now use the Icenberg CLI to rapidly bootstrap Icenberg blocks (since v0.5.0). This extends wp-cli so you need to have that installed and working first.
+you can now use the Icenberg CLI to rapidly bootstrap Icenberg blocks (since v0.5.0). This extends wp-cli so you need to
+have that installed and working first.
 
 Add the below to your functions.php, after the autoload.
 
@@ -440,9 +440,11 @@ if ($is_wp_cli) {
 
 this bootstraps an ACF gutenberg block with all relevant files ready to go.
 
-This assumes that your blocks are in a folder called 'blocks' in your template root directory but this is configurable via icenberg.yaml
+This assumes that your blocks are in a folder called 'blocks' in your template root directory but this is configurable
+via icenberg.yaml
 
 Icenberg generates a folder per block within the blocks folder. This folder contains
+
 - block.json
 - <block_name>.php
 - <block_name>.css
@@ -451,16 +453,18 @@ It will also register an empty field group ready for access via the ACF GUI.
 
 `wp icenberg block --block_name --flexible`
 
-this is similar to the above but creates just the php and scss files for flexible content blocks. 
-
+this is similar to the above but creates just the php and scss files for flexible content blocks.
 
 ### Configuration
-Config options are now available by placing an 'icenberg.yaml' file in your project's root directory. If this file doesn't exist or can't be parsed, icenberg will just go ahead and use its defaults.
+
+Config options are now available by placing an 'icenberg.yaml' file in your project's root directory. If this file
+doesn't exist or can't be parsed, icenberg will just go ahead and use its defaults.
 
 Supported config options below with their default values:
 
 ```yaml
 block_directory_name: 'blocks' #change the default block directory name
+block_editor_prefix: "block" #wordpress will use this as the prefix for blocks in the block editor
 sass_path: 'src/sass/blocks' #specify a location for sass partials
 google_maps_api_key: '<your key here>'
 
@@ -469,6 +473,7 @@ google_maps_api_key: '<your key here>'
 ## Supported fields
 
 #### Full Support
+
 - Gallery
 - Group
 - Image
@@ -480,21 +485,19 @@ google_maps_api_key: '<your key here>'
 - Select
 - Text
 - Textarea
-- Wysiwyg
+- WYSIWYG
 - Relationship
 - Post Object
 - Page Link
 - Google Maps
 
 #### Third party fields:
-- Forms
-- Swatch
 
-#### Special Fields
-- Buttons
-- Settings
+- Forms
+- Table
 
 ### VS Code Extension
+
 An extension with useful snippets is available for Virtual Studio Code.
 
 [Icenberg Snippets](https://marketplace.visualstudio.com/items?itemName=coderjerk.icenberg-snippets&ssr=false#overview)
