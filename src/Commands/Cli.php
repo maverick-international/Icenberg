@@ -17,7 +17,7 @@ class Cli extends Bootstrap
     public function block($args, $flags): void
     {
         if (!$args) {
-            WP_CLI::error('Hey, meathead - you need to give me a snake_case block name.');
+            WP_CLI::error('Hey, meathead - you need to give me a block name.');
         }
 
         // First item is the block name, so shift it off the array

@@ -13,7 +13,7 @@ $ice->wrap(
         '<h3>NUMBER</h3>',
         $ice->get_element('test_number'),
         '<h3>RANGE</h3>',
-        $ice->get_element('test_range  '),
+        $ice->get_element('test_range'),
         '<h3>EMAIL</h3>',
         $ice->get_element('test_email'),
         '<h3>URL</h3>',

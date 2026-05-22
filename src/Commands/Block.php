@@ -11,46 +11,42 @@ class Block
      */
     public static function create(string $block_name, array $args, $assoc_args): void
     {
+
+        $prefix = Bootstrap::getBlockPrefix();
+
         if (!isset($assoc_args['flexible'])) {
             // gutenberg/acf can't handle block names with underscores or spaces
             $block_name = str_replace([' ', '_'], '-', $block_name);
-
-            WP_CLI::log('Generating a Gutenberg block..');
-
-            $css_classes = self::generateCssClass($block_name, $args);
-            $php_stub = self::generatePhpStub($block_name, $args, false);
-            $json_stub = self::generateJsonStub($block_name);
+            $css_stub = self::generateCss($block_name, $prefix, $args);
+            $php_stub = self::generatePhp($block_name, $prefix, $args, false);
+            $json_stub = self::generateJson($block_name);
             $directories = self::createDirectories($block_name, false);
 
             self::writeFile($directories['php_file_path'], $php_stub);
-            self::writeFile($directories['css_file_path'], $css_classes);
+            self::writeFile($directories['css_file_path'], $css_stub);
             self::writeFile($directories['json_file_path'], $json_stub);
-            self::writeFile($directories['sass_file_path'], $css_classes);
-
+            self::writeFile($directories['sass_file_path'], $css_stub);
             self::createEmptyFieldGroup($block_name);
 
         } else {
-            WP_CLI::log('Generating a flexible content block..');
-
-            $css_classes = self::generateCssClass($block_name, $args);
-            $php_stub = self::generatePhpStub($block_name, $args, true);
+            $css_stub = self::generateCss($block_name, $prefix, $args);
+            $php_stub = self::generatePhp($block_name, $prefix, $args, true);
             $directories = self::createDirectories($block_name, true);
 
             self::writeFile($directories['php_file_path'], $php_stub);
-            self::writeFile($directories['sass_file_path'], $css_classes);
+            self::writeFile($directories['sass_file_path'], $css_stub);
         }
 
         WP_CLI::success("New block created at {$directories['single_dir']}");
     }
 
-    /**
-     * Generates the CSS classes for the block
-     */
-    public static function generateCssClass(string $block_name, array $args): string
+    public static function generateCss(string $block_name, string $prefix, array $args): string
     {
         $css_name = str_replace('_', '-', $block_name);
-        $classes = ".wp-block-acf-{$css_name} {" . PHP_EOL;
+        $classes = ".{$prefix}--{$css_name} {" . PHP_EOL;
+        $classes .= "&__inner {}" . PHP_EOL;
         $classes .= ".wrapper {}" . PHP_EOL;
+        $classes .= "&__wrapper {}" . PHP_EOL;
 
         foreach ($args as $arg) {
             $class = "&__" . str_replace('_', '-', $arg) . "{}" . PHP_EOL;
@@ -59,13 +55,23 @@ class Block
 
         $classes .= '}' . PHP_EOL;
 
+        // no stub needed.
         return $classes;
+    }
+
+    public static function generateJson(string $block_name): string
+    {
+        $stubs_directory = dirname(__DIR__, 2) . '/stubs';
+
+        $json_stub = file_get_contents($stubs_directory . "/block.json.stub", true);
+        $json_stub = str_replace('{block_name}', $block_name, $json_stub);
+        return str_replace('{block_title}', ucwords(str_replace('-', ' ', $block_name)), $json_stub);
     }
 
     /**
      * Generates the PHP stub for the block
      */
-    public static function generatePhpStub(string $block_name, array $args, bool $is_flexible): string
+    public static function generatePhp(string $block_name, string $prefix, array $args, bool $is_flexible): string
     {
         // Grab our stub files
         $stubs_directory = dirname(__DIR__, 2) . '/stubs';
@@ -77,6 +83,7 @@ class Block
         }
 
         $php_stub = str_replace('{block_name}', $block_name, $php_stub);
+        $php_stub = str_replace('{prefix}', $prefix, $php_stub);
 
         // Append the icenberg elements onto the stub for each specified field
         $fields = "";
@@ -158,18 +165,6 @@ class Block
         ));
 
         WP_CLI::success("ACF field group '{$title}' created and registered in the GUI.");
-    }
-
-    /**
-     * Generates the PHP stub for the block
-     */
-    public static function generateJsonStub(string $block_name): string
-    {
-        $stubs_directory = dirname(__DIR__, 2) . '/stubs';
-
-        $json_stub = file_get_contents($stubs_directory . "/block.json.stub", true);
-        $json_stub = str_replace('{block_name}', $block_name, $json_stub);
-        return str_replace('{block_title}', ucwords(str_replace('-', ' ', $block_name)), $json_stub);
     }
 
     /**

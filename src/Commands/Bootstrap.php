@@ -8,16 +8,12 @@ use WP_CLI_Command;
 
 class Bootstrap extends WP_CLI_Command
 {
-
     protected static string $theme_directory;
-
     protected static string $blocks_directory;
-
     protected static string $block_directory_name;
-
     protected static string $sass_directory;
-
     protected static string $sass_directory_name;
+    protected static string $block_prefix;
 
     public static function setup(): void
     {
@@ -48,6 +44,7 @@ class Bootstrap extends WP_CLI_Command
         Config::load();
 
         static::$block_directory_name = Config::get('block_directory_name') ?? 'blocks';
+        static::$block_prefix = Config::get('block_editor_prefix') ?? 'block';
         static::$blocks_directory = get_template_directory() . "/" . static::$block_directory_name;
         static::$theme_directory = get_template_directory();
         static::$sass_directory_name = Config::get('sass_directory') ?? 'src/sass/blocks';
@@ -56,18 +53,24 @@ class Bootstrap extends WP_CLI_Command
         WP_CLI::add_command('icenberg', 'MVRK\\Icenberg\\Commands\\Cli');
     }
 
-    public static function getThemeDirectory()
+    public static function getThemeDirectory(): string
     {
         return static::$theme_directory;
     }
 
-    public static function getBlocksDirectory()
+    public static function getBlocksDirectory(): string
     {
         return static::$blocks_directory;
     }
 
-    public static function getSassDirectory()
+    public static function getSassDirectory(): string
     {
         return static::$sass_directory;
     }
+
+    public static function getBlockPrefix(): string
+    {
+        return static::$block_prefix;
+    }
+
 }

@@ -7,11 +7,8 @@ use MVRK\Icenberg\Utils\Format;
 class Settings
 {
     public mixed $settings;
-    
     public ?array $classes;
-
     protected ?string $class_string;
-
     public ?string $prefix;
 
     public function __construct(mixed $settings, ?array $classes = [], ?string $prefix = 'block')
@@ -60,7 +57,7 @@ class Settings
                         $v = $v ? 'true' : 'false';
                     }
                     if ($v) {
-                        $class = "{$this->prefix}--{$key}-{$k}-{$v}";
+                        $class = "{$this->prefix}--{$key}-{$k}--{$v}";
                         $this->classes[] = Format::kebabCase($class);
                     }
                 } else {

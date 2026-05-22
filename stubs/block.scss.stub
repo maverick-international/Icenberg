@@ -1,7 +1,0 @@
-.wp-block-acf-{{ block }}
- {
-
-   &__wrapper {
-
-   }
-}
