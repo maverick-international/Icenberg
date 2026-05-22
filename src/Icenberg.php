@@ -271,4 +271,9 @@ class Icenberg
         echo (new Wrap($this->prefix, $this->layout, $content, $block, $wrap_inner, $background))->create();
     }
 
+    public function member($target, $group)
+    {
+        return Member::get($target, $group, $this->post_id, $this);
+    }
+
 }

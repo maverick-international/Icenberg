@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0/),
 
-## [v1.0.0] - 2026-05-20
+## [v1.0.0] - 2026-05-22
 
 ### Breaking Changes
 
@@ -33,10 +33,11 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.0.0
 
 - Utils/Format string manipulation helpers
 - Support for ACF table field plugin
-- Enclose class
-- Predicate class
+- Enclose
+- Predicate
 - Hooks
-- FieldObject class
+- FieldObject
+- Member class - ability to get the value of a sub-field from a given group
 
 ### Fixed
 
@@ -263,4 +264,4 @@ Paddy's day mega-release
 
 ## [v0.1.0] - 2022-06-01
 
-- Initialises project
+- Initialised project

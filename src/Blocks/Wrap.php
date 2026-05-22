@@ -76,7 +76,13 @@ class Wrap
     protected function intermediateWrapper($content, $background): string
     {
         $classes = [];
-        $classes[] = $this->prefix . '__inner';
+
+        if ($this->prefix) {
+            $classes[] = $this->prefix . '__inner';
+        } else {
+            $classes[] = 'inner';
+        }
+
         $classes[] = $this->base_class . '__inner';
 
         if ($background) {
@@ -109,7 +115,14 @@ class Wrap
             return $content;
         }
 
-        $classes = ['wrapper'];
+        $classes = [];
+
+        if ($this->prefix) {
+            $classes[] = $this->prefix . '__wrapper';
+        } else {
+            $classes[] = 'wrapper';
+        }
+
         $classes[] = $this->base_class . '__wrapper';
 
         return sprintf('<div class="%s">%s</div>', implode(' ', $classes), $content);

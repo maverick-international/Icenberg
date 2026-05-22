@@ -57,7 +57,7 @@ class Settings
                         $v = $v ? 'true' : 'false';
                     }
                     if ($v) {
-                        $class = "{$this->prefix}--{$key}-{$k}--{$v}";
+                        $class = "{$this->prefix}--{$key}-{$k}-{$v}";
                         $this->classes[] = Format::kebabCase($class);
                     }
                 } else {
