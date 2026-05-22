@@ -11,28 +11,37 @@ use MVRK\Icenberg\Settings;
 class Wrap
 {
     private string $prefix;
+    private string $layout;
     private mixed $content;
     private ?array $block;
     private bool $wrap_inner;
     private mixed $background;
     private string $base_class;
 
-    public function __construct(string $prefix, mixed $content, ?array $block = null, bool $wrap_inner = true, mixed $background = null)
+    public function __construct(string $prefix, string $layout, mixed $content, ?array $block = null, bool $wrap_inner = true, mixed $background = null)
     {
         $this->content = $content;
         $this->block = $block;
         $this->wrap_inner = $wrap_inner;
         $this->background = $background;
-        $this->base_class = $this->getBaseClass($block, $prefix);
         $this->prefix = $prefix;
+        $this->layout = $layout;
+        $this->base_class = $this->getBaseClass($block, $prefix);
     }
 
     protected function getBaseClass($block, $prefix): string
     {
-        $base_class = str_replace(['acf/', '_'], ['', '-'], $block['name']);
+        if ($block) {
+            $base_class = str_replace(['acf/', '_'], ['', '-'], $block['name']);
+
+        } else {
+            $base_class = $this->layout;
+        }
+
         if ($prefix) {
             $base_class = $prefix . '--' . $base_class;
         }
+
         return $base_class;
     }
 

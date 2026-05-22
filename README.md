@@ -9,8 +9,6 @@ WordPress style).
 Using Icenberg's methods we can render acf fields and blocks complete with BEM classes and settings in a clean(er)
 object-oriented fashion, while still allowing us to do things the old-fashioned way if necessary.
 
-![icenberg logo](images/comparison.png)
-
 Icenberg requires ACF Pro and is primarily for internal use at Maverick, although it is easy to implement on any
 WordPress template using ACF fields. It also includes a convenient CLI for generating ACF Gutenberg blocks.
 
@@ -18,6 +16,8 @@ It is designed to be used primarily with flexible content fields and ACF Gutenbe
 including option fields. It could also work within other scenarios, in theory.
 
 ### Getting Started
+
+Make sure you have ACF Pro installed.
 
 Install via composer:
 
@@ -37,12 +37,23 @@ if (file_exists($composer_path)) {
 
 ```
 
-Make sure you have ACF Pro installed.
+Enable overwriting of default block classes in the block editor
 
-The library also supports the following ACF plugins:
+```php
 
-[ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/)
-[]
+\MVRK\Icenberg\Hooks::init();
+
+```
+
+Add the CLI commands
+
+```php
+$is_wp_cli = defined('WP_CLI') && WP_CLI;
+
+if ($is_wp_cli) {
+    \MVRK\Icenberg\Commands\Bootstrap::setup();
+}
+``` 
 
 #### Initialise
 
@@ -53,6 +64,8 @@ use MVRK\Icenberg\Icenberg;
 $ice = new Icenberg($layout = 'block_name', $prefix = 'block', $post_id = false);
 
 ```
+
+### Icenberg
 
 #### `Icenberg::__construct($layout, $prefix = 'block', $post_id = false)`
 
@@ -118,7 +131,9 @@ $icenberg->wrap(
 
 ```
 
-### Icenberg Methods
+## Icenberg Methods
+
+### get_element
 
 #### `get_element($field_name, $tag = 'div', $modifiers = [])`
 
@@ -140,6 +155,8 @@ echo $field_name;
 
 ```
 
+### the_element
+
 #### `the_element($field_name, $tag = 'div', $modifiers = [])`
 
 | Argument      | Type   | Required | Description                                              |
@@ -159,12 +176,9 @@ $ice->the_element('field_name');
 Icenberg is smart enough to know what a field's type is, so you don't need to differentiate, you just pass the field
 name in.
 
-#### Global Options
-
 To retrieve a global option simply pass a comma-delimited string to `the_element()` or `get_element()` - it must be all
 as one string as opposed to separate args, and it must be comma-delimited, where the first part is the field name and
-the
-second part is the options name, eg
+the second part is the options name.
 
 ```php
 
@@ -172,7 +186,11 @@ $ice->the_element('field_name, options');
 
 ```
 
+### enclose / get_enclose
+
 #### `enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`
+
+#### `get_enclose($class, array $elements, $tag = 'div', $attrs = [], $modifiers = [])`
 
 | Argument     | Type   | Required | Description                                                                      |
 |--------------|--------|----------|----------------------------------------------------------------------------------|
@@ -469,6 +487,13 @@ sass_path: 'src/sass/blocks' #specify a location for sass partials
 google_maps_api_key: '<your key here>'
 
 ```
+
+### Supported Add Ons
+
+The library supports the following ACF plugins:
+
+* [ACF Gravity forms](https://wordpress.org/plugins/acf-gravityforms-add-on/)
+* [Table Field Add-on for ACF and SCF](https://wordpress.org/plugins/advanced-custom-fields-table-field/)
 
 ## Supported fields
 

@@ -48,5 +48,4 @@ class Email extends Field
 
         return str_replace('@', '&#64;', $email_no_spam_address);
     }
-
 }

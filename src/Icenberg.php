@@ -268,7 +268,7 @@ class Icenberg
         mixed  $background = null
     ): void
     {
-        echo (new Wrap($this->prefix, $content, $block, $wrap_inner, $background))->create();
+        echo (new Wrap($this->prefix, $this->layout, $content, $block, $wrap_inner, $background))->create();
     }
 
 }
