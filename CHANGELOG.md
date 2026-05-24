@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Implied nullable field in Config
 - Put Changelog in correct order
 - BEM implementation
+- Boolean settings were being evaluated after string conversion
 
 ## [v0.9.1] - 2025-05-28
 
