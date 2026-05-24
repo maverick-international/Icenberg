@@ -6,12 +6,12 @@ use MVRK\Icenberg\Utils\Format;
 
 class Settings
 {
-    public mixed $settings;
+    public array $settings;
     public ?array $classes;
     protected ?string $class_string;
     public ?string $prefix;
 
-    public function __construct(mixed $settings, ?array $classes = [], ?string $prefix = 'block')
+    public function __construct(array $settings, ?array $classes = [], ?string $prefix = 'block')
     {
         $this->settings = $settings;
         $this->classes = $classes;
@@ -27,8 +27,10 @@ class Settings
     protected function setClasses(): void
     {
         if ($this->settings) {
-            foreach ($this->settings as $key => $value) {
-                $this->parseFields($key, $value);
+            foreach ($this->settings as $setting_group) {
+                foreach ($setting_group as $key => $value) {
+                    $this->parseFields($key, $value);
+                }
             }
         }
 

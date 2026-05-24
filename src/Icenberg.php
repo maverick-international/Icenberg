@@ -55,7 +55,7 @@ class Icenberg
 
         $field_type = $field_object['type'];
         $field_name = $field_object['_name'];
-        $base_class = CSS::generateBaseClass($this->layout, $field_name, $this->prefix);
+        $base_class = CSS::generateBaseFieldClass($this->layout, $field_name, $this->prefix);
         $field_classes = CSS::fieldClasses($this->layout, $field_name, $this->prefix, $modifiers);
         $type_class_name = Format::pascalCase($field_type);
         $class_name = "\\MVRK\Icenberg\Fields\\" . $type_class_name;
@@ -246,7 +246,7 @@ class Icenberg
         return Predicate::lessThan($condition, $this->field, $this->field_object);
     }
 
-    public function settings($block_settings, $classes): ?string
+    public function settings(array $block_settings, array $classes): ?string
     {
         return (new Settings($block_settings, $classes))->applySettings();
     }

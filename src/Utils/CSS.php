@@ -32,22 +32,29 @@ class CSS
 
     public static function fieldClasses(string $layout, string $field_name, string $prefix, array $modifiers = []): string
     {
-        $base_class = self::generateBaseClass($layout, $field_name, $prefix);
+        $base_class = self::generateBaseFieldClass($layout, $field_name, $prefix);
         $modifier_classes = self::generateModifierClasses($base_class, $modifiers);
 
         return self::implodeClasses($base_class, $modifier_classes);
     }
 
-    public static function generateBaseClass(string $layout, string $field_name, ?string $prefix = ''): string
+    public static function generateBaseFieldClass(string $layout, string $field_name, ?string $prefix = ''): string
     {
-        $layout = Format::kebabCase($layout);
+        $base_class = self::generateBaseClass($layout, $prefix);
         $field_name = Format::kebabCase($field_name);
 
+        return "{$base_class}__{$field_name}";
+    }
+
+    public static function generateBaseClass(string $layout, ?string $prefix = ''): string
+    {
+        $layout = Format::kebabCase($layout);
+
         if ($prefix) {
-            return "{$prefix}--{$layout}__{$field_name}";
+            return "{$prefix}--{$layout}";
         }
 
-        return "{$layout}__{$field_name}";
+        return $layout;
     }
 
 }

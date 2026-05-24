@@ -1,6 +1,6 @@
 {
-   "$schema": "https://schemas.wp.org/trunk/block.json",
-   "apiVersion": 3,
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
     "name": "acf/{block_name}",
     "title": "{block_title}",
     "category": "icenberg",
@@ -8,24 +8,22 @@
     "icon": "marker",
     "acf": {
         "mode": "preview",
-        "renderTemplate": "{block_name}.php"
+        "renderTemplate": "{block_name}.php",
+        "blockVersion": 3,
+        "autoInlineEditing": true
     },
-      "supports": {
+    "supports": {
         "align": [
             "full"
         ],
+        "jsx": true,
+        "mode": true,
         "anchor": true,
-        "alignContent": true,
         "color": {
             "text": true,
             "background": true,
             "link": true,
             "gradients": true
-        },
-        "alignText": true,
-        "typography": {
-            "lineHeight": true,
-            "fontSize": true
         }
     },
     "attributes": {

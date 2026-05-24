@@ -1,15 +1,22 @@
 <?php
 
 use MVRK\Icenberg\Icenberg;
+use MVRK\Icenberg\Blocks\InnerBlocks;
 
 $icenberg = new Icenberg('{block_name}', '{prefix}');
+$allowed_blocks = [//add some here];
+$background = $icenberg->get_element('maybe_a_background_image');
+$is_wrapped = true;
+
+$content = $icenberg->get_enclose('content', [
+    $icenberg->get_element('a_field'),
+    // remove if you don't want innerblocks
+    InnerBlocks::make($allowed_blocks, $icenberg)
+]);
 
 $icenberg->wrap(
-    [
-        $icenberg->get_element('a_field'),
-        $icenberg->get_element('another_field'),
-        $icenberg->get_element('a_third_field')
-    ],
+    [$content],
     $block,
-    true
+    $is_wrapped,
+    $background
 );

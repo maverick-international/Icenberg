@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0/),
 
-## [v1.0.0] - 2026-05-22
+## [v1.0.0] - 2026-05-24
 
 ### Breaking Changes
 
-- Converts wrap method to non-static to allow for passing of block prefix
-- Initialisation required in functions.php
+- Converts wrap method to non-static
+- Initialisation required in functions.php to use Gutenberg features
 - Requires php 8+
+- Settings now takes an array of settings fields
 
 ### Removed
 
@@ -33,22 +34,26 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 
 - Utils/Format string manipulation helpers
 - Support for ACF table field plugin
-- Enclose
-- Predicate
-- Hooks
-- FieldObject
-- Member class - ability to get the value of a sub-field from a given group
+- CSS generation utility class
+- Enclose class
+- Predicate class
+- Hooks class
+- FieldObject class
+- Ability to get the value of a sub-field from a given group
+- InnerBlocks generation method
+- Ability to add additional settings fields
 
 ### Fixed
 
 - Implied nullable field in Config
 - Put Changelog in correct order
+- BEM implementation
 
 ## [v0.9.1] - 2025-05-28
 
 ### Added
 
-- support for native Gutenberg anchors in wrapped icenberg blocks
+- Support for native Gutenberg anchors in wrapped icenberg blocks
 
 ## [v0.9.2] - 2025-11-19
 

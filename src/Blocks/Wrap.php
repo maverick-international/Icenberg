@@ -93,10 +93,23 @@ class Wrap
             $classes[] = 'has-media-background';
         }
 
+        // @todo maybe allow passing of settings explicitly rather than relying on convention
+        // @todo test on flexible content
         if ($this->block) {
-            $block_settings = get_field('block_settings') ?: null;
 
-            if ($block_settings) {
+            $block_settings = [];
+
+            // shared settings
+            if (get_field('block_settings')) {
+                $block_settings[] = get_field('block_settings');
+            }
+
+            // specific settings for this block
+            if (get_field('settings')) {
+                $block_settings[] = get_field('settings');
+            }
+
+            if (!empty($block_settings)) {
                 $settings = new Settings($block_settings, [], $this->prefix);
                 $settings->applySettings();
                 $classes = array_merge($classes, $settings->classes);
