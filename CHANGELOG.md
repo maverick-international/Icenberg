@@ -15,8 +15,8 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 
 ### Removed
 
-- legacy button and buttons pseudo fields
-- legacy standard setting presets
+- Legacy button and buttons pseudo-fields
+- Legacy standard setting presets
 
 ### Improved
 
@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Non rendering fields return false by default
 - Standardised BEM in settings classes
 - CLI Improvements
+- block.json stub supports latest acf features
+- block.php stub includes advanced features by default
 
 ### Added
 
