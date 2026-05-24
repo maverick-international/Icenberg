@@ -41,13 +41,14 @@ class Settings
 
     protected function parseFields(string $key, mixed $value): void
     {
+
+        if (is_bool($value)) {
+            $value = $value ? 'true' : 'false';
+        }
+
         if (!is_iterable($value)) {
             $value = strval($value);
-
-            if (is_bool($value)) {
-                $value = $value ? 'true' : 'false';
-            }
-
+            
             if ($value) {
                 $class = "{$this->prefix}--{$key}-{$value}";
                 $this->classes[] = Format::kebabCase($class);
