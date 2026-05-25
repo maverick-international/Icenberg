@@ -246,7 +246,7 @@ class Icenberg
         return Predicate::lessThan($condition, $this->field, $this->field_object);
     }
 
-    public function settings(array $block_settings, array $classes): ?string
+    public function settings(array $block_settings, ?array $classes = []): ?string
     {
         return (new Settings($block_settings, $classes))->applySettings();
     }

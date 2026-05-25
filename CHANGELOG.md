@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0/),
 
-## [v1.0.0] - 2026-05-24
+## [v1.0.0] - 2026-05-25
 
 ### Breaking Changes
 
@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - CLI Improvements
 - block.json stub supports latest acf features
 - block.php stub includes advanced features by default
+- README easier to maintain
 
 ### Added
 
@@ -74,7 +75,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 
 ### Added
 
-- ability to pass background content to an ACF gutenberg block
+- ability to pass background content to an ACF Gutenberg block
 
 ## [v0.9.0] - 2025-05-12
 
@@ -136,8 +137,8 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 
 ### Fixed
 
-- Json stub now valid
-- hyphens and underscores in acf gutenberg blocks don't work for some reason, handled this in cli
+- JSON stub now valid
+- hyphens and underscores in acf Gutenberg blocks don't work for some reason, handled this in cli
 
 ## [v0.6.3] - 2025-03-22
 
@@ -154,7 +155,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 ## [v0.6.0] - 2025-03-21
 
 **Potentially Breaking changes**: Relationship and Post Object fields now return a value, so if they exist in groups
-that are dispayed using previous versions of icenberg they will now display, which may not be desired.
+that are displayed using previous versions of icenberg they will now display, which may not be desired.
 
 ### Added
 

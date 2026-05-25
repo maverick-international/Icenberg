@@ -28,11 +28,6 @@
             "MVRK\\Icenberg\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "MVRK\\Icenberg\\Fields\\": "tests/Fixtures/Fields/"
-        }
-    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
