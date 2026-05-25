@@ -609,11 +609,14 @@ Other plugins may be compatible if they use the built-in field names or aren't d
 
 #### Full Support
 
+The following fields can be used with get_element() / the_element() and all other Icenberg methods:
+
 - DatePicker
 - DateTimePicker
 - Gallery
 - Google Maps
 - Group
+- IconPicker
 - Image
 - Link
 - Number
@@ -629,7 +632,19 @@ Other plugins may be compatible if they use the built-in field names or aren't d
 - TimePicker
 - WYSIWYG
 
-Icenberg will quietly skip over any other default fields, such as password, that you are unlikely to want to render.
+Element methods will quietly skip over any other default fields if they are included in a group or repeater.
+
+#### Limited Support
+
+The values of the following fields are available in the settings method or any of the field methods:
+
+- ButtonGroup
+- Checkbox
+- Taxonomy
+- User
+- TrueFalse
+
+Submit a GitHub issue if you have a use case for directly rendering any of these and we'll consider it.
 
 #### Third party fields:
 

@@ -24,11 +24,10 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Strict(er) typing
 - General code clean-up
 - Improved kebab casing
-- Rewritten and restructured fields
+- Rewritten and restructured all fields
 - Spam protection for email field
 - Non rendering fields return false by default
 - Standardised BEM in settings classes
-- CLI Improvements
 - block.json stub supports latest acf features
 - block.php stub includes advanced features by default
 - README easier to maintain
@@ -48,13 +47,14 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Support for TimePicker field
 - Support for DatePicker field
 - Support for DateTimePicker field
+- Support for IconPicker field
 
 ### Fixed
 
 - Implied nullable field in Config
 - Put Changelog in correct order
 - BEM implementation
-- Boolean settings were being evaluated after string conversion
+- Boolean settings being evaluated after string conversion
 
 ## [v0.9.1] - 2025-05-28
 
@@ -102,7 +102,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 
 ### Fixed
 
-- Whitespace at tail of css classes
+- Whitespace at tail of CSS classes
 
 ## [v0.8.2] - 2025-04-11
 
@@ -167,7 +167,7 @@ that are displayed using previous versions of icenberg they will now display, wh
 - Post object field support
 - Testing framework (Brain Monkey/Pest) and scaffolding for future implementation
 - Google Maps field
-- Value method to retrieve unprocessed field/sub field values
+- Value method to retrieve unprocessed field/sub-field values
 
 ### Fixed
 
