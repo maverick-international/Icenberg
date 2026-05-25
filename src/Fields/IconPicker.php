@@ -13,8 +13,16 @@ class IconPicker extends Field
         $field = self::icefield($field_name, $post_id);
 
         if (is_string($field)) {
-            $field_classes .= $field ? ' ' . $field : '';
-            // if it's a url then we should display an image, otherwise add it to the classes
+            if (str_contains($field, 'dashicon')) {
+                $field_classes .= ' ' . $field;
+            } else {
+                if (!filter_var($field, FILTER_VALIDATE_URL)) {
+                    // it must be custom so maybe it's an icomoon icon?
+                    $field_classes .= ' icon ' . $field;
+                }
+            }
+
+            // if it's a url then we should display an image, otherwise just add it to the classes
             if (filter_var($field, FILTER_VALIDATE_URL)) {
                 $content = "<img src='{$field}' alt='' title='icon'/>";
             } else {
@@ -24,22 +32,22 @@ class IconPicker extends Field
         }
 
         /**
-         * Available types are 'dashicons', 'media_library, 'url'. For dashicons to work you;'ll need to enqueue their css.
-         * Customisation is possible so icomoon is pre-handled, but you'll have to implement it yourself.
+         * Available types are 'dashicons', 'media_library, 'url'. For dashicons to work you'll need to enqueue their CSS.
+         * Customisation is possible, but you'll have to implement it yourself. Default 'coincidentally' lines up with icomoon.
          * @link https://www.advancedcustomfields.com/resources/icon-picker/
          */
         $icon_class = match ($field['type']) {
             'dashicons' => $field['value'], // a string in dashicons case, an array otherwise,
             'media_library' => 'media-library-icon',
-            'url', 'default' => 'custom-icon',
-            'icomoon' => "icon {$field['value']}"
+            'url', => 'custom-icon',
+            default => "icon {$field['value']}",
         };
 
         $field_classes .= $icon_class ? ' ' . $icon_class : '';
 
         $content = match ($field['type']) {
-            'dashicons', 'icomoon', 'default' => ' ',
             'media_library', 'url' => $field['value']['url'] ?? '',
+            default => ' ',
         };
 
         return $this->wrap($field_name, $tag, $post_id, $field_classes, $content);
