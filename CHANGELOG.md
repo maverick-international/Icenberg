@@ -45,6 +45,9 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Ability to get the value of a sub-field from a given group
 - InnerBlocks generation method
 - Ability to add additional settings fields
+- Support for TimePicker field
+- Support for DatePicker field
+- Support for DateTimePicker field
 
 ### Fixed
 

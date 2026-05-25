@@ -609,22 +609,25 @@ Other plugins may be compatible if they use the built-in field names or aren't d
 
 #### Full Support
 
+- DatePicker
+- DateTimePicker
 - Gallery
+- Google Maps
 - Group
 - Image
 - Link
 - Number
 - OEmbed
+- Page Link
+- Post Object
 - Range
+- Relationship
 - Repeater
 - Select
 - Text
 - Textarea
+- TimePicker
 - WYSIWYG
-- Relationship
-- Post Object
-- Page Link
-- Google Maps
 
 Icenberg will quietly skip over any other default fields, such as password, that you are unlikely to want to render.
 
