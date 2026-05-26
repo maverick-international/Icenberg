@@ -17,7 +17,9 @@ class Repeater extends Field
                 $repeater_item = '';
 
                 foreach ($field_object['sub_fields'] as $sub_field) {
-                    $repeater_item .= $icenberg->get_element($sub_field['name']);
+                    // imperfect but better BEM
+                    $ice = new Icenberg($field_name);
+                    $repeater_item .= $ice->get_element($sub_field['name']);
                 }
 
                 $content .= "<div class='{$base_class}__item'>{$repeater_item}</div>";

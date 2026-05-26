@@ -6,11 +6,7 @@ use WP_CLI;
 
 class Cli extends Bootstrap
 {
-    public function make(): void
-    {
-        WP_CLI::success('Icenberg make command executed.');
-    }
-
+    
     /**
      * Generates php and scss files for icenberg friendly blocks
      */

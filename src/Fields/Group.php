@@ -16,10 +16,9 @@ class Group extends Field
         foreach ($field_object['value'] as $key => $value) {
             $sub_fields[] = $key;
         }
-        
+
         if (have_rows($name, $post_id)) :
             while (have_rows($name, $post_id)) : the_row();
-
                 foreach ($sub_fields as $sub_field) {
                     $content .= $icenberg->get_element($sub_field);
                 }
