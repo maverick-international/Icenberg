@@ -46,10 +46,14 @@ class Settings
             $value = $value ? 'true' : 'false';
         }
 
+        if (is_numeric($value)) {
+            $value = strval($value);
+        }
+
         if (!is_iterable($value)) {
             $value = strval($value);
-            
-            if ($value) {
+
+            if (isset($value)) {
                 $class = "{$this->prefix}--{$key}-{$value}";
                 $this->classes[] = Format::kebabCase($class);
             }
@@ -59,7 +63,10 @@ class Settings
                     if (is_bool($v)) {
                         $v = $v ? 'true' : 'false';
                     }
-                    if ($v) {
+                    if (is_numeric($v)) {
+                        $v = strval($v);
+                    }
+                    if (isset($v)) {
                         $class = "{$this->prefix}--{$key}-{$k}-{$v}";
                         $this->classes[] = Format::kebabCase($class);
                     }
