@@ -55,6 +55,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - Put Changelog in correct order
 - BEM implementation
 - Boolean settings being evaluated after string conversion
+- Settings with the value of "0" being evaluated as falsey
 
 ## [v0.9.1] - 2025-05-28
 
