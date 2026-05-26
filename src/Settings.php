@@ -53,7 +53,7 @@ class Settings
         if (!is_iterable($value)) {
             $value = strval($value);
 
-            if (isset($value)) {
+            if ($value) {
                 $class = "{$this->prefix}--{$key}-{$value}";
                 $this->classes[] = Format::kebabCase($class);
             }
