@@ -9,7 +9,7 @@ class Group extends Field
     /** @noinspection PhpUndefinedFunctionInspection */
     public function getElement(mixed $field_object, string $tag, mixed $post_id, string $field_classes, string $base_class, Icenberg $icenberg): string
     {
-        $name = $field_object['_name'];
+        $field_name = $field_object['_name'];
         $sub_fields = [];
         $content = "";
 
@@ -17,12 +17,12 @@ class Group extends Field
             $sub_fields[] = $key;
         }
 
-        if (have_rows($name, $post_id)) :
-            while (have_rows($name, $post_id)) : the_row();
+        if (have_rows($field_name, $post_id)) :
+            while (have_rows($field_name, $post_id)) : the_row();
+                $ice = new Icenberg($icenberg->layout . "__" . $field_name, $icenberg->prefix);
                 foreach ($sub_fields as $sub_field) {
-                    $content .= $icenberg->get_element($sub_field);
+                    $content .= $ice->get_element($sub_field);
                 }
-
             endwhile;
         endif;
 

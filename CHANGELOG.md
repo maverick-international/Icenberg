@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog] - (https://keepachangelog.com/en/1.1.0
 - block.json stub supports latest acf features
 - block.php stub includes advanced features by default
 - README easier to maintain
+- BEM classes passed down correctly to group and repeater sub-fields
 
 ### Added
 
