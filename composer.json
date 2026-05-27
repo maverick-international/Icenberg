@@ -1,13 +1,12 @@
 {
     "name": "mvrk/icenberg",
     "type": "library",
-    "description": "Library to abstract away Advanced Custom Fields flexible content markup",
+    "description": "Abstraction Library for Advanced Custom Fields",
     "license": "MIT",
     "keywords": [
         "acf",
         "advanced custom fields",
-        "wordpress",
-        "flexible content"
+        "wordpress"
     ],
     "authors": [
         {
