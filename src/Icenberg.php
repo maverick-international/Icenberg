@@ -29,7 +29,7 @@ class Icenberg
         $this->post_id = $post_id;
     }
 
-    public function the_element(string $field_name, string $tag = 'div', ?array $modifiers = []): void
+    public function the_element(string $field_name, string $tag = 'div', ?array $modifiers = [])
     {
         echo $this->findElement($field_name, $tag, $modifiers);
     }
