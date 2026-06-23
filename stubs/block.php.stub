@@ -4,7 +4,9 @@ use MVRK\Icenberg\Icenberg;
 use MVRK\Icenberg\Blocks\InnerBlocks;
 
 $icenberg = new Icenberg('{block_name}', '{prefix}');
-$allowed_blocks = [//add some here];
+$allowed_blocks = [
+//add some here
+];
 $background = $icenberg->get_element('maybe_a_background_image');
 $is_wrapped = true;
 

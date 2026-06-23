@@ -10,12 +10,9 @@
         "mode": "preview",
         "renderTemplate": "{block_name}.php",
         "blockVersion": 3,
-        "autoInlineEditing": true
+        "autoInlineEditing": false
     },
     "supports": {
-        "align": [
-            "full"
-        ],
         "jsx": true,
         "mode": true,
         "anchor": true,
@@ -30,10 +27,6 @@
         "backgroundColor": {
             "type": "string",
             "default": "white"
-        },
-        "align": {
-            "type": "string",
-            "default": "full"
         }
     }
 }
