@@ -7,12 +7,13 @@ use MVRK\Icenberg\Utils\CSS;
 
 class InnerBlocks
 {
-    public static function make(array $allowed_blocks, Icenberg $icenberg): string
+    public static function make(array $allowed_blocks, Icenberg $icenberg, ?array $template = null): string
     {
         $allowed_blocks = esc_attr(wp_json_encode($allowed_blocks));
         $base_class = CSS::generateBaseClass($icenberg->layout, $icenberg->prefix);
+        $template = $template ? esc_attr(json_encode($template)) : '';
 
-        return "<InnerBlocks allowedBlocks='{$allowed_blocks}' className='inner-blocks {$base_class}__inner-blocks'/>";
+        return "<InnerBlocks allowedBlocks='{$allowed_blocks}' className='inner-blocks {$base_class}__inner-blocks' template='{$template}'/>";
     }
 
     /**
